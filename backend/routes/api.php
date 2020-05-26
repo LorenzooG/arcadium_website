@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('user')->middleware('auth:api')->group(function () {
   Route::put('/', 'UserController@update')->name('user.update');
   Route::put('/password', 'UserController@updatePassword')->name('user.update.password');
-  Route::put('/email', 'UserController@updateEmail')->name('user.update.email');
+  Route::put('/email/{email_update}', 'UserController@updateEmail')->name('user.update.email');
   Route::delete('/', 'UserController@delete')->name('user.delete');
 });
 

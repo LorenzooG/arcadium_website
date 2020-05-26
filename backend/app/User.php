@@ -84,6 +84,11 @@ class User extends Authenticatable
       ->reduce(fn($role, $otherRole) => $role | $otherRole, 0);
   }
 
+  public function emailUpdates()
+  {
+    return $this->hasMany(EmailUpdate::class);
+  }
+
   public function getIsAdminAttribute()
   {
     return isset($this->attributes["is_admin"]) ? $this->attributes["is_admin"] : false;
