@@ -14,7 +14,7 @@ class UserUpdateEmailRequest extends FormRequest
    */
   public function authorize()
   {
-    return true;
+    return !$this->email_update->already_used;
   }
 
   /**
@@ -25,12 +25,12 @@ class UserUpdateEmailRequest extends FormRequest
   public function rules()
   {
     return [
-      'email' => [
+      'new_email' => [
         'required',
         'string',
         'min:8',
         'max:32',
-        Rule::unique('users')->ignore($this->changeEmailRequest->user_id)
+        Rule::unique('users', 'email')->ignore($this->email_update->user->id)
       ]
     ];
   }

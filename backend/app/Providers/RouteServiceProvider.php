@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Http\Middleware\ClearXss;
+use App\EmailUpdate;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -47,7 +47,11 @@ class RouteServiceProvider extends ServiceProvider
 
     $this->mapWebRoutes();
 
-    //
+    Route::bind('email_update', function (string $email_update) {
+      return EmailUpdate::query()
+        ->where('token', $email_update)
+        ->firstOrFail();
+    });
   }
 
   /**

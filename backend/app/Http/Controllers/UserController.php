@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\EmailUpdate;
 use App\Http\Requests\UserDeleteRequest;
+use App\Http\Requests\UserUpdateEmailRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
 use Exception;
@@ -37,8 +39,17 @@ class UserController extends Controller
     return response()->noContent();
   }
 
-  public function updateEmail() {
+  public function updateEmail(EmailUpdate $email_update, UserUpdateEmailRequest $request)
+  {
+    $email_update->already_used = true;
 
+    $request->user()
+      ->fill([
+        'email' => $request->get('new_email')
+      ])
+      ->save();
+
+    return response()->noContent();
   }
 
   /**
