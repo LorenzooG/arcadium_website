@@ -1,0 +1,54 @@
+version: "3"
+
+services:
+  database:
+    build: ./mysql
+    restart: always
+    container_name: arcadium_mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql:/arcadium_mysql
+    env_file:
+      - ./mysql/.env.test
+    networks:
+      - arcadium-network
+
+  webserver:
+    image: nginx:alpine
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - database
+      - app
+    volumes:
+      - ./backend:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d/
+    env_file:
+      - ./backend/.env.test
+    networks:
+      - arcadium-network
+
+  app:
+    build:
+      context: backend
+      dockerfile: dockerfile
+    image: digitalocean.com/php
+    restart: unless-stopped
+    tty: true
+    env_file:
+      - ./backend/.env.test
+    working_dir: /var/www
+    depends_on:
+      - database
+    volumes:
+      - ./backend:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - arcadium-network
+
+networks:
+  arcadium-network:
