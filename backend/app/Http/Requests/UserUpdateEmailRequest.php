@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Utils\Permission;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -14,7 +15,8 @@ class UserUpdateEmailRequest extends FormRequest
    */
   public function authorize()
   {
-    return !$this->email_update->already_used;
+    return !$this->email_update->already_used
+      && $this->user()->hasPermission(Permission::UPDATE_USER);
   }
 
   /**

@@ -53,7 +53,7 @@ class UserPolicy
    */
   public function update(User $user, User $model)
   {
-    return $user->hasPermission(Permission::UPDATE_USER);
+    return $user->hasPermission(Permission::UPDATE_ANY_USER);
   }
 
   /**
@@ -65,7 +65,7 @@ class UserPolicy
    */
   public function delete(User $user, User $model)
   {
-    return $user->hasPermission(Permission::DELETE_USER);
+    return $user->hasPermission(Permission::DELETE_ANY_USER);
   }
 
   /**
@@ -77,7 +77,7 @@ class UserPolicy
    */
   public function restore(User $user, User $model)
   {
-    return $user->hasPermission(Permission::RESTORE_USER);
+    return $user->hasPermission(Permission::RESTORE_ANY_USER);
   }
 
   /**
@@ -89,6 +89,6 @@ class UserPolicy
    */
   public function forceDelete(User $user, User $model)
   {
-    return false;
+    return true;
   }
 }

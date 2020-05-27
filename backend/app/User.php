@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
  * @property string email
  * @property string password
  * @property Collection<Role> roles
- * @property boolean isAdmin
+ * @property Collection<Post> posts
  *
  * @method static User create(array $array)
  * @method static User findOrFail(int $int)
@@ -72,6 +72,11 @@ class User extends Authenticatable
     return $this->belongsToMany(Role::class);
   }
 
+  public function posts()
+  {
+    return $this->hasMany(Post::class);
+  }
+
   public function hasPermission(int $permission)
   {
     return ($this->permissions() & $permission) !== 0;
@@ -81,19 +86,13 @@ class User extends Authenticatable
   {
     return $this->roles
       ->map(fn($role) => $role->permission_level)
-      ->reduce(fn($role, $otherRole) => $role | $otherRole, 0);
+      ->reduce(fn($role, $otherRole) => $role | $otherRole, 1);
   }
 
   public function emailUpdates()
   {
     return $this->hasMany(EmailUpdate::class);
   }
-
-  public function getIsAdminAttribute()
-  {
-    return isset($this->attributes["is_admin"]) ? $this->attributes["is_admin"] : false;
-  }
-
 
   /**
    * @param string $value
