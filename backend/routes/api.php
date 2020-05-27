@@ -17,33 +17,36 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('user')->middleware('auth:api')->group(function () {
-  Route::put('/', 'UserController@update')->name('user.update');
-  Route::put('/password', 'UserController@updatePassword')->name('user.update.password');
-  Route::put('/email/{email_update}', 'UserController@updateEmail')->name('user.update.email');
-  Route::delete('/', 'UserController@delete')->name('user.delete');
+  Route::delete('/', 'UserController@delete')->middleware('can:delete_self')->name('user.delete');
+
+  Route::get('posts', 'PostsController@index')->name('user.posts.index');
+
+  Route::middleware('can:update_self')->group(function () {
+    Route::put('/', 'UserController@update')->name('user.update');
+    Route::put('/password', 'UserController@updatePassword')->name('user.update.password');
+    Route::put('/email/{email_update}', 'UserController@updateEmail')->name('user.update.email');
+  });
 });
 
 
-Route::prefix("users")->group(function () {
-  Route::get("/", "UsersController@index")->name('users.index');
-  Route::get("{user}", "UsersController@show")->name('users.show');
+Route::prefix('users')->group(function () {
+  Route::get('/', 'UsersController@index')->name('users.index');
+  Route::get('{user}', 'UsersController@show')->name('users.show');
+
+  Route::get('{user}/posts', 'PostsController@index')->name('users.posts.index');
 
   Route::middleware('xss')->group(function () {
     Route::post("/", "UsersController@store")->name('users.store');
-    Route::middleware('can:delete,user')->delete("{user}", "UsersController@delete")->name('users.delete');
-    Route::middleware('can:update,user')->put("{user}", "UsersController@update")->name('users.update');
+
+    Route::put("{user}", "UsersController@update")->middleware('can:update,App\User')->name('users.update');
+    Route::delete("{user}", "UsersController@delete")->middleware('can:delete,App\User')->name('users.delete');
   });
 });
 
-Route::prefix("posts")->name('posts.')->group(function () {
-  Route::get("/", "PostsController@index")->name('index');
-  Route::get("{post}", "PostsController@show")->name('show');
-
-  Route::middleware(AdminOnly::class)->group(function () {
-    Route::middleware("xss")->post("/", "PostsController@store")->name('store');
-    Route::delete("{post}", "PostsController@delete")->name('delete');
-    Route::middleware("xss")->put("{post}", "PostsController@update")->name('update');
-  });
+Route::prefix('posts')->group(function () {
+  Route::get('/', 'PostsController@index')->middleware('can:viewAny,App\Post')->name('posts.index');
+  Route::get('{post}', 'PostsController@show')->middleware('can:view,App\Post')->name('posts.show');
+  Route::delete('{post}', 'PostsController@delete')->middleware('can:delete,App\Post')->name('posts.delete');
 });
 
 Route::prefix("/payments")

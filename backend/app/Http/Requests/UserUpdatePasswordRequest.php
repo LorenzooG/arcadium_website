@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Utils\Permission;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,7 +15,8 @@ class UserUpdatePasswordRequest extends FormRequest
    */
   public function authorize()
   {
-    return Hash::check($this->get('password'), $this->user()->password);
+    return Hash::check($this->get('password'), $this->user()->password)
+      && $this->user()->hasPermission(Permission::UPDATE_USER);
   }
 
   /**

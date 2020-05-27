@@ -8,6 +8,7 @@ use App\Http\Requests\UserUpdateEmailRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\User;
+use App\Utils\Permission;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use JMac\Testing\Traits\AdditionalAssertions;
@@ -17,7 +18,7 @@ class UserController extends TestCase
 {
   use AdditionalAssertions;
 
-  public function test_should_delete_user_when_delete_user_when_send_password()
+  public function test_should_delete_user_when_delete_user_when_send_password_and_have_permission()
   {
     $password = $this->faker->password(8, 16);
 
@@ -25,13 +26,18 @@ class UserController extends TestCase
       'password' => $password
     ]);
 
+    $user->roles()->create([
+      'title' => 'Permission',
+      'permission_level' => Permission::DELETE_USER
+    ]);
+
     $response = $this->actingAs($user)->deleteJson(route('user.delete'), [
       "password" => $password
     ]);
 
-    $this->assertSoftDeleted($user);
-
     $response->assertNoContent();
+
+    $this->assertSoftDeleted($user);
   }
 
   public function test_assert_delete_uses_middleware()
@@ -40,6 +46,12 @@ class UserController extends TestCase
       Controller::class,
       'delete',
       'auth:api'
+    );
+
+    $this->assertActionUsesMiddleware(
+      Controller::class,
+      'delete',
+      'can:delete_self'
     );
   }
 
@@ -52,9 +64,13 @@ class UserController extends TestCase
     );
   }
 
-  public function test_should_update_user_when_put_user()
+  public function test_should_update_user_when_put_user_and_have_permission()
   {
     $user = factory(User::class)->create();
+    $user->roles()->create([
+      'title' => 'Permission',
+      'permission_level' => Permission::UPDATE_USER
+    ]);
 
     $name = $this->faker->name;
     $user_name = $this->faker->name;
@@ -93,6 +109,12 @@ class UserController extends TestCase
       'update',
       'auth:api'
     );
+
+    $this->assertActionUsesMiddleware(
+      Controller::class,
+      'update',
+      'can:update_self'
+    );
   }
 
   public function test_should_update_password_when_put_user_and_send_old_password()
@@ -102,6 +124,10 @@ class UserController extends TestCase
 
     $user = factory(User::class)->create([
       'password' => $password,
+    ]);
+    $user->roles()->create([
+      'title' => 'Permission',
+      'permission_level' => Permission::UPDATE_USER
     ]);
 
     $response = $this->actingAs($user)->putJson(route('user.update.password'), [
@@ -141,6 +167,12 @@ class UserController extends TestCase
       'updatePassword',
       'auth:api'
     );
+
+    $this->assertActionUsesMiddleware(
+      Controller::class,
+      'updatePassword',
+      'can:update_self'
+    );
   }
 
   public function test_should_update_email_user_when_put_user_email_and_send_token()
@@ -150,6 +182,10 @@ class UserController extends TestCase
     $user->emailUpdates()->create([
       'token' => $token,
       'origin_address' => '127.0.0.1'
+    ]);
+    $user->roles()->create([
+      'title' => 'Permission',
+      'permission_level' => Permission::UPDATE_USER
     ]);
 
     $email = $this->faker->unique()->safeEmail;
@@ -188,6 +224,12 @@ class UserController extends TestCase
       Controller::class,
       'updateEmail',
       'auth:api'
+    );
+
+    $this->assertActionUsesMiddleware(
+      Controller::class,
+      'updateEmail',
+      'can:update_self'
     );
   }
 }
