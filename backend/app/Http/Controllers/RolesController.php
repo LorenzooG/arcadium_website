@@ -70,6 +70,9 @@ class RolesController extends Controller
       'permission_level'
     ]));
 
+    $this->roleRepository->forgetRoleFromCache($role);
+    $this->roleRepository->forgetAllRolesFromCache();
+
     return new RoleResource($role);
   }
 
@@ -85,6 +88,12 @@ class RolesController extends Controller
     $role->delete();
 
     $this->roleRepository->forgetRoleFromCache($role);
+
+    $role->users()->each(function (User $user) {
+      $this->roleRepository->forgetAllUserRolesFromCache($user);
+    });
+
+    $this->roleRepository->forgetAllRolesFromCache();
 
     return response()->noContent();
   }
