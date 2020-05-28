@@ -49,10 +49,10 @@ class PostPolicy
    * Determine whether the user can update the model.
    *
    * @param User $user
-   * @param Post $post
+   * @param Post|null $post
    * @return mixed
    */
-  public function update(User $user, Post $post)
+  public function update(User $user, ?Post $post = null)
   {
     return $user->hasPermission(Permission::DELETE_ANY_POST)
       || ($user->hasPermission(Permission::UPDATE_POST)
@@ -63,10 +63,10 @@ class PostPolicy
    * Determine whether the user can delete the model.
    *
    * @param User $user
-   * @param Post $post
+   * @param Post|null $post
    * @return mixed
    */
-  public function delete(User $user, Post $post)
+  public function delete(User $user, ?Post $post = null)
   {
     return $user->hasPermission(Permission::DELETE_ANY_POST)
       || ($user->hasPermission(Permission::DELETE_POST)

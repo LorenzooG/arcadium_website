@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostStoreRequest;
+use App\Http\Requests\PostUpdateRequest;
 use App\Http\Resources\PostResource;
 use App\Post;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class PostsController extends Controller
@@ -14,7 +14,7 @@ class PostsController extends Controller
 
   public function index()
   {
-    return PostResource::collection(Post::all());
+    return PostResource::collection(Post::query()->orderByDesc('likes')->get());
   }
 
   public function show(Post $post)
@@ -34,17 +34,15 @@ class PostsController extends Controller
 
   /**
    * @param Post $post
-   * @param Request $request
+   * @param PostUpdateRequest $request
    * @return Response
    */
-  public function update(Post $post, Request $request)
+  public function update(Post $post, PostUpdateRequest $request)
   {
-    $content = $request->validate([
-      "name" => "string|max:255",
-      "description" => "string|max:6000"
-    ]);
-
-    $post->update($content);
+    $post->update($request->only([
+      'title',
+      'description'
+    ]));
 
     return response()->noContent();
   }
