@@ -62,6 +62,17 @@ class UserRepository
     return User::create($data);
   }
 
+  /**
+   * Forget user from cache
+   *
+   * @param User $user
+   * @return bool
+   */
+  public function forgetUserFromCache($user)
+  {
+    return $this->cacheRepository->forget($this->getCacheKey("show.{$user->id}"));
+  }
+
   public final function getCacheKey($key)
   {
     return self::CACHE_KEY . '.' . $key;

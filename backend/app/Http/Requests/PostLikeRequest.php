@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Post;
-use App\Repositories\PostRepository;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -16,14 +14,10 @@ class PostLikeRequest extends FormRequest
    */
   public function authorize()
   {
-    /** @var PostRepository $postRepository */
-    $postRepository = resolve(PostRepository::class);
-
-    $post = $postRepository->findPostById($this->route('post'));
     /* @var User $user */
     $user = $this->user();
 
-    return $post->likes()->where('user_id', $user->id)->doesntExist();
+    return $this->post->likes()->where('user_id', $user->id)->doesntExist();
   }
 
   /**

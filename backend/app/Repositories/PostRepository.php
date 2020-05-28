@@ -79,6 +79,16 @@ class PostRepository
     return $user->posts()->create($data);
   }
 
+  /**
+   * Forget post from cache
+   *
+   * @param Post $post
+   * @return bool
+   */
+  public function forgetPostFromCache($post) {
+    return $this->cacheRepository->forget($this->getCacheKey("show.{$post->id}"));
+  }
+
   public final function getCacheKey($key)
   {
     return self::CACHE_KEY . '.' . $key;
