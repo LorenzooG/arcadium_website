@@ -13,6 +13,8 @@ use Illuminate\Http\Response;
 class UserController extends Controller
 {
   /**
+   * Update current user's name and user name
+   *
    * @param UserUpdateRequest $request
    * @return Response
    */
@@ -28,6 +30,12 @@ class UserController extends Controller
     return response()->noContent();
   }
 
+  /**
+   * Update current user's password
+   *
+   * @param UserUpdatePasswordRequest $request
+   * @return Response
+   */
   public function updatePassword(UserUpdatePasswordRequest $request)
   {
     $request->user()
@@ -39,6 +47,13 @@ class UserController extends Controller
     return response()->noContent();
   }
 
+  /**
+   * Update current user's email
+   *
+   * @param EmailUpdate $email_update
+   * @param UserUpdateEmailRequest $request
+   * @return Response
+   */
   public function updateEmail(EmailUpdate $email_update, UserUpdateEmailRequest $request)
   {
     $email_update->already_used = true;
@@ -53,6 +68,8 @@ class UserController extends Controller
   }
 
   /**
+   * Delete current user
+   *
    * @param UserDeleteRequest $request
    * @return Response
    * @throws Exception
