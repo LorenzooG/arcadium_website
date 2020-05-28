@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostStoreRequest;
+use App\Http\Resources\PostResource;
 use App\Post;
 use Exception;
 use Illuminate\Http\Request;
@@ -12,22 +14,22 @@ class PostsController extends Controller
 
   public function index()
   {
-    return Post::all();
+    return PostResource::collection(Post::all());
   }
 
   public function show(Post $post)
   {
-    return $post;
+    return new PostResource($post);
   }
 
-  public function store(Request $request)
+  public function store(PostStoreRequest $request)
   {
-    $content = $request->validate([
-      "name" => "required|string|max:255",
-      "description" => "required|string|max:6000"
-    ]);
+    $post = $request->user()->posts()->create($request->only([
+      'title',
+      'description'
+    ]));
 
-    return Post::create($content);
+    return new PostResource($post);
   }
 
   /**

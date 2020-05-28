@@ -48,10 +48,9 @@ class UserPolicy
    * Determine whether the user can update the model.
    *
    * @param User $user
-   * @param User $model
    * @return mixed
    */
-  public function update(User $user, User $model)
+  public function update(User $user)
   {
     return $user->hasPermission(Permission::UPDATE_ANY_USER);
   }
@@ -60,10 +59,9 @@ class UserPolicy
    * Determine whether the user can delete the model.
    *
    * @param User $user
-   * @param User $model
    * @return mixed
    */
-  public function delete(User $user, User $model)
+  public function delete(User $user)
   {
     return $user->hasPermission(Permission::DELETE_ANY_USER);
   }
@@ -72,10 +70,9 @@ class UserPolicy
    * Determine whether the user can restore the model.
    *
    * @param User $user
-   * @param User $model
    * @return mixed
    */
-  public function restore(User $user, User $model)
+  public function restore(User $user)
   {
     return $user->hasPermission(Permission::RESTORE_ANY_USER);
   }

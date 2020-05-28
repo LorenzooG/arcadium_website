@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class ClearXss
 {
+  private array $ignoreFields = [
+    'password'
+  ];
+
   public function clearXss(array $array)
   {
     foreach ($array as $key => $value) {

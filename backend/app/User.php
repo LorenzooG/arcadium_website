@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -19,6 +20,8 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
  * @property string password
  * @property Collection<Role> roles
  * @property Collection<Post> posts
+ * @property Carbon created_at
+ * @property Carbon updated_at
  *
  * @method static User create(array $array)
  * @method static User findOrFail(int $int)

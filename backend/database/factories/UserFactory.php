@@ -19,12 +19,10 @@ $factory->define(User::class, function (Faker $faker) {
 });
 
 $factory->afterCreating(User::class, function (User $user, Faker $faker) {
-  $role = Role::create([
+  $user->roles()->create([
     'title' => 'Member',
     'permission_level' => Permission::NONE
   ]);
-
-  $user->roles()->save($role);
 });
 
 $factory->afterCreatingState(User::class, 'admin', function (User $user, Faker $faker) {
