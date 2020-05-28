@@ -36,7 +36,7 @@ Route::prefix('users')->group(function () {
   Route::get('/', 'UsersController@index')->name('users.index');
   Route::get('{user}', 'UsersController@show')->name('users.show');
 
-  Route::get('{user}/posts', 'PostsController@index')->name('users.posts.index');
+  Route::get('{user}/posts', 'PostsController@user')->name('users.posts.index');
 
   Route::middleware('xss')->group(function () {
     Route::post("/", "UsersController@store")->name('users.store');

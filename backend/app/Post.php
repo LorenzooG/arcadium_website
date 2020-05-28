@@ -36,4 +36,13 @@ class Post extends Model
   {
     return $this->belongsToMany(User::class);
   }
+
+  public static function allOrderedByLikes()
+  {
+    return self::query()->selectRaw('posts.*, count(*) as total')
+      ->join('post_user', 'posts.id', '=', 'post_user.post_id')
+      ->groupBy('id')
+      ->orderByDesc('total')
+      ->get();
+  }
 }

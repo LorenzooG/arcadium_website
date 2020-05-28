@@ -7,6 +7,7 @@ use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Http\Resources\PostResource;
 use App\Post;
+use App\User;
 use Exception;
 use Illuminate\Http\Response;
 
@@ -15,7 +16,12 @@ class PostsController extends Controller
 
   public function index()
   {
-    return PostResource::collection(Post::query()->orderByDesc('likes')->get());
+    return PostResource::collection(Post::allOrderedByLikes());
+  }
+
+  public function user(User $user)
+  {
+    return PostResource::collection($user->posts()->orderByDesc('id')->get());
   }
 
   public function show(Post $post)
