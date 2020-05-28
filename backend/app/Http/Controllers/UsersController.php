@@ -29,7 +29,7 @@ class UsersController extends Controller
   {
     $page = Paginator::resolveCurrentPage();
 
-    return UserResource::collection($this->userRepository->all($page));
+    return UserResource::collection($this->userRepository->findAllUsersPaginatedInPage($page));
   }
 
   /**
@@ -38,7 +38,7 @@ class UsersController extends Controller
    */
   public function show(int $user)
   {
-    return new UserResource($this->userRepository->show($user));
+    return new UserResource($this->userRepository->findUserById($user));
   }
 
   /**

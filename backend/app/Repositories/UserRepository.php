@@ -12,14 +12,14 @@ class UserRepository
 
   const CACHE_KEY = 'users';
 
-  public function all($page)
+  public function findAllUsersPaginatedInPage($page)
   {
     return Cache::remember($this->getCacheKey("all.page.$page"), now()->addHour(), function () {
       return User::query()->paginate();
     });
   }
 
-  public function show($id)
+  public function findUserById($id)
   {
     return Cache::remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($id) {
       return User::findOrFail($id);
