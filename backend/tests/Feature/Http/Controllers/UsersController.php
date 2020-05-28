@@ -20,8 +20,6 @@ class UsersController extends TestCase
    */
   public function testShouldShowUsersAndDoNotShowTheUsersEmailsWhenGetUsers()
   {
-    $this->artisan('cache:clear');
-
     $user = factory(User::class)->create();
 
     $response = $this->getJson(route('users.index'));
@@ -50,10 +48,6 @@ class UsersController extends TestCase
     ]);
 
     $response = $this->actingAs($user)->getJson(route('users.index'));
-
-    $users = $response->json();
-
-    $this->assertCount(1, $users);
 
     $response->assertOk()
       ->assertJson([

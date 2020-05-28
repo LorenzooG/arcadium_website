@@ -38,7 +38,7 @@ class UsersController extends Controller
    */
   public function show(int $user)
   {
-    return $this->userRepository->show($user);
+    return new UserResource($this->userRepository->show($user));
   }
 
   /**
