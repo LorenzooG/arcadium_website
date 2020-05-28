@@ -6,33 +6,46 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Repositories\UserRepository;
-use App\User;
 use Exception;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
 
 class UsersController extends Controller
 {
 
+  /**
+   * User repository
+   *
+   * @var UserRepository
+   */
   protected UserRepository $userRepository;
 
+  /**
+   * UsersController constructor
+   *
+   * @param UserRepository $userRepository
+   */
   public function __construct(UserRepository $userRepository)
   {
     $this->userRepository = $userRepository;
   }
 
   /**
-   * @return AnonymousResourceCollection
+   * Find and show all users in a page
+   *
+   * @return ResourceCollection
    */
   public function index()
   {
     $page = Paginator::resolveCurrentPage();
 
-    return UserResource::collection($this->userRepository->findAllUsersPaginatedInPage($page));
+    return UserResource::collection($this->userRepository->findAllUsersInPage($page));
   }
 
   /**
+   * Find and show an user by it's id
+   *
    * @param int $user
    * @return UserResource
    */
@@ -42,6 +55,8 @@ class UsersController extends Controller
   }
 
   /**
+   * Store user in database
+   *
    * @param UserStoreRequest $request
    * @return UserResource
    */
@@ -56,19 +71,19 @@ class UsersController extends Controller
 
     $data['avatar_url'] = '';
 
-    $user = User::create($data);
-
-    return new UserResource($user);
+    return new UserResource($this->userRepository->store($data));
   }
 
   /**
-   * @param User $user
+   * Find and update user by it's id
+   *
+   * @param int $user
    * @param UserUpdateRequest $request
    * @return Response
    */
-  public function update(User $user, UserUpdateRequest $request)
+  public function update(int $user, UserUpdateRequest $request)
   {
-    $user->update($request->only([
+    $this->userRepository->updateUserById($user, $request->only([
       'email',
       'password',
       'name',
@@ -79,13 +94,15 @@ class UsersController extends Controller
   }
 
   /**
-   * @param User $user
+   * Find and delete user by it's id
+   *
+   * @param int $user
    * @return Response
    * @throws Exception
    */
-  public function delete(User $user)
+  public function delete(int $user)
   {
-    $user->delete();
+    $this->userRepository->deleteUserById($user);
 
     return response()->noContent();
   }
