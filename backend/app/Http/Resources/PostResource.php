@@ -6,6 +6,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Ramsey\Collection\Collection;
 
 /**
  * Class PostResource
@@ -14,7 +15,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property int id
  * @property string title
  * @property string description
- * @property int likes
+ * @property Collection<User> likes
  * @property User user
  * @property Carbon created_at
  * @property Carbon updated_at
@@ -33,7 +34,7 @@ class PostResource extends JsonResource
       'id' => $this->id,
       'title' => $this->title,
       'description' => $this->description,
-      'likes' => $this->likes,
+      'likes' => $this->likes->count(),
       'created_by' => route('users.show', [
         'user' => $this->user->id
       ]),

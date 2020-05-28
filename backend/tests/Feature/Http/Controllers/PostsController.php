@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Http\Controllers\PostsController as ActualPostsController;
+use App\Http\Requests\PostLikeRequest;
 use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Post;
@@ -283,6 +284,61 @@ class PostsController extends TestCase
       ActualPostsController::class,
       'update',
       'can:update,post'
+    );
+  }
+
+  public function testShouldLikePostWhenPostPostsLike()
+  {
+    /** @var User $user */
+    $user = factory(User::class)->create();
+    $user->roles()->create([
+      'title' => 'Administrator',
+      'permission_level' => Permission::LIKE_POST
+    ]);
+    /** @var Post $post */
+    $post = $user->posts()->create([
+      'title' => $this->faker->title,
+      'description' => $this->faker->text,
+    ]);
+
+    $response = $this->actingAs($user)->postJson(route('posts.like', [
+      'post' => $post->id
+    ]));
+
+    $posts = Post::query()
+      ->where('id', $post->id)
+      ->get();
+
+    $this->assertCount(1, $posts);
+
+    $post = $posts->first();
+
+    $this->assertEquals(1, $post->likes->count());
+
+    $response->assertNoContent();
+  }
+
+  public function testAssertLikeUsesFormRequest()
+  {
+    $this->assertActionUsesFormRequest(
+      ActualPostsController::class,
+      'like',
+      PostLikeRequest::class
+    );
+  }
+
+  public function testAssertLikeUsesMiddleware()
+  {
+    $this->assertActionUsesMiddleware(
+      ActualPostsController::class,
+      'like',
+      'auth:api'
+    );
+
+    $this->assertActionUsesMiddleware(
+      ActualPostsController::class,
+      'like',
+      'can:like,post'
     );
   }
 }
