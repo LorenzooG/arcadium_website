@@ -21,7 +21,7 @@ class PostsController extends Controller
 
   public function user(User $user)
   {
-    return PostResource::collection($user->posts()->orderByDesc('id')->get());
+    return PostResource::collection($user->posts()->orderByDesc('id')->paginate());
   }
 
   public function show(Post $post)

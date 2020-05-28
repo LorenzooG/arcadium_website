@@ -7,7 +7,6 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\User;
 use App\Utils\Permission;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
@@ -28,23 +27,19 @@ class UsersController extends TestCase
     $users = $response->json();
 
     $this->assertCount(1, $users);
-    /**
-     * @var Carbon $date
-     */
-
 
     $response->assertOk()
-      ->assertJsonPath('0', [
-        'id' => $user->id,
-        'user_name' => $user->user_name,
-        'name' => $user->name,
-        'deleted_at' => null,
-        'created_at' => $user->created_at->toISOString(),
-        'updated_at' => $user->updated_at->toISOString(),
-      ])
-      ->assertJsonMissing([
-        'password',
-        'email'
+      ->assertJson([
+        'data' => [
+          [
+            'id' => $user->id,
+            'user_name' => $user->user_name,
+            'name' => $user->name,
+            'deleted_at' => null,
+            'created_at' => $user->created_at->toISOString(),
+            'updated_at' => $user->updated_at->toISOString(),
+          ]
+        ]
       ]);
   }
 

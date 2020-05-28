@@ -44,25 +44,27 @@ class PostsController extends TestCase
 
     $response->assertOk()
       ->assertJson([
-        [
-          'id' => $secondPost->id,
-          'title' => $secondPost->title,
-          'likes' => $secondPost->likes->count(),
-          'created_by' => route('users.show', [
-            'user' => $user->id
-          ]),
-          'updated_at' => $secondPost->updated_at->toISOString(),
-          'created_at' => $secondPost->updated_at->toISOString(),
-        ],
-        [
-          'id' => $firstPost->id,
-          'title' => $firstPost->title,
-          'likes' => $firstPost->likes->count(),
-          'created_by' => route('users.show', [
-            'user' => $user->id
-          ]),
-          'updated_at' => $firstPost->updated_at->toISOString(),
-          'created_at' => $firstPost->updated_at->toISOString(),
+        'data' => [
+          [
+            'id' => $secondPost->id,
+            'title' => $secondPost->title,
+            'likes' => $secondPost->likes->count(),
+            'created_by' => route('users.show', [
+              'user' => $user->id
+            ]),
+            'updated_at' => $secondPost->updated_at->toISOString(),
+            'created_at' => $secondPost->updated_at->toISOString(),
+          ],
+          [
+            'id' => $firstPost->id,
+            'title' => $firstPost->title,
+            'likes' => $firstPost->likes->count(),
+            'created_by' => route('users.show', [
+              'user' => $user->id
+            ]),
+            'updated_at' => $firstPost->updated_at->toISOString(),
+            'created_at' => $firstPost->updated_at->toISOString(),
+          ]
         ],
       ]);
   }
@@ -92,26 +94,28 @@ class PostsController extends TestCase
 
     $response->assertOk()
       ->assertJson([
-        [
-          'id' => $secondPost->id,
-          'title' => $secondPost->title,
-          'likes' => $secondPost->likes->count(),
-          'created_by' => route('users.show', [
-            'user' => $user->id
-          ]),
-          'updated_at' => $secondPost->updated_at->toISOString(),
-          'created_at' => $secondPost->updated_at->toISOString(),
-        ],
-        [
-          'id' => $firstPost->id,
-          'title' => $firstPost->title,
-          'likes' => $firstPost->likes->count(),
-          'created_by' => route('users.show', [
-            'user' => $user->id
-          ]),
-          'updated_at' => $firstPost->updated_at->toISOString(),
-          'created_at' => $firstPost->updated_at->toISOString(),
-        ],
+        'data' => [
+          [
+            'id' => $secondPost->id,
+            'title' => $secondPost->title,
+            'likes' => $secondPost->likes->count(),
+            'created_by' => route('users.show', [
+              'user' => $user->id
+            ]),
+            'updated_at' => $secondPost->updated_at->toISOString(),
+            'created_at' => $secondPost->updated_at->toISOString(),
+          ],
+          [
+            'id' => $firstPost->id,
+            'title' => $firstPost->title,
+            'likes' => $firstPost->likes->count(),
+            'created_by' => route('users.show', [
+              'user' => $user->id
+            ]),
+            'updated_at' => $firstPost->updated_at->toISOString(),
+            'created_at' => $firstPost->updated_at->toISOString(),
+          ]
+        ]
       ]);
   }
 
