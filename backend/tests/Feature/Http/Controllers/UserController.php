@@ -205,6 +205,8 @@ class UserController extends TestCase
       ->where('password', $user->password)
       ->get();
 
+    $this->assertCount(1, $users);
+
     $response->assertNoContent();
   }
 
