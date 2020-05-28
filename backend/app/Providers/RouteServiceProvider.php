@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\EmailUpdate;
+use App\Repositories\PostRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -17,12 +19,8 @@ class RouteServiceProvider extends ServiceProvider
    */
   protected $namespace = 'App\Http\Controllers';
 
-  /**
-   * The path to the "home" route for your application.
-   *
-   * @var string
-   */
-  public const HOME = '/home';
+  private UserRepository $userRepository;
+  private PostRepository $postRepository;
 
   /**
    * Define your route model bindings, pattern filters, etc.
@@ -31,7 +29,22 @@ class RouteServiceProvider extends ServiceProvider
    */
   public function boot()
   {
-    //
+    $this->postRepository = resolve(PostRepository::class);
+    $this->userRepository = resolve(UserRepository::class);
+
+    $this->bind('email_update', function (string $email_update) {
+      return EmailUpdate::query()
+        ->where('token', $email_update)
+        ->firstOrFail();
+    });
+
+    $this->bind('user', function (int $user) {
+      return $this->userRepository->findUserById($user);
+    });
+
+    $this->bind('post', function (int $post) {
+      return $this->postRepository->findPostById($post);
+    });
 
     parent::boot();
   }
@@ -44,14 +57,7 @@ class RouteServiceProvider extends ServiceProvider
   public function map()
   {
     $this->mapApiRoutes();
-
     $this->mapWebRoutes();
-
-    Route::bind('email_update', function (string $email_update) {
-      return EmailUpdate::query()
-        ->where('token', $email_update)
-        ->firstOrFail();
-    });
   }
 
   /**

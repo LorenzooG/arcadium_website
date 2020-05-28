@@ -56,7 +56,7 @@ class PostPolicy
   {
     return $user->hasPermission(Permission::DELETE_ANY_POST)
       || ($user->hasPermission(Permission::UPDATE_POST)
-        && $user->posts->contains($post));
+        && $user->is($post->user));
   }
 
   /**
@@ -70,7 +70,7 @@ class PostPolicy
   {
     return $user->hasPermission(Permission::DELETE_ANY_POST)
       || ($user->hasPermission(Permission::DELETE_POST)
-        && $user->posts->contains($post));
+        && $user->is($post->user));
   }
 
   public function like(User $user)
