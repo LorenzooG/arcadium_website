@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostLikeRequest;
 use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Http\Resources\PostResource;
@@ -30,6 +31,13 @@ class PostsController extends Controller
     ]));
 
     return new PostResource($post);
+  }
+
+  public function like(PostLikeRequest $request, Post $post)
+  {
+    $post->likes()->save($request->user());
+
+    return response()->noContent();
   }
 
   /**

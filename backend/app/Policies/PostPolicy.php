@@ -72,4 +72,9 @@ class PostPolicy
       || ($user->hasPermission(Permission::DELETE_POST)
         && $user->posts->contains($post));
   }
+
+  public function like(User $user)
+  {
+    return $user->hasPermission(Permission::LIKE_POST);
+  }
 }

@@ -31,6 +31,8 @@ class Permission
 
   const DELETE_ANY_POST = 4096;
 
+  const LIKE_POST = 8192;
+
   const ALL =
     self::NONE
     | self::STORE_USER
@@ -44,6 +46,7 @@ class Permission
     | self::UPDATE_ANY_POST
     | self::UPDATE_POST
     | self::DELETE_ANY_POST
-    | self::DELETE_POST;
+    | self::DELETE_POST
+    | self::LIKE_POST;
 
 }

@@ -50,6 +50,7 @@ Route::prefix('posts')->group(function () {
   Route::get('/', 'PostsController@index')->name('posts.index');
   Route::get('{post}', 'PostsController@show')->name('posts.show');
   Route::put('{post}', 'PostsController@update')->middleware(['xss', 'can:update,post'])->name('posts.update');
+  Route::post('{post}/like', 'PostsController@like')->middleware(['auth:api', 'can:like,post'])->name('posts.like');
   Route::delete('{post}', 'PostsController@delete')->middleware('can:delete,post')->name('posts.delete');
 });
 
