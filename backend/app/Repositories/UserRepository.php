@@ -13,11 +13,6 @@ class UserRepository
 
   const CACHE_KEY = 'users';
 
-  /**
-   * Cache repository
-   *
-   * @var Repository
-   */
   private Repository $cacheRepository;
 
   /**
