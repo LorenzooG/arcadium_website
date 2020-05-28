@@ -8,7 +8,6 @@ use App\Http\Requests\PostUpdateRequest;
 use App\Post;
 use App\User;
 use App\Utils\Permission;
-use Illuminate\Support\Facades\Hash;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
@@ -19,35 +18,55 @@ class PostsController extends TestCase
   /**
    * Read all
    */
-  public function testShouldShowUsersPostsWhenGetUsersPosts()
+  public function testShouldShowPostsOrderedByLikesWhenGetPosts()
   {
     /* @var User $user */
     $title = $this->faker->title;
     $description = $this->faker->text;
 
     $user = factory(User::class)->create();
-    /* @var Post $post */
-    $post = $user->posts()->create([
+    /* @var Post $firstPost */
+    $firstPost = $user->posts()->create([
       'title' => $title,
-      'description' => $description
+      'description' => $description,
     ]);
+    $firstPost->likes = 2;
+    $firstPost->save();
 
-    $response = $this->getJson(route('users.posts.index', [
+    /* @var Post $secondPost */
+    $secondPost = $user->posts()->create([
+      'title' => $title,
+      'description' => $description,
+    ]);
+    $secondPost->likes = 5;
+    $secondPost->save();
+
+    $response = $this->getJson(route('posts.index', [
       'user' => $user->id
     ]));
 
     $response->assertOk()
       ->assertJson([
         [
-          'id' => $post->id,
-          'title' => $post->title,
-          'likes' => $post->likes,
+          'id' => $secondPost->id,
+          'title' => $secondPost->title,
+          'likes' => $secondPost->likes,
           'created_by' => route('users.show', [
             'user' => $user->id
           ]),
-          'updated_at' => $post->updated_at->toISOString(),
-          'created_at' => $post->updated_at->toISOString(),
-        ]
+          'updated_at' => $secondPost->updated_at->toISOString(),
+          'created_at' => $secondPost->updated_at->toISOString(),
+        ],
+        [
+          'id' => $firstPost->id,
+          'title' => $firstPost->title,
+          'likes' => $firstPost->likes,
+          'created_by' => route('users.show', [
+            'user' => $user->id
+          ]),
+          'updated_at' => $firstPost->updated_at->toISOString(),
+          'created_at' => $firstPost->updated_at->toISOString(),
+        ],
       ]);
   }
 
@@ -87,7 +106,7 @@ class PostsController extends TestCase
   /**
    * Create
    */
-  public function testShouldStoreUserWhenPostUsersPosts()
+  public function testShouldStorePostWhenPostUsersPosts()
   {
     $title = $this->faker->title;
     $description = $this->faker->text;
@@ -99,9 +118,7 @@ class PostsController extends TestCase
       'permission_level' => Permission::STORE_POST
     ]);
 
-    $response = $this->actingAs($user)->postJson(route('posts.store', [
-      'user' => $user->id
-    ]), [
+    $response = $this->actingAs($user)->postJson(route('posts.store'), [
       'title' => $title,
       'description' => $description
     ]);
@@ -139,7 +156,7 @@ class PostsController extends TestCase
     );
   }
 
-  public function testAssertStoreUsesXssMiddleware()
+  public function testAssertStoreUsesMiddleware()
   {
     $this->assertActionUsesMiddleware(
       ActualPostsController::class,
@@ -157,19 +174,45 @@ class PostsController extends TestCase
   /**
    * Delete
    */
-  public function testShouldDeleteUserWhenDeleteUsersAndHavePermission()
+  public function testShouldDeletePostWhenDeletePosts()
   {
     $user = factory(User::class)->create();
     $user->roles()->create([
       'title' => 'Administrator',
-      'permission_level' => Permission::DELETE_USER
+      'permission_level' => Permission::DELETE_ANY_POST
+    ]);
+    $post = $user->posts()->create([
+      'title' => $this->faker->title,
+      'description' => $this->faker->text,
     ]);
 
-    $response = $this->actingAs($user)->deleteJson(route('users.delete', [
-      "user" => $user->id
+    $response = $this->actingAs($user)->deleteJson(route('posts.delete', [
+      'post' => $post->id
     ]));
 
-    $this->assertSoftDeleted($user);
+    $this->assertDeleted($post);
+
+    $response->assertNoContent();
+  }
+
+  public function testShouldDeletePostWhenDeleteUserPosts()
+  {
+    $user = factory(User::class)->create();
+    $user->roles()->create([
+      'title' => 'Administrator',
+      'permission_level' => Permission::DELETE_POST
+    ]);
+    $post = $user->posts()->create([
+      'title' => $this->faker->title,
+      'description' => $this->faker->text,
+    ]);
+
+    $response = $this->actingAs($user)->deleteJson(route('user.posts.delete', [
+      'post' => $post->id,
+      'user' => $user->id
+    ]));
+
+    $this->assertDeleted($post);
 
     $response->assertNoContent();
   }
@@ -179,45 +222,42 @@ class PostsController extends TestCase
     $this->assertActionUsesMiddleware(
       ActualPostsController::class,
       'delete',
-      'can:delete,App\Post'
+      'can:delete,post'
     );
   }
 
   /**
    * Update
    */
-  public function testShouldUpdateUserWhenPutUsersAndHavePermission()
+  public function testShouldUpdatePostWhenPutPosts()
   {
     $user = factory(User::class)->create();
     $user->roles()->create([
       'title' => 'Administrator',
-      'permission_level' => Permission::UPDATE_USER
+      'permission_level' => Permission::UPDATE_POST
+    ]);
+    $post = $user->posts()->create([
+      'title' => $this->faker->title,
+      'description' => $this->faker->text,
     ]);
 
-    $name = $this->faker->name;
-    $user_name = $this->faker->name;
-    $email = $this->faker->unique()->safeEmail;
-    $password = $this->faker->unique()->password(8, 16);
+    $title = $this->faker->title;
+    $description = $this->faker->text;
 
-    $response = $this->actingAs($user)->putJson(route('users.update', [
-      'user' => $user->id
+    $response = $this->actingAs($user)->putJson(route('posts.update', [
+      'post' => $post->id
     ]), [
-      "name" => $name,
-      "email" => $email,
-      "user_name" => $user_name,
-      "password" => $password,
+      'title' => $title,
+      'description' => $description,
     ]);
 
-    $users = User::query()
-      ->where('name', $name)
-      ->where('email', $email)
-      ->where('user_name', $user_name)
+    $users = Post::query()
+      ->where('id', $post->id)
+      ->where('title', $title)
+      ->where('description', $description)
       ->get();
 
-    $updatedUser = $users->first();
-
     $this->assertCount(1, $users);
-    $this->assertTrue(Hash::check($password, $updatedUser->password));
 
     $response->assertNoContent();
   }
@@ -231,7 +271,7 @@ class PostsController extends TestCase
     );
   }
 
-  public function testAssertUpdateUsesPermissionAndXssMiddleware()
+  public function testAssertUpdateUsesMiddleware()
   {
     $this->assertActionUsesMiddleware(
       ActualPostsController::class,
@@ -242,7 +282,7 @@ class PostsController extends TestCase
     $this->assertActionUsesMiddleware(
       ActualPostsController::class,
       'update',
-      'can:update,App\Post'
+      'can:update,post'
     );
   }
 }
