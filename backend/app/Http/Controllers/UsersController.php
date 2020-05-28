@@ -104,6 +104,8 @@ class UsersController extends Controller
    */
   public function delete(User $user)
   {
+    $this->userRepository->forgetUserFromCache($user);
+
     $user->delete();
 
     return response()->noContent();

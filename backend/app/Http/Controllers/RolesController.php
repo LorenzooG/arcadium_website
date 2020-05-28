@@ -85,15 +85,14 @@ class RolesController extends Controller
    */
   public function delete(Role $role)
   {
-    $role->delete();
-
-    $this->roleRepository->forgetRoleFromCache($role);
-
     $role->users()->each(function (User $user) {
       $this->roleRepository->forgetAllUserRolesFromCache($user);
     });
 
+    $this->roleRepository->forgetRoleFromCache($role);
     $this->roleRepository->forgetAllRolesFromCache();
+
+    $role->delete();
 
     return response()->noContent();
   }

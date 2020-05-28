@@ -107,7 +107,7 @@ class PostsController extends Controller
       'title',
       'description'
     ]));
-    
+
     $this->postRepository->forgetPostFromCache($post);
 
     return response()->noContent();
@@ -122,6 +122,8 @@ class PostsController extends Controller
    */
   public function delete(Post $post)
   {
+    $this->postRepository->forgetPostFromCache($post);
+
     $post->delete();
 
     return response()->noContent();
