@@ -5,28 +5,40 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
+use App\Repositories\UserRepository;
 use App\User;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\Paginator;
 
 class UsersController extends Controller
 {
+
+  protected UserRepository $userRepository;
+
+  public function __construct(UserRepository $userRepository)
+  {
+    $this->userRepository = $userRepository;
+  }
+
   /**
    * @return AnonymousResourceCollection
    */
   public function index()
   {
-    return UserResource::collection(User::query()->paginate());
+    $page = Paginator::resolveCurrentPage();
+
+    return UserResource::collection($this->userRepository->all($page));
   }
 
   /**
-   * @param User $user
+   * @param int $user
    * @return UserResource
    */
-  public function show(User $user)
+  public function show(int $user)
   {
-    return new UserResource($user);
+    return $this->userRepository->show($user);
   }
 
   /**
