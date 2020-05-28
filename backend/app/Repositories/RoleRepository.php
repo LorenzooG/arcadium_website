@@ -35,7 +35,9 @@ class RoleRepository
    */
   public function findAllRolesInPage($page)
   {
-    return Role::query()->paginate();
+    return $this->cacheRepository->remember($this->getCacheKey("all.pages.$page"), now()->addHour(), function () {
+      return Role::query()->paginate();
+    });
   }
 
   /**
@@ -47,7 +49,9 @@ class RoleRepository
    */
   public function findAllRolesOfUserInPage($user, $page)
   {
-    return $user->roles()->paginate();
+    return $this->cacheRepository->remember($this->getCacheKey("user.{$user->id}.roles.$page"), now()->addHour(), function () use ($user) {
+      return $user->roles()->paginate();
+    });
   }
 
   /**
@@ -84,6 +88,29 @@ class RoleRepository
   {
     return $this->cacheRepository->forget($this->getCacheKey("show.{$role->id}"));
   }
+
+
+  /**
+   * Forget all roles from the cache
+   *
+   * @return bool
+   */
+  public function forgetAllRolesFromCache()
+  {
+    return $this->cacheRepository->forget($this->getCacheKey("all.*"));
+  }
+
+  /**
+   * Forget all user's roles from the cache
+   *
+   * @param User $user
+   * @return bool
+   */
+  public function forgetAllUserRolesFromCache($user)
+  {
+    return $this->cacheRepository->forget($this->getCacheKey("user.{$user->id}.roles.*"));
+  }
+
 
   public final function getCacheKey($key)
   {
