@@ -126,7 +126,7 @@ class UserController extends TestCase
   public function testShouldUpdatePasswordWhenPutUser()
   {
     $password = $this->faker->password(8, 16);
-    $newPassword = '1234567890';
+    $newPassword = $this->faker->password(8, 16);
 
     $user = factory(User::class)->create([
       'password' => $password,
