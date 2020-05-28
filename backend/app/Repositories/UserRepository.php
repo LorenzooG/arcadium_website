@@ -5,7 +5,7 @@ namespace App\Repositories;
 
 
 use App\User;
-use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserRepository
@@ -13,14 +13,14 @@ class UserRepository
 
   const CACHE_KEY = 'users';
 
-  private Repository $cacheRepository;
+  private CacheRepository $cacheRepository;
 
   /**
    * UserRepository constructor
    *
-   * @param Repository $cacheRepository
+   * @param CacheRepository $cacheRepository
    */
-  public function __construct(Repository $cacheRepository)
+  public function __construct(CacheRepository $cacheRepository)
   {
     $this->cacheRepository = $cacheRepository;
   }
