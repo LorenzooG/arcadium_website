@@ -60,6 +60,8 @@ class UserRepository
    */
   public function updateUserById($id, array $data)
   {
+    Cache::forget("show.$id");
+
     return $this->findUserById($id)->update($data);
   }
 
