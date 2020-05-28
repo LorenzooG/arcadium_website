@@ -29,4 +29,5 @@ class UserUpdatePasswordRequest extends FormRequest
       'new_password' => 'required|string|min:8|max:16'
     ];
   }
+
 }

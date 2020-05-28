@@ -8,9 +8,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -66,10 +64,10 @@ class Handler extends ExceptionHandler
       return response()->json([
         "message" => empty($exception->getMessage()) ? "Bad request!" : $exception->getMessage()
       ], 400);
-    } else if($exception instanceof UnauthorizedHttpException) {
-      return response()->json([
-        "message" => "Unauthorized!"
-      ], 401);
+//    } else if($exception instanceof UnauthorizedHttpException) {
+//      return response()->json([
+//        "message" => "Unauthorized!"
+//      ], 401);
     } else if($exception instanceof NotFoundHttpException && $request->acceptsJson()) {
       return response()->json([
         "message" => "Page not found!"

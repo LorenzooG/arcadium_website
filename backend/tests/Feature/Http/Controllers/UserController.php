@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\Http\Controllers\UserController as Controller;
+use App\Http\Controllers\UserController as ActualUserController;
 use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateEmailRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
@@ -18,7 +18,7 @@ class UserController extends TestCase
 {
   use AdditionalAssertions;
 
-  public function test_should_delete_user_when_delete_user_when_send_password_and_have_permission()
+  public function testShouldDeleteUserWhenDeleteUserAndHavePermission()
   {
     $password = $this->faker->password(8, 16);
 
@@ -40,31 +40,31 @@ class UserController extends TestCase
     $this->assertSoftDeleted($user);
   }
 
-  public function test_assert_delete_uses_middleware()
+  public function testAssertDeleteUsesMiddleware()
   {
     $this->assertActionUsesMiddleware(
-      Controller::class,
+      ActualUserController::class,
       'delete',
       'auth:api'
     );
 
     $this->assertActionUsesMiddleware(
-      Controller::class,
+      ActualUserController::class,
       'delete',
       'can:delete_self'
     );
   }
 
-  public function test_assert_delete_uses_form_request()
+  public function testAssertDeleteUsesFormRequest()
   {
     $this->assertActionUsesFormRequest(
-      Controller::class,
+      ActualUserController::class,
       'delete',
       UserDeleteRequest::class
     );
   }
 
-  public function test_should_update_user_when_put_user_and_have_permission()
+  public function testShouldUpdateUserWhenPutUserAndHavePermission()
   {
     $user = factory(User::class)->create();
     $user->roles()->create([
@@ -93,34 +93,40 @@ class UserController extends TestCase
     $this->assertCount(1, $users);
   }
 
-  public function test_assert_update_uses_form_request()
+  public function testAssertUpdateUsesFormRequest()
   {
     $this->assertActionUsesFormRequest(
-      Controller::class,
+      ActualUserController::class,
       'update',
       UserUpdateRequest::class
     );
   }
 
-  public function test_assert_update_uses_middleware()
+  public function testAssertUpdateUsesMiddleware()
   {
     $this->assertActionUsesMiddleware(
-      Controller::class,
+      ActualUserController::class,
       'update',
       'auth:api'
     );
 
     $this->assertActionUsesMiddleware(
-      Controller::class,
+      ActualUserController::class,
+      'update',
+      'xss'
+    );
+
+    $this->assertActionUsesMiddleware(
+      ActualUserController::class,
       'update',
       'can:update_self'
     );
   }
 
-  public function test_should_update_password_when_put_user_and_send_old_password()
+  public function testShouldUpdatePasswordWhenPutUser()
   {
     $password = $this->faker->password(8, 16);
-    $newPassword = $this->faker->password(8, 16);
+    $newPassword = '1234567890';
 
     $user = factory(User::class)->create([
       'password' => $password,
@@ -135,47 +141,42 @@ class UserController extends TestCase
       'password' => $password
     ]);
 
-    $users = User::query()
-      ->where('id', $user->id)
-      ->where('name', $user->name)
-      ->where('user_name', $user->user_name)
-      ->where('email', $user->email)
-      ->get();
-
-    $user = $users->first();
-
     $this->assertTrue(Hash::check($newPassword, $user->password));
-
-    $this->assertCount(1, $users);
 
     $response->assertNoContent();
   }
 
-  public function test_assert_update_password_uses_form_request()
+  public function testAssertUpdatePasswordUsesFormRequest()
   {
     $this->assertActionUsesFormRequest(
-      Controller::class,
+      ActualUserController::class,
       'updatePassword',
       UserUpdatePasswordRequest::class
     );
   }
 
-  public function test_assert_update_password_uses_middleware()
+  public function testAssertUpdatePasswordUsesMiddleware()
   {
     $this->assertActionUsesMiddleware(
-      Controller::class,
+      ActualUserController::class,
       'updatePassword',
       'auth:api'
     );
 
     $this->assertActionUsesMiddleware(
-      Controller::class,
+      ActualUserController::class,
+      'updatePassword',
+      'xss'
+    );
+
+    $this->assertActionUsesMiddleware(
+      ActualUserController::class,
       'updatePassword',
       'can:update_self'
     );
   }
 
-  public function test_should_update_email_user_when_put_user_email_and_send_token()
+  public function testShouldUpdateEmailUserWhenPutUserEmail()
   {
     $user = factory(User::class)->create();
     $token = Str::random(64);
@@ -205,29 +206,33 @@ class UserController extends TestCase
       ->get();
 
     $response->assertNoContent();
-
-    $this->assertCount(1, $users);
   }
 
-  public function test_assert_update_email_uses_form_request()
+  public function testAssertUpdateEmailUsesFormRequest()
   {
     $this->assertActionUsesFormRequest(
-      Controller::class,
+      ActualUserController::class,
       'updateEmail',
       UserUpdateEmailRequest::class
     );
   }
 
-  public function test_assert_update_email_uses_middleware()
+  public function testAssertUpdateEmailUsesMiddleware()
   {
     $this->assertActionUsesMiddleware(
-      Controller::class,
+      ActualUserController::class,
       'updateEmail',
       'auth:api'
     );
 
     $this->assertActionUsesMiddleware(
-      Controller::class,
+      ActualUserController::class,
+      'updateEmail',
+      'xss'
+    );
+
+    $this->assertActionUsesMiddleware(
+      ActualUserController::class,
       'updateEmail',
       'can:update_self'
     );

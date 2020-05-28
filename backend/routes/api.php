@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Middleware\AdminOnly;
-use App\Http\Middleware\ExpectPassword;
-use App\Http\Middleware\OnlyCurrentUserOrAdmin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,10 +19,14 @@ Route::prefix('user')->middleware('auth:api')->group(function () {
 
   Route::get('posts', 'PostsController@index')->name('user.posts.index');
 
-  Route::middleware('can:update_self')->group(function () {
-    Route::put('/', 'UserController@update')->name('user.update');
-    Route::put('/password', 'UserController@updatePassword')->name('user.update.password');
-    Route::put('/email/{email_update}', 'UserController@updateEmail')->name('user.update.email');
+  Route::middleware('xss')->group(function () {
+    Route::post('posts', 'PostsController@store')->middleware('can:create,App\Post')->name('posts.store');
+
+    Route::middleware('can:update_self')->group(function () {
+      Route::put('/', 'UserController@update')->name('user.update');
+      Route::put('/password', 'UserController@updatePassword')->name('user.update.password');
+      Route::put('/email/{email_update}', 'UserController@updateEmail')->name('user.update.email');
+    });
   });
 });
 
@@ -44,8 +46,8 @@ Route::prefix('users')->group(function () {
 });
 
 Route::prefix('posts')->group(function () {
-  Route::get('/', 'PostsController@index')->middleware('can:viewAny,App\Post')->name('posts.index');
-  Route::get('{post}', 'PostsController@show')->middleware('can:view,App\Post')->name('posts.show');
+  Route::get('/', 'PostsController@index')->name('posts.index');
+  Route::get('{post}', 'PostsController@show')->name('posts.show');
   Route::delete('{post}', 'PostsController@delete')->middleware('can:delete,App\Post')->name('posts.delete');
 });
 

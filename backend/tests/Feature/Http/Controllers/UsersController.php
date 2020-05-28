@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\Http\Controllers\UsersController as Controller;
+use App\Http\Controllers\UsersController as ActualUsersController;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\User;
@@ -19,7 +19,7 @@ class UsersController extends TestCase
   /**
    * Read all
    */
-  public function test_should_show_users_and_do_not_show_the_users_emails_when_get_users()
+  public function testShouldShowUsersAndDoNotShowTheUsersEmailsWhenGetUsers()
   {
     $user = factory(User::class)->create();
 
@@ -48,7 +48,7 @@ class UsersController extends TestCase
       ]);
   }
 
-  public function test_should_show_users_and_its_emails_when_get_users_and_has_administrator_role()
+  public function testShouldShowUsersAndItsEmailsWhenGetUsersAndHavePermission()
   {
     $user = factory(User::class)->create();
     $user->roles()->create([
@@ -80,7 +80,7 @@ class UsersController extends TestCase
   /**
    * Read one
    */
-  public function test_should_show_an_user_and_do_not_show_its_email_when_get_users()
+  public function testShouldShowAnUserAndDoNotShowItsEmailWhenGetUsers()
   {
     $user = factory(User::class)->create();
 
@@ -103,7 +103,7 @@ class UsersController extends TestCase
       ]);
   }
 
-  public function test_should_show_an_user_and_do_not_show_its_email_when_get_users_and_has_administrator_role()
+  public function testShouldShowAnUserAndItsEmailWhenGetUserAndHavePermission()
   {
     $user = factory(User::class)->create();
     $user->roles()->create([
@@ -133,7 +133,7 @@ class UsersController extends TestCase
   /**
    * Create
    */
-  public function test_should_store_user_when_post_users()
+  public function testShouldStoreUserWhenPostUsers()
   {
     $name = $this->faker->name;
     $user_name = $this->faker->name;
@@ -176,19 +176,19 @@ class UsersController extends TestCase
       ]);
   }
 
-  public function test_assert_store_uses_form_request()
+  public function testAssertStoreUsesFormRequest()
   {
     $this->assertActionUsesFormRequest(
-      Controller::class,
+      ActualUsersController::class,
       'store',
       UserStoreRequest::class
     );
   }
 
-  public function test_assert_store_uses_xss_middleware()
+  public function testAssertStoreUsesMiddleware()
   {
     $this->assertActionUsesMiddleware(
-      Controller::class,
+      ActualUsersController::class,
       'store',
       'xss'
     );
@@ -197,12 +197,12 @@ class UsersController extends TestCase
   /**
    * Delete
    */
-  public function test_should_delete_user_when_delete_users_and_has_administrator_role()
+  public function testShouldDeleteUserWhenDeleteUsersAndHavePermission()
   {
     $user = factory(User::class)->create();
     $user->roles()->create([
       'title' => 'Administrator',
-      'permission_level' => Permission::DELETE_USER
+      'permission_level' => Permission::DELETE_ANY_USER
     ]);
 
     $response = $this->actingAs($user)->deleteJson(route('users.delete', [
@@ -214,24 +214,24 @@ class UsersController extends TestCase
     $response->assertNoContent();
   }
 
-  public function test_assert_delete_uses_permission_middleware()
+  public function testAssertDeleteUsesMiddleware()
   {
     $this->assertActionUsesMiddleware(
-      Controller::class,
+      ActualUsersController::class,
       'delete',
-      'can:delete,user'
+      'can:delete,App\User'
     );
   }
 
   /**
    * Update
    */
-  public function test_should_update_user_when_put_users_and_has_administrator_role()
+  public function testShouldUpdateUserWhenPutUsersAndHavePermission()
   {
     $user = factory(User::class)->create();
     $user->roles()->create([
       'title' => 'Administrator',
-      'permission_level' => Permission::UPDATE_USER
+      'permission_level' => Permission::UPDATE_ANY_USER
     ]);
 
     $name = $this->faker->name;
@@ -262,27 +262,27 @@ class UsersController extends TestCase
     $response->assertNoContent();
   }
 
-  public function test_assert_update_uses_form_request()
+  public function testAssertUpdateUsesFormRequest()
   {
     $this->assertActionUsesFormRequest(
-      Controller::class,
+      ActualUsersController::class,
       'update',
       UserUpdateRequest::class
     );
   }
 
-  public function test_assert_update_uses_permission_and_xss_middleware()
+  public function testAssertUpdateUsesMiddleware()
   {
     $this->assertActionUsesMiddleware(
-      Controller::class,
+      ActualUsersController::class,
       'update',
       'xss'
     );
 
     $this->assertActionUsesMiddleware(
-      Controller::class,
+      ActualUsersController::class,
       'update',
-      'can:update,user'
+      'can:update,App\User'
     );
   }
 }
