@@ -15,6 +15,7 @@ class ClearXss
   {
     foreach ($array as $key => $value) {
       if (is_string($value)) {
+        if (in_array($key, $this->ignoreFields)) continue;
         $array[$key] = htmlspecialchars($value);
       } else if (is_array($value)) {
         $array[$key] = $this->clearXss($value);
