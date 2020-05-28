@@ -19,7 +19,7 @@ class PostsController extends TestCase
   /**
    * Read all
    */
-  public function testShouldShowPostsOrderedByLikesWhenGetPosts()
+  public function testShouldShowPostsOrderedByDescLikesWhenGetPosts()
   {
     /* @var User $user */
     $title = $this->faker->title;
@@ -31,27 +31,23 @@ class PostsController extends TestCase
       'title' => $title,
       'description' => $description,
     ]);
-    $firstPost->likes = 2;
-    $firstPost->save();
+    $firstPost->likes()->saveMany([$user, $user]);
 
     /* @var Post $secondPost */
     $secondPost = $user->posts()->create([
       'title' => $title,
       'description' => $description,
     ]);
-    $secondPost->likes = 5;
-    $secondPost->save();
+    $secondPost->likes()->saveMany([$user, $user, $user, $user]);
 
-    $response = $this->getJson(route('posts.index', [
-      'user' => $user->id
-    ]));
+    $response = $this->getJson(route('posts.index'));
 
     $response->assertOk()
       ->assertJson([
         [
           'id' => $secondPost->id,
           'title' => $secondPost->title,
-          'likes' => $secondPost->likes,
+          'likes' => $secondPost->likes->count(),
           'created_by' => route('users.show', [
             'user' => $user->id
           ]),
@@ -61,7 +57,55 @@ class PostsController extends TestCase
         [
           'id' => $firstPost->id,
           'title' => $firstPost->title,
-          'likes' => $firstPost->likes,
+          'likes' => $firstPost->likes->count(),
+          'created_by' => route('users.show', [
+            'user' => $user->id
+          ]),
+          'updated_at' => $firstPost->updated_at->toISOString(),
+          'created_at' => $firstPost->updated_at->toISOString(),
+        ],
+      ]);
+  }
+
+  public function testShouldShowPostsOrderedByDescIdWhenGetUsersPosts()
+  {
+    /* @var User $user */
+    $title = $this->faker->title;
+    $description = $this->faker->text;
+
+    $user = factory(User::class)->create();
+    /* @var Post $firstPost */
+    $firstPost = $user->posts()->create([
+      'title' => $title,
+      'description' => $description,
+    ]);
+
+    /* @var Post $secondPost */
+    $secondPost = $user->posts()->create([
+      'title' => $title,
+      'description' => $description,
+    ]);
+
+    $response = $this->getJson(route('users.posts.index', [
+      'user' => $user->id
+    ]));
+
+    $response->assertOk()
+      ->assertJson([
+        [
+          'id' => $secondPost->id,
+          'title' => $secondPost->title,
+          'likes' => $secondPost->likes->count(),
+          'created_by' => route('users.show', [
+            'user' => $user->id
+          ]),
+          'updated_at' => $secondPost->updated_at->toISOString(),
+          'created_at' => $secondPost->updated_at->toISOString(),
+        ],
+        [
+          'id' => $firstPost->id,
+          'title' => $firstPost->title,
+          'likes' => $firstPost->likes->count(),
           'created_by' => route('users.show', [
             'user' => $user->id
           ]),
@@ -95,7 +139,7 @@ class PostsController extends TestCase
       ->assertJson([
         'id' => $post->id,
         'title' => $post->title,
-        'likes' => $post->likes,
+        'likes' => $post->likes->count(),
         'created_by' => route('users.show', [
           'user' => $user->id
         ]),
@@ -139,9 +183,9 @@ class PostsController extends TestCase
       ->assertJson([
         'id' => $post->id,
         'title' => $post->title,
-        'likes' => $post->likes,
+        'likes' => $post->likes->count(),
         'created_by' => route('users.show', [
-          'user' => $post->id
+          'user' => $user->id
         ]),
         'updated_at' => $post->updated_at->toISOString(),
         'created_at' => $post->updated_at->toISOString(),
