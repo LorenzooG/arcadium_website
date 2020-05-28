@@ -46,12 +46,12 @@ class UsersController extends Controller
   /**
    * Find and show an user by it's id
    *
-   * @param int $user
+   * @param User $user
    * @return UserResource
    */
-  public function show(int $user)
+  public function show(User $user)
   {
-    return new UserResource($this->userRepository->findUserById($user));
+    return new UserResource($user);
   }
 
   /**
