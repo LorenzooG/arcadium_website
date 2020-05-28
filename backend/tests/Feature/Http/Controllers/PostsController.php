@@ -10,6 +10,7 @@ use App\Post;
 use App\User;
 use App\Utils\Permission;
 use JMac\Testing\Traits\AdditionalAssertions;
+use Psy\Util\Json;
 use Tests\TestCase;
 
 class PostsController extends TestCase
@@ -361,7 +362,7 @@ class PostsController extends TestCase
 
     $post = $posts->first();
 
-    $this->assertEquals(1, $post->likes->count());
+    $this->assertEquals(1, $post->likes()->count());
 
     $response->assertNoContent();
   }

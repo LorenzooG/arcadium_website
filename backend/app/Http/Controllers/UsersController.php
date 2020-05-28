@@ -8,7 +8,6 @@ use App\Http\Resources\UserResource;
 use App\Repositories\UserRepository;
 use App\User;
 use Exception;
-use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
@@ -17,18 +16,15 @@ class UsersController extends Controller
 {
 
   private UserRepository $userRepository;
-  private Repository $cacheRepository;
 
   /**
    * UsersController constructor
    *
    * @param UserRepository $userRepository
-   * @param Repository $cacheRepository
    */
-  public function __construct(UserRepository $userRepository, Repository $cacheRepository)
+  public function __construct(UserRepository $userRepository)
   {
     $this->userRepository = $userRepository;
-    $this->cacheRepository = $cacheRepository;
   }
 
   /**
@@ -71,7 +67,11 @@ class UsersController extends Controller
 
     $data['avatar_url'] = '';
 
-    return new UserResource($this->userRepository->store($data));
+    $user = $this->userRepository->store($data);
+
+    $this->userRepository->forgetUserFromCache($user);
+
+    return new UserResource($user);
   }
 
   /**
@@ -83,7 +83,7 @@ class UsersController extends Controller
    */
   public function update(User $user, UserUpdateRequest $request)
   {
-    $this->cacheRepository->forget($this->userRepository->getCacheKey("show.{$user->id}"));
+    $this->userRepository->forgetUserFromCache($user);
 
     $user->update($request->only([
       'email',

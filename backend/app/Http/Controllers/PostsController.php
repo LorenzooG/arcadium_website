@@ -10,7 +10,6 @@ use App\Post;
 use App\Repositories\PostRepository;
 use App\User;
 use Exception;
-use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
@@ -19,18 +18,15 @@ class PostsController extends Controller
 {
 
   private PostRepository $postRepository;
-  private Repository $cacheRepository;
 
   /**
    * PostsController constructor
    *
    * @param PostRepository $postRepository
-   * @param Repository $cacheRepository
    */
-  public function __construct(PostRepository $postRepository, Repository $cacheRepository)
+  public function __construct(PostRepository $postRepository)
   {
     $this->postRepository = $postRepository;
-    $this->cacheRepository = $cacheRepository;
   }
 
 
@@ -77,6 +73,8 @@ class PostsController extends Controller
       'description'
     ]));
 
+    $this->postRepository->forgetPostFromCache($post);
+
     return new PostResource($post);
   }
 
@@ -89,9 +87,9 @@ class PostsController extends Controller
    */
   public function like(PostLikeRequest $request, Post $post)
   {
-    $this->cacheRepository->forget("show.{$post->id}");
-
     $post->likes()->save($request->user());
+
+    $this->postRepository->forgetPostFromCache($post);
 
     return response()->noContent();
   }
@@ -105,12 +103,12 @@ class PostsController extends Controller
    */
   public function update(Post $post, PostUpdateRequest $request)
   {
-    $this->cacheRepository->forget("show.{$post->id}");
-
     $post->update($request->only([
       'title',
       'description'
     ]));
+    
+    $this->postRepository->forgetPostFromCache($post);
 
     return response()->noContent();
   }
