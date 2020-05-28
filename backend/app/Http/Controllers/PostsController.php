@@ -16,7 +16,7 @@ class PostsController extends Controller
 
   public function index()
   {
-    return PostResource::collection(Post::allOrderedByLikes());
+    return PostResource::collection(Post::byLikes());
   }
 
   public function user(User $user)
