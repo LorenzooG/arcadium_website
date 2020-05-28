@@ -6,7 +6,9 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Repositories\UserRepository;
+use App\User;
 use Exception;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
@@ -14,21 +16,19 @@ use Illuminate\Pagination\Paginator;
 class UsersController extends Controller
 {
 
-  /**
-   * User repository
-   *
-   * @var UserRepository
-   */
-  protected UserRepository $userRepository;
+  private UserRepository $userRepository;
+  private Repository $cacheRepository;
 
   /**
    * UsersController constructor
    *
    * @param UserRepository $userRepository
+   * @param Repository $cacheRepository
    */
-  public function __construct(UserRepository $userRepository)
+  public function __construct(UserRepository $userRepository, Repository $cacheRepository)
   {
     $this->userRepository = $userRepository;
+    $this->cacheRepository = $cacheRepository;
   }
 
   /**
@@ -75,15 +75,17 @@ class UsersController extends Controller
   }
 
   /**
-   * Find and update user by it's id
+   * Find and update user
    *
-   * @param int $user
+   * @param User $user
    * @param UserUpdateRequest $request
    * @return Response
    */
-  public function update(int $user, UserUpdateRequest $request)
+  public function update(User $user, UserUpdateRequest $request)
   {
-    $this->userRepository->updateUserById($user, $request->only([
+    $this->cacheRepository->forget($this->userRepository->getCacheKey("show.{$user->id}"));
+
+    $user->update($request->only([
       'email',
       'password',
       'name',
@@ -94,15 +96,15 @@ class UsersController extends Controller
   }
 
   /**
-   * Find and delete user by it's id
+   * Find and delete user
    *
-   * @param int $user
+   * @param User $user
    * @return Response
    * @throws Exception
    */
-  public function delete(int $user)
+  public function delete(User $user)
   {
-    $this->userRepository->deleteUserById($user);
+    $user->delete();
 
     return response()->noContent();
   }
