@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\Http\Controllers\UserController as ActualUserController;
+use App\Http\Controllers\SelfUserController as ActualUserController;
 use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateEmailRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
-class UserController extends TestCase
+class SelfUserControllerTest extends TestCase
 {
   use AdditionalAssertions;
 
