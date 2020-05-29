@@ -67,4 +67,37 @@ class RolePolicy
   {
     return $user->hasPermission(Permission::DELETE_ROLE);
   }
+
+  /**
+   * Determine whether the user can view self roles
+   *
+   * @param User $user
+   * @return bool
+   */
+  public function viewSelf(User $user)
+  {
+    return $user->hasPermission(Permission::VIEW_SELF_ROLES);
+  }
+
+  /**
+   * Determine whether the user can attach role to any user
+   *
+   * @param User $user
+   * @return bool
+   */
+  public function attach(User $user)
+  {
+    return $user->hasPermission(Permission::ATTACH_ROLE_TO_USER);
+  }
+
+  /**
+   * Determine whether the user can detach role to any user
+   *
+   * @param User $user
+   * @return bool
+   */
+  public function detach(User $user)
+  {
+    return $user->hasPermission(Permission::DETACH_ROLE_TO_USER);
+  }
 }
