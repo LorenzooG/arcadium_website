@@ -15,19 +15,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('user')->middleware('auth:api')->group(function () {
-  Route::delete('/', 'UserController@delete')->middleware('can:delete_self')->name('user.delete');
+  Route::delete('/', 'SelfUserController@delete')->middleware('can:delete_self')->name('user.delete');
 
-  Route::get('posts', 'UserController@posts')->name('user.posts.index');
-  Route::get('roles', 'UserController@roles')->middleware('can:viewSelf,App\Role')->name('user.roles.index');
+  Route::get('posts', 'SelfUserController@posts')->name('user.posts.index');
+  Route::get('roles', 'SelfUserController@roles')->middleware('can:viewSelf,App\Role')->name('user.roles.index');
 
   Route::middleware('xss')->group(function () {
     Route::post('posts', 'PostsController@store')->middleware('can:create,App\Post')->name('posts.store');
     Route::delete('posts/{post}', 'PostsController@delete')->middleware('can:delete,post')->name('user.posts.delete');
 
     Route::middleware('can:update_self')->group(function () {
-      Route::put('/', 'UserController@update')->name('user.update');
-      Route::put('/password', 'UserController@updatePassword')->name('user.update.password');
-      Route::put('/email/{email_update}', 'UserController@updateEmail')->name('user.update.email');
+      Route::put('/', 'SelfUserController@update')->name('user.update');
+      Route::put('/password', 'SelfUserController@updatePassword')->name('user.update.password');
+      Route::put('/email/{email_update}', 'SelfUserController@updateEmail')->name('user.update.email');
     });
   });
 });
