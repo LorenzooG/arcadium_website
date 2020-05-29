@@ -47,6 +47,8 @@ class Permission
 
   const DETACH_ROLE_TO_USER = 1048576;
 
+  const VIEW_SELF_ROLES = 2097152;
+
   const ALL =
     self::NONE
     | self::STORE_USER
@@ -68,6 +70,7 @@ class Permission
     | self::UPDATE_ROLE
     | self::DELETE_ROLE
     | self::ATTACH_ROLE_TO_USER
-    | self::DETACH_ROLE_TO_USER;
+    | self::DETACH_ROLE_TO_USER
+    | self::VIEW_SELF_ROLES;
 
 }

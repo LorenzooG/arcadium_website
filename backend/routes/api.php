@@ -18,6 +18,7 @@ Route::prefix('user')->middleware('auth:api')->group(function () {
   Route::delete('/', 'UserController@delete')->middleware('can:delete_self')->name('user.delete');
 
   Route::get('posts', 'UserController@posts')->name('user.posts.index');
+  Route::get('roles', 'UserController@roles')->middleware('can:viewSelf,App\Role')->name('user.roles.index');
 
   Route::middleware('xss')->group(function () {
     Route::post('posts', 'PostsController@store')->middleware('can:create,App\Post')->name('posts.store');
@@ -31,10 +32,24 @@ Route::prefix('user')->middleware('auth:api')->group(function () {
   });
 });
 
+Route::prefix('roles')->group(function () {
+  Route::get('/', 'RolesController@index')->middleware('can:viewAny,App\Role')->name('roles.index');
+  Route::delete('{role}', 'RolesController@delete')->middleware('can:delete,role')->name('roles.delete');
+
+  Route::middleware('xss')->group(function () {
+    Route::get('/', 'RolesController@store')->middleware('can:create,App\Role')->name('roles.store');
+    Route::get('{role}', 'RolesController@update')->middleware('can:update,role')->name('roles.update');
+  });
+});
 
 Route::prefix('users')->group(function () {
   Route::get('/', 'UsersController@index')->name('users.index');
   Route::get('{user}', 'UsersController@show')->name('users.show');
+
+  Route::get('{user}/roles', 'RolesController@user')->middleware('can:view,role')->name('users.roles.show');
+
+  Route::post('{user}/roles/{role}')->middleware('can:attach,App\Role')->name('users.role.attach');
+  Route::delete('{role}/roles/{role}')->middleware('can:detach,App\Role')->name('users.role.detach');
 
   Route::get('{user}/posts', 'PostsController@user')->name('users.posts.index');
 
