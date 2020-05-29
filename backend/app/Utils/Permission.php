@@ -33,6 +33,20 @@ class Permission
 
   const LIKE_POST = 8192;
 
+  const VIEW_ROLE = 16384;
+
+  const VIEW_ANY_ROLE = 32768;
+
+  const STORE_ROLE = 65536;
+
+  const UPDATE_ROLE = 131072;
+
+  const DELETE_ROLE = 262144;
+
+  const ATTACH_ROLE_TO_USER = 524288;
+
+  const DETACH_ROLE_TO_USER = 1048576;
+
   const ALL =
     self::NONE
     | self::STORE_USER
@@ -47,6 +61,13 @@ class Permission
     | self::UPDATE_POST
     | self::DELETE_ANY_POST
     | self::DELETE_POST
-    | self::LIKE_POST;
+    | self::LIKE_POST
+    | self::VIEW_ROLE
+    | self::VIEW_ANY_ROLE
+    | self::STORE_ROLE
+    | self::UPDATE_ROLE
+    | self::DELETE_ROLE
+    | self::ATTACH_ROLE_TO_USER
+    | self::DETACH_ROLE_TO_USER;
 
 }
