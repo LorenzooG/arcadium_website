@@ -14,7 +14,7 @@ use App\Utils\Permission;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
-class RolesController extends TestCase
+class RolesControllerTest extends TestCase
 {
 
   use AdditionalAssertions;

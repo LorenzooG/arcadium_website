@@ -10,7 +10,7 @@ use App\Http\Requests\UserUpdateRequest;
 use Exception;
 use Illuminate\Http\Response;
 
-class UserController extends Controller
+class SelfUserController extends Controller
 {
   /**
    * Update current user's name and user name

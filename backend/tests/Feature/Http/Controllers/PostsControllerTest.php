@@ -13,7 +13,7 @@ use JMac\Testing\Traits\AdditionalAssertions;
 use Psy\Util\Json;
 use Tests\TestCase;
 
-class PostsController extends TestCase
+class PostsControllerTest extends TestCase
 {
   use AdditionalAssertions;
 

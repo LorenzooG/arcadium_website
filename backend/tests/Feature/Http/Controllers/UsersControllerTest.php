@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
-class UsersController extends TestCase
+class UsersControllerTest extends TestCase
 {
   use AdditionalAssertions;
 
