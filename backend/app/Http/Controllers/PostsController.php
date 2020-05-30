@@ -39,7 +39,7 @@ class PostsController extends Controller
   {
     $page = Paginator::resolveCurrentPage();
 
-    return PostResource::collection($this->postRepository->findAllPostsInPage($page));
+    return PostResource::collection($this->postRepository->findPaginatedPosts($page));
   }
 
   /**
@@ -52,7 +52,7 @@ class PostsController extends Controller
   {
     $page = Paginator::resolveCurrentPage();
 
-    return PostResource::collection($this->postRepository->findAllPostsOfUserInPage($user, $page));
+    return PostResource::collection($this->postRepository->findPaginatedPostsForUser($user, $page));
   }
 
   public function show(Post $post)
@@ -68,12 +68,10 @@ class PostsController extends Controller
    */
   public function store(PostStoreRequest $request)
   {
-    $post = $this->postRepository->store($request->user(), $request->only([
+    $post = $this->postRepository->createPost($request->user(), $request->only([
       'title',
       'description'
     ]));
-
-    $this->postRepository->forgetPostFromCache($post);
 
     return new PostResource($post);
   }
@@ -88,8 +86,6 @@ class PostsController extends Controller
   public function like(PostLikeRequest $request, Post $post)
   {
     $post->likes()->save($request->user());
-
-    $this->postRepository->forgetPostFromCache($post);
 
     return response()->noContent();
   }
@@ -108,8 +104,6 @@ class PostsController extends Controller
       'description'
     ]));
 
-    $this->postRepository->forgetPostFromCache($post);
-
     return response()->noContent();
   }
 
@@ -122,8 +116,6 @@ class PostsController extends Controller
    */
   public function delete(Post $post)
   {
-    $this->postRepository->forgetPostFromCache($post);
-
     $post->delete();
 
     return response()->noContent();

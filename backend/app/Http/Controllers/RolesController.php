@@ -40,7 +40,7 @@ class RolesController extends Controller
   {
     $page = Paginator::resolveCurrentPage();
 
-    return RoleResource::collection($this->roleRepository->findAllRolesInPage($page));
+    return RoleResource::collection($this->roleRepository->findPaginatedRoles($page));
   }
 
   /**
@@ -53,7 +53,7 @@ class RolesController extends Controller
   {
     $page = Paginator::resolveCurrentPage();
 
-    return RoleResource::collection($this->roleRepository->findAllRolesOfUserInPage($user, $page));
+    return RoleResource::collection($this->roleRepository->findPaginatedRolesForUser($user, $page));
   }
 
   /**
@@ -64,14 +64,11 @@ class RolesController extends Controller
    */
   public function store(RoleStoreRequest $request)
   {
-    $role = $this->roleRepository->store($request->only([
+    $role = $this->roleRepository->createRole($request->only([
       'title',
       'color',
       'permission_level'
     ]));
-
-    $this->roleRepository->forgetRoleFromCache($role);
-    $this->roleRepository->forgetAllRolesFromCache();
 
     return new RoleResource($role);
   }
@@ -85,13 +82,6 @@ class RolesController extends Controller
    */
   public function delete(Role $role)
   {
-    $role->users()->each(function (User $user) {
-      $this->roleRepository->forgetAllUserRolesFromCache($user);
-    });
-
-    $this->roleRepository->forgetRoleFromCache($role);
-    $this->roleRepository->forgetAllRolesFromCache();
-
     $role->delete();
 
     return response()->noContent();
@@ -112,8 +102,6 @@ class RolesController extends Controller
       'permission_level'
     ]));
 
-    $this->roleRepository->forgetRoleFromCache($role);
-
     return response()->noContent();
   }
 
@@ -128,9 +116,6 @@ class RolesController extends Controller
   {
     $user->roles()->attach($role->id);
 
-    $this->roleRepository->forgetRoleFromCache($role);
-    $this->userRepository->forgetUserFromCache($user);
-
     return response()->noContent();
   }
 
@@ -144,9 +129,6 @@ class RolesController extends Controller
   public function detach(Role $role, User $user)
   {
     $user->roles()->detach($role->id);
-
-    $this->roleRepository->forgetRoleFromCache($role);
-    $this->userRepository->forgetUserFromCache($user);
 
     return response()->noContent();
   }

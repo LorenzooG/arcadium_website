@@ -18,7 +18,7 @@ class PostRepository
   private CacheRepository $cacheRepository;
 
   /**
-   * UserRepository constructor
+   * PostRepository constructor
    *
    * @param CacheRepository $cacheRepository
    */
@@ -33,9 +33,9 @@ class PostRepository
    * @param int $page
    * @return LengthAwarePaginator
    */
-  public function findAllPostsInPage($page)
+  public function findPaginatedPosts($page)
   {
-    return $this->cacheRepository->remember($this->getCacheKey("all.page.$page"), now()->addHour(), function () {
+    return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () {
       return Post::byLikes()->paginate();
     });
   }
@@ -47,9 +47,9 @@ class PostRepository
    * @param int $page
    * @return LengthAwarePaginator
    */
-  public function findAllPostsOfUserInPage($user, $page)
+  public function findPaginatedPostsForUser($user, $page)
   {
-    return $this->cacheRepository->remember($this->getCacheKey("all.page.$page"), now()->addHour(), function () use ($user) {
+    return $this->cacheRepository->remember($this->getCacheKey("for.$user.paginated.$page"), now()->addHour(), function () use ($user) {
       return $user->posts()->orderByDesc('id')->paginate();
     });
   }
@@ -68,28 +68,34 @@ class PostRepository
   }
 
   /**
-   * Store post in database
+   * Create post in database
    *
    * @param User $user
    * @param array $data
    * @return Model
    */
-  public function store(User $user, array $data)
+  public function createPost(User $user, array $data)
   {
     return $user->posts()->create($data);
   }
 
   /**
-   * Forget post from cache
+   * Remove all keys from cache
    *
-   * @param Post $post
-   * @return bool
+   * @return void
    */
-  public function forgetPostFromCache($post) {
-    return $this->cacheRepository->forget($this->getCacheKey("show.{$post->id}"));
+  public function flushCache()
+  {
+    $this->cacheRepository->getStore()->flush();
   }
 
-  public final function getCacheKey($key)
+  /**
+   * Return cache key for post repository
+   *
+   * @param string $key
+   * @return string
+   */
+  public final function getCacheKey(string $key)
   {
     return self::CACHE_KEY . '.' . $key;
   }
