@@ -49,7 +49,7 @@ Route::prefix('users')->group(function () {
   Route::get('{user}/roles', 'RolesController@user')->middleware('can:view,role')->name('users.roles.show');
 
   Route::post('{user}/roles/{role}')->middleware('can:attach,App\Role')->name('users.role.attach');
-  Route::delete('{role}/roles/{role}')->middleware('can:detach,App\Role')->name('users.role.detach');
+  Route::delete('{user}/roles/{role}')->middleware('can:detach,App\Role')->name('users.role.detach');
 
   Route::get('{user}/posts', 'PostsController@user')->name('users.posts.index');
 
