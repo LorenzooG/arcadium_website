@@ -36,7 +36,7 @@ class UsersController extends Controller
   {
     $page = Paginator::resolveCurrentPage();
 
-    return UserResource::collection($this->userRepository->findAllUsersInPage($page));
+    return UserResource::collection($this->userRepository->findPaginatedUsers($page));
   }
 
   /**
@@ -67,9 +67,7 @@ class UsersController extends Controller
 
     $data['avatar_url'] = '';
 
-    $user = $this->userRepository->store($data);
-
-    $this->userRepository->forgetUserFromCache($user);
+    $user = $this->userRepository->createUser($data);
 
     return new UserResource($user);
   }
@@ -83,8 +81,6 @@ class UsersController extends Controller
    */
   public function update(User $user, UserUpdateRequest $request)
   {
-    $this->userRepository->forgetUserFromCache($user);
-
     $user->update($request->only([
       'email',
       'password',
@@ -104,8 +100,6 @@ class UsersController extends Controller
    */
   public function delete(User $user)
   {
-    $this->userRepository->forgetUserFromCache($user);
-
     $user->delete();
 
     return response()->noContent();

@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Observers\PostObserver;
+use App\Observers\RoleObserver;
+use App\Observers\UserObserver;
+use App\Post;
+use App\Role;
+use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,5 +31,9 @@ class AppServiceProvider extends ServiceProvider
   public function boot()
   {
     JsonResource::withoutWrapping();
+
+    User::observe(UserObserver::class);
+    Post::observe(PostObserver::class);
+    Role::observe(RoleObserver::class);
   }
 }

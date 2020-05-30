@@ -33,9 +33,9 @@ class RoleRepository
    * @param int $page
    * @return LengthAwarePaginator
    */
-  public function findAllRolesInPage($page)
+  public function findPaginatedRoles($page)
   {
-    return $this->cacheRepository->remember($this->getCacheKey("all.pages.$page"), now()->addHour(), function () {
+    return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () {
       return Role::query()->paginate();
     });
   }
@@ -47,9 +47,9 @@ class RoleRepository
    * @param int $page
    * @return LengthAwarePaginator
    */
-  public function findAllRolesOfUserInPage($user, $page)
+  public function findPaginatedRolesForUser($user, $page)
   {
-    return $this->cacheRepository->remember($this->getCacheKey("user.{$user->id}.roles.$page"), now()->addHour(), function () use ($user) {
+    return $this->cacheRepository->remember($this->getCacheKey("for.$user.paginated.$page"), now()->addHour(), function () use ($user) {
       return $user->roles()->paginate();
     });
   }
@@ -60,7 +60,7 @@ class RoleRepository
    * @param array $data
    * @return Model
    */
-  public function store(array $data)
+  public function createRole(array $data)
   {
     return Role::create($data);
   }
@@ -79,39 +79,21 @@ class RoleRepository
   }
 
   /**
-   * Forget role from cache
+   * Remove all keys from cache
    *
-   * @param Role $role
-   * @return bool
+   * @return void
    */
-  public function forgetRoleFromCache($role)
+  public function flushCache()
   {
-    return $this->cacheRepository->forget($this->getCacheKey("show.{$role->id}"));
-  }
-
-
-  /**
-   * Forget all roles from the cache
-   *
-   * @return bool
-   */
-  public function forgetAllRolesFromCache()
-  {
-    return $this->cacheRepository->forget($this->getCacheKey("all.*"));
+    $this->cacheRepository->getStore()->flush();
   }
 
   /**
-   * Forget all user's roles from the cache
+   * Return cache key for role repository
    *
-   * @param User $user
-   * @return bool
+   * @param string $key
+   * @return string
    */
-  public function forgetAllUserRolesFromCache($user)
-  {
-    return $this->cacheRepository->forget($this->getCacheKey("user.{$user->id}.roles.*"));
-  }
-
-
   public final function getCacheKey($key)
   {
     return self::CACHE_KEY . '.' . $key;

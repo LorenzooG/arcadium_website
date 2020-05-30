@@ -31,9 +31,9 @@ class UserRepository
    * @param int $page
    * @return LengthAwarePaginator
    */
-  public function findAllUsersInPage($page)
+  public function findPaginatedUsers($page)
   {
-    return $this->cacheRepository->remember($this->getCacheKey("all.page.$page"), now()->addHour(), function () {
+    return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () {
       return User::query()->paginate();
     });
   }
@@ -57,22 +57,27 @@ class UserRepository
    * @param array $data
    * @return User
    */
-  public function store(array $data)
+  public function createUser(array $data)
   {
     return User::create($data);
   }
 
   /**
-   * Forget user from cache
+   * Remove all keys from cache
    *
-   * @param User $user
-   * @return bool
+   * @return void
    */
-  public function forgetUserFromCache($user)
+  public function flushCache()
   {
-    return $this->cacheRepository->forget($this->getCacheKey("show.{$user->id}"));
+    $this->cacheRepository->getStore()->flush();
   }
 
+  /**
+   * Return cache key for user repository
+   *
+   * @param string $key
+   * @return string
+   */
   public final function getCacheKey($key)
   {
     return self::CACHE_KEY . '.' . $key;
