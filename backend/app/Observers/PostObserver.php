@@ -22,7 +22,7 @@ class PostObserver
    */
   public function created(Post $post)
   {
-    $this->postRepository->updatePostInTheCache($post);
+    $this->postRepository->flushCache();
   }
 
   /**
