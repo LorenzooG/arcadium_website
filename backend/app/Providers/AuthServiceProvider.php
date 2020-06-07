@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use App\Auth\JwtGuard;
+use App\Policies\PostPolicy;
+use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
+use App\Role;
 use App\User;
 use App\Utils\Permission;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -18,7 +21,9 @@ class AuthServiceProvider extends ServiceProvider
    * @var array
    */
   protected $policies = [
-    User::class => UserPolicy::class
+		User::class => UserPolicy::class,
+		Role::class => RolePolicy::class,
+		Post::class => PostPolicy::class
     // 'App\Model' => 'App\Policies\ModelPolicy',
   ];
 

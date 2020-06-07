@@ -17,7 +17,6 @@ use Illuminate\Pagination\Paginator;
 class RolesController extends Controller
 {
   private RoleRepository $roleRepository;
-  private UserRepository $userRepository;
 
   /**
    * RolesController constructor
@@ -26,7 +25,7 @@ class RolesController extends Controller
    * @param UserRepository $userRepository
    */
   public function __construct(RoleRepository $roleRepository, UserRepository $userRepository)
-  {
+	{
     $this->roleRepository = $roleRepository;
     $this->userRepository = $userRepository;
   }
@@ -41,7 +40,16 @@ class RolesController extends Controller
     $page = Paginator::resolveCurrentPage();
 
     return RoleResource::collection($this->roleRepository->findPaginatedRoles($page));
-  }
+	}
+
+	/**
+	 * Find and show role
+	 *
+	 * @return RoleResource
+	 */
+	public function show(Role $role) {
+		return new RoleResource($role);
+	}
 
   /**
    * Find and show all user's roles in a page
@@ -51,7 +59,7 @@ class RolesController extends Controller
    */
   public function user(User $user)
   {
-    $page = Paginator::resolveCurrentPage();
+		$page = Paginator::resolveCurrentPage();
 
     return RoleResource::collection($this->roleRepository->findPaginatedRolesForUser($user, $page));
   }

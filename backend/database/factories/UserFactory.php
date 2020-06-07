@@ -6,7 +6,7 @@ use App\Role;
 use App\User;
 use App\Utils\Permission;
 use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\Str;
 
 $factory->define(User::class, function (Faker $faker) {
   return [
@@ -16,13 +16,6 @@ $factory->define(User::class, function (Faker $faker) {
     'email' => $faker->unique()->safeEmail,
     'password' => $faker->password(8, 16),
   ];
-});
-
-$factory->afterCreating(User::class, function (User $user, Faker $faker) {
-  $user->roles()->create([
-    'title' => 'Member',
-    'permission_level' => Permission::NONE
-  ]);
 });
 
 $factory->afterCreatingState(User::class, 'admin', function (User $user, Faker $faker) {
