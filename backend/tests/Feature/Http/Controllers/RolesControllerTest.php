@@ -26,7 +26,7 @@ class RolesControllerTest extends TestCase
     /* @var User $user */
     $title = $this->faker->title;
     $permissionLevel = Permission::VIEW_ANY_ROLE | Permission::VIEW_ROLES_PERMISSIONS;
-    $color = $this->faker->word;
+    $color = $this->faker->hexColor;
 
 		$user = factory(User::class)->create();
 		$role = $user->roles()->create([
@@ -56,7 +56,7 @@ class RolesControllerTest extends TestCase
   {
     $title = $this->faker->title;
     $permissionLevel = Permission::VIEW_ANY_ROLE | Permission::VIEW_ROLES_PERMISSIONS;
-    $color = $this->faker->word;
+    $color = $this->faker->hexColor;
 
     $user = factory(User::class)->create();
 		$role = $user->roles()->create([
@@ -122,7 +122,7 @@ class RolesControllerTest extends TestCase
   public function testShouldStoreRoleWhenPostRoles()
   {
     $title = $this->faker->title;
-		$color = $this->faker->word;
+		$color = $this->faker->hexColor;
 		$permissionLevel = Permission::STORE_ROLE | Permission::VIEW_ROLES_PERMISSIONS; 
 
     $user = factory(User::class)->create();
