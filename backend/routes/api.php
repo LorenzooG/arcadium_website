@@ -70,7 +70,7 @@ Route::prefix('posts')->group(function () {
   Route::get('/', 'PostsController@index')->name('posts.index');
   Route::get('{post}', 'PostsController@show')->name('posts.show');
   Route::put('{post}', 'PostsController@update')->middleware(['xss', 'can:update,post'])->name('posts.update');
-  Route::post('{post}/like', 'PostsController@like')->middleware('auth:api')->name('posts.like');
+  Route::post('{post}/like', 'PostsController@like')->middleware(['auth:api', 'can:like,post'])->name('posts.like');
   Route::delete('{post}', 'PostsController@delete')->middleware('can:delete,post')->name('posts.delete');
 	Route::post('{post}', 'CommentController@store')->middleware('can:store,App\Comment')->name('comments.store');
 	Route::get('{post}/comments', 'CommentController@post')->middleware('can:viewAny,App\Comment')->name('post.comments.index');
