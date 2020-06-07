@@ -28,7 +28,8 @@ class RoleResource extends JsonResource
   {
     return [
       'id' => $this->id,
-      'title' => $this->title,
+			'title' => $this->title,
+			'color' => $this->color,
       'permission_level' => $this->when($request->user()->hasPermission(Permission::VIEW_ROLES_PERMISSIONS), $this->permission_level),
       'created_at' => $this->created_at,
       'updated_at' => $this->updated_at

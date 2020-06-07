@@ -18,7 +18,8 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
   protected $fillable = [
-    'title',
+		'title',
+		'color',
     'permission_level'
   ];
 

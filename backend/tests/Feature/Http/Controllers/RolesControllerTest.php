@@ -4,11 +4,10 @@
 namespace Tests\Feature\Http\Controllers;
 
 
-use App\Http\Controllers\PostsController as ActualRolesController;
-use App\Http\Requests\PostLikeRequest;
-use App\Http\Requests\PostStoreRequest;
-use App\Http\Requests\PostUpdateRequest;
-use App\Post;
+use App\Http\Controllers\RolesController as ActualRolesController;
+use App\Http\Requests\RoleStoreRequest;
+use App\Http\Requests\RoleUpdateRequest;
+use App\Role;
 use App\User;
 use App\Utils\Permission;
 use JMac\Testing\Traits\AdditionalAssertions;
@@ -23,75 +22,50 @@ class RolesControllerTest extends TestCase
    * Read all
    */
   public function testShouldShowRolesWhenGetRoles()
-  {
+	{
     /* @var User $user */
     $title = $this->faker->title;
-    $description = $this->faker->text;
+    $permissionLevel = Permission::VIEW_ANY_ROLE | Permission::VIEW_ROLES_PERMISSIONS;
+    $color = $this->faker->word;
 
-    $user = factory(User::class)->create();
-    /* @var Post $firstPost */
-    $firstPost = $user->posts()->create([
+		$user = factory(User::class)->create();
+		$role = $user->roles()->create([
       'title' => $title,
-      'description' => $description,
-    ]);
-    $firstPost->likes()->saveMany([$user, $user]);
+      'color' => $color,
+      'permission_level' => $permissionLevel
+		]);
 
-    /* @var Post $secondPost */
-    $secondPost = $user->posts()->create([
-      'title' => $title,
-      'description' => $description,
-    ]);
-    $secondPost->likes()->saveMany([$user, $user, $user, $user]);
-
-    $response = $this->getJson(route('posts.index'));
-
+    $response = $this->actingAs($user)->getJson(route('roles.index'));
+		
     $response->assertOk()
       ->assertJson([
-        'data' => [
+				'data' => [
           [
-            'id' => $secondPost->id,
-            'title' => $secondPost->title,
-            'likes' => $secondPost->likes->count(),
-            'created_by' => route('users.show', [
-              'user' => $user->id
-            ]),
-            'updated_at' => $secondPost->updated_at->toISOString(),
-            'created_at' => $secondPost->updated_at->toISOString(),
-          ],
-          [
-            'id' => $firstPost->id,
-            'title' => $firstPost->title,
-            'likes' => $firstPost->likes->count(),
-            'created_by' => route('users.show', [
-              'user' => $user->id
-            ]),
-            'updated_at' => $firstPost->updated_at->toISOString(),
-            'created_at' => $firstPost->updated_at->toISOString(),
+            'id' => $role->id,
+            'title' => $title,
+            'color' => $color, 
+            'permission_level' => $permissionLevel,
+            'created_at' => $role->created_at->toISOString(),
+            'updated_at' => $role->updated_at->toISOString()
           ]
-        ],
+				]
       ]);
   }
 
-  public function testShouldShowPostsOrderedByDescIdWhenGetUsersPosts()
+  public function testShouldShowRolesWhenGetUsersRoles()
   {
-    /* @var User $user */
     $title = $this->faker->title;
-    $description = $this->faker->text;
+    $permissionLevel = Permission::VIEW_ANY_ROLE | Permission::VIEW_ROLES_PERMISSIONS;
+    $color = $this->faker->word;
 
     $user = factory(User::class)->create();
-    /* @var Post $firstPost */
-    $firstPost = $user->posts()->create([
-      'title' => $title,
-      'description' => $description,
-    ]);
+		$role = $user->roles()->create([
+			'title' => $title,
+			'permission_level' => $permissionLevel,
+			'color' => $color,
+		]);
 
-    /* @var Post $secondPost */
-    $secondPost = $user->posts()->create([
-      'title' => $title,
-      'description' => $description,
-    ]);
-
-    $response = $this->getJson(route('users.posts.index', [
+    $response = $this->actingAs($user)->getJson(route('users.roles.index', [
       'user' => $user->id
     ]));
 
@@ -99,24 +73,12 @@ class RolesControllerTest extends TestCase
       ->assertJson([
         'data' => [
           [
-            'id' => $secondPost->id,
-            'title' => $secondPost->title,
-            'likes' => $secondPost->likes->count(),
-            'created_by' => route('users.show', [
-              'user' => $user->id
-            ]),
-            'updated_at' => $secondPost->updated_at->toISOString(),
-            'created_at' => $secondPost->updated_at->toISOString(),
-          ],
-          [
-            'id' => $firstPost->id,
-            'title' => $firstPost->title,
-            'likes' => $firstPost->likes->count(),
-            'created_by' => route('users.show', [
-              'user' => $user->id
-            ]),
-            'updated_at' => $firstPost->updated_at->toISOString(),
-            'created_at' => $firstPost->updated_at->toISOString(),
+            'id' => $role->id,
+            'title' => $title,
+            'permission_level' => $permissionLevel,
+            'color' => $color, 
+            'created_at' => $role->created_at->toISOString(),
+            'updated_at' => $role->updated_at->toISOString()
           ]
         ]
       ]);
@@ -125,77 +87,76 @@ class RolesControllerTest extends TestCase
   /**
    * Read one
    */
-  public function testShouldShowAnPostWhenGetUsersPosts()
+  public function testShouldShowAnRoleWhenGetRoles()
   {
     /* @var User $user */
     $title = $this->faker->title;
-    $description = $this->faker->text;
+		$color = '#fff';
+		$permissionLevel = Permission::VIEW_ROLE | Permission::VIEW_ROLES_PERMISSIONS;
 
     $user = factory(User::class)->create();
-    /* @var Post $post */
-    $post = $user->posts()->create([
-      'title' => $title,
-      'description' => $description
-    ]);
-
-    $response = $this->getJson(route('posts.show', [
-      'post' => $post->id
-    ]));
+		$role = $user->roles()->create([
+			'title' => $title,
+			'color' => $color,
+			'permission_level' => $permissionLevel
+		]);
+		
+		$response = $this->actingAs($user)->getJson(route('roles.show', [
+      'role' => $role->id
+		]));
 
     $response->assertOk()
       ->assertJson([
-        'id' => $post->id,
-        'title' => $post->title,
-        'likes' => $post->likes->count(),
-        'created_by' => route('users.show', [
-          'user' => $user->id
-        ]),
-        'updated_at' => $post->updated_at->toISOString(),
-        'created_at' => $post->updated_at->toISOString(),
+				'id' => $role->id,
+				'title' => $role->title,
+				'color' => $color,
+				'permission_level' => $permissionLevel,
+				'updated_at' => $role->updated_at->toISOString(),
+        'created_at' => $role->updated_at->toISOString(),
       ]);
   }
 
   /**
    * Create
    */
-  public function testShouldStorePostWhenPostUsersPosts()
+  public function testShouldStoreRoleWhenPostRoles()
   {
     $title = $this->faker->title;
-    $description = $this->faker->text;
+		$color = $this->faker->word;
+		$permissionLevel = Permission::STORE_ROLE | Permission::VIEW_ROLES_PERMISSIONS; 
 
-    /* @var User $user */
     $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Permission',
-      'permission_level' => Permission::STORE_POST
+    $role = $user->roles()->create([
+			'title' => $title,
+			'color' => $color,
+      'permission_level' => $permissionLevel
     ]);
 
-    $response = $this->actingAs($user)->postJson(route('posts.store'), [
-      'title' => $title,
-      'description' => $description
-    ]);
+    $response = $this->actingAs($user)->postJson(route('roles.store'), [
+			'title' => $title,
+			'color' => $color,
+			'permission_level' => $permissionLevel
+		]);
 
-    $posts = Post::query()
+    $roles = Role::query()
       ->where('id', $response->json('id'))
-      ->where('title', $title)
-      ->where('description', $description)
+			->where('title', $title)
+			->where('permission_level', $permissionLevel)
+      ->where('color', $color)
       ->get();
 
-    /* @var Post $post */
-    $post = $posts->first();
+    $role = $roles->first();
 
-    $this->assertCount(1, $posts);
+    $this->assertCount(1, $roles);
 
     $response->assertCreated()
       ->assertJson([
-        'id' => $post->id,
-        'title' => $post->title,
-        'likes' => $post->likes->count(),
-        'created_by' => route('users.show', [
-          'user' => $user->id
-        ]),
-        'updated_at' => $post->updated_at->toISOString(),
-        'created_at' => $post->updated_at->toISOString(),
+        'id' => $role->id,
+        'title' => $role->title,
+				'color' => $color,
+				'permission_level' => $permissionLevel,
+				'updated_at' => $role->updated_at->toISOString(),
+        'created_at' => $role->updated_at->toISOString(),
       ]);
   }
 
@@ -204,7 +165,7 @@ class RolesControllerTest extends TestCase
     $this->assertActionUsesFormRequest(
       ActualRolesController::class,
       'store',
-      PostStoreRequest::class
+      RoleStoreRequest::class
     );
   }
 
@@ -219,7 +180,7 @@ class RolesControllerTest extends TestCase
     $this->assertActionUsesMiddleware(
       ActualRolesController::class,
       'store',
-      'can:create,App\Post'
+      'can:create,App\Role'
     );
   }
 
@@ -229,42 +190,16 @@ class RolesControllerTest extends TestCase
   public function testShouldDeletePostWhenDeletePosts()
   {
     $user = factory(User::class)->create();
-    $user->roles()->create([
+    $role = $user->roles()->create([
       'title' => 'Administrator',
-      'permission_level' => Permission::DELETE_ANY_POST
-    ]);
-    $post = $user->posts()->create([
-      'title' => $this->faker->title,
-      'description' => $this->faker->text,
+      'permission_level' => Permission::DELETE_ROLE
     ]);
 
-    $response = $this->actingAs($user)->deleteJson(route('posts.delete', [
-      'post' => $post->id
+    $response = $this->actingAs($user)->deleteJson(route('roles.delete', [
+      'role' => $role->id
     ]));
 
-    $this->assertDeleted($post);
-
-    $response->assertNoContent();
-  }
-
-  public function testShouldDeletePostWhenDeleteUserPosts()
-  {
-    $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::DELETE_POST
-    ]);
-    $post = $user->posts()->create([
-      'title' => $this->faker->title,
-      'description' => $this->faker->text,
-    ]);
-
-    $response = $this->actingAs($user)->deleteJson(route('user.posts.delete', [
-      'post' => $post->id,
-      'user' => $user->id
-    ]));
-
-    $this->assertDeleted($post);
+    $this->assertDeleted($role);
 
     $response->assertNoContent();
   }
@@ -274,7 +209,7 @@ class RolesControllerTest extends TestCase
     $this->assertActionUsesMiddleware(
       ActualRolesController::class,
       'delete',
-      'can:delete,post'
+      'can:delete,role'
     );
   }
 
@@ -284,32 +219,32 @@ class RolesControllerTest extends TestCase
   public function testShouldUpdatePostWhenPutPosts()
   {
     $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::UPDATE_POST
-    ]);
-    $post = $user->posts()->create([
+		$role = $user->roles()->create([
       'title' => $this->faker->title,
-      'description' => $this->faker->text,
+			'permission_level' => Permission::UPDATE_ROLE,
+			'color' => $this->faker->hexColor
     ]);
+	
+		$title = $this->faker->title;
+		$color = $this->faker->hexColor;
+		$permissionLevel = Permission::NONE;
 
-    $title = $this->faker->title;
-    $description = $this->faker->text;
-
-    $response = $this->actingAs($user)->putJson(route('posts.update', [
-      'post' => $post->id
+    $response = $this->actingAs($user)->putJson(route('roles.update', [
+      'role' => $role->id
     ]), [
-      'title' => $title,
-      'description' => $description,
-    ]);
+			'title' => $title,
+			'color' => $color,
+      'permission_level' => $permissionLevel,
+		]);
 
-    $users = Post::query()
-      ->where('id', $post->id)
-      ->where('title', $title)
-      ->where('description', $description)
+    $roles = Role::query()
+      ->where('id', $role->id)
+			->where('title', $title)
+			->where('permission_level', $permissionLevel)
+      ->where('color', $color)
       ->get();
 
-    $this->assertCount(1, $users);
+    $this->assertCount(1, $roles);
 
     $response->assertNoContent();
   }
@@ -319,7 +254,7 @@ class RolesControllerTest extends TestCase
     $this->assertActionUsesFormRequest(
       ActualRolesController::class,
       'update',
-      PostUpdateRequest::class
+      RoleUpdateRequest::class
     );
   }
 
@@ -334,62 +269,7 @@ class RolesControllerTest extends TestCase
     $this->assertActionUsesMiddleware(
       ActualRolesController::class,
       'update',
-      'can:update,post'
+      'can:update,App\Role'
     );
-  }
-
-  public function testShouldLikePostWhenPostPostsLike()
-  {
-    /** @var User $user */
-    $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::LIKE_POST
-    ]);
-    /** @var Post $post */
-    $post = $user->posts()->create([
-      'title' => $this->faker->title,
-      'description' => $this->faker->text,
-    ]);
-
-    $response = $this->actingAs($user)->postJson(route('posts.like', [
-      'post' => $post->id
-    ]));
-
-    $posts = Post::query()
-      ->where('id', $post->id)
-      ->get();
-
-    $this->assertCount(1, $posts);
-
-    $post = $posts->first();
-
-    $this->assertEquals(1, $post->likes()->count());
-
-    $response->assertNoContent();
-  }
-
-  public function testAssertLikeUsesFormRequest()
-  {
-    $this->assertActionUsesFormRequest(
-      ActualRolesController::class,
-      'like',
-      PostLikeRequest::class
-    );
-  }
-
-  public function testAssertLikeUsesMiddleware()
-  {
-    $this->assertActionUsesMiddleware(
-      ActualRolesController::class,
-      'like',
-      'auth:api'
-    );
-
-    $this->assertActionUsesMiddleware(
-      ActualRolesController::class,
-      'like',
-      'can:like,post'
-    );
-  }
+	}
 }

@@ -29,10 +29,9 @@ class RolePolicy
    * @param Role $role
    * @return mixed
    */
-  public function view(User $user, Role $role)
+  public function view(User $user)
   {
-    return $user->hasPermission(Permission::VIEW_ROLE)
-      && $user->roles()->where('role_id', $role->id)->exists();
+    return $user->hasPermission(Permission::VIEW_ROLE);
   }
 
   /**
@@ -42,7 +41,7 @@ class RolePolicy
    * @return mixed
    */
   public function create(User $user)
-  {
+	{
     return $user->hasPermission(Permission::STORE_ROLE);
   }
 
@@ -76,7 +75,8 @@ class RolePolicy
    */
   public function viewSelf(User $user)
   {
-    return $user->hasPermission(Permission::VIEW_SELF_ROLES);
+		return $user->hasPermission(Permission::VIEW_SELF_ROLES) 
+			|| $user->hasPermission(Permission::VIEW_ANY_ROLE);
   }
 
   /**
