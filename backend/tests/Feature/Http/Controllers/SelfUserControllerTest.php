@@ -7,6 +7,7 @@ use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateEmailRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Post;
 use App\User;
 use App\Utils\Permission;
 use Illuminate\Support\Facades\Hash;
@@ -239,4 +240,85 @@ class SelfUserControllerTest extends TestCase
       'can:update_self'
     );
   }
+	
+  public function testShouldShowPostsOrderedByDescIdWhenGetUserPosts()
+  {
+    /* @var User $user */
+    $title = $this->faker->title;
+    $description = $this->faker->text;
+
+    $user = factory(User::class)->create();
+    /* @var Post $firstPost */
+    $firstPost = $user->posts()->create([
+      'title' => $title,
+      'description' => $description,
+    ]);
+
+    /* @var Post $secondPost */
+    $secondPost = $user->posts()->create([
+      'title' => $title,
+      'description' => $description,
+    ]);
+
+    $response = $this->actingAs($user)->getJson(route('user.posts.index'));
+
+    $response->assertOk()
+      ->assertJson([
+        'data' => [
+          [
+            'id' => $secondPost->id,
+            'title' => $secondPost->title,
+            'likes' => $secondPost->likes->count(),
+            'created_by' => route('users.show', [
+              'user' => $user->id
+            ]),
+            'updated_at' => $secondPost->updated_at->toISOString(),
+            'created_at' => $secondPost->updated_at->toISOString(),
+          ],
+          [
+            'id' => $firstPost->id,
+            'title' => $firstPost->title,
+            'likes' => $firstPost->likes->count(),
+            'created_by' => route('users.show', [
+              'user' => $user->id
+            ]),
+            'updated_at' => $firstPost->updated_at->toISOString(),
+            'created_at' => $firstPost->updated_at->toISOString(),
+          ]
+        ]
+      ]);
+  }
+
+  public function testShouldShowRolesWhenGetUserRoles()
+  {
+    $title = $this->faker->title;
+    $permissionLevel = Permission::VIEW_SELF_ROLES | Permission::VIEW_ROLES_PERMISSIONS;
+    $color = $this->faker->word;
+
+    $user = factory(User::class)->create();
+		$role = $user->roles()->create([
+			'title' => $title,
+			'permission_level' => $permissionLevel,
+			'color' => $color
+		]);
+
+    $response = $this->actingAs($user)->getJson(route('user.roles.index', [
+      'user' => $user->id
+		]));
+
+    $response->assertOk()
+      ->assertJson([
+        'data' => [
+          [
+            'id' => $role->id,
+            'title' => $title,
+            'permission_level' => $permissionLevel,
+            'color' => $color, 
+            'created_at' => $role->created_at->toISOString(),
+            'updated_at' => $role->updated_at->toISOString()
+          ]
+        ]
+      ]);
+  }
+
 }
