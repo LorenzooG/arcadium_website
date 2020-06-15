@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Auth\JwtGuard;
+use App\Comment;
+use App\Policies\CommentPolicy;
 use App\Policies\PostPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
@@ -23,7 +25,8 @@ class AuthServiceProvider extends ServiceProvider
   protected $policies = [
 		User::class => UserPolicy::class,
 		Role::class => RolePolicy::class,
-		Post::class => PostPolicy::class
+    Post::class => PostPolicy::class,
+    Comment::class => CommentPolicy::class
     // 'App\Model' => 'App\Policies\ModelPolicy',
   ];
 

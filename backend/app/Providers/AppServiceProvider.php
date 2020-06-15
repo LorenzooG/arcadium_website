@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Comment;
+use App\Observers\CommentObserver;
 use App\Observers\PostObserver;
 use App\Observers\RoleObserver;
 use App\Observers\UserObserver;
@@ -35,5 +37,6 @@ class AppServiceProvider extends ServiceProvider
     User::observe(UserObserver::class);
     Post::observe(PostObserver::class);
     Role::observe(RoleObserver::class);
+    Comment::observe(CommentObserver::class);
   }
 }
