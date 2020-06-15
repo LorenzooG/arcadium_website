@@ -51,6 +51,16 @@ class Permission
 
   const VIEW_ROLES_PERMISSIONS = 4194304;
 
+  const DELETE_COMMENT = 8388608;
+
+  const DELETE_ANY_COMMENT = 16777216;
+
+  const STORE_COMMENT = 33554432;
+
+  const UPDATE_COMMENT = 67108864;
+
+  const UPDATE_ANY_COMMENT = 134217728;
+
   const ALL =
     self::NONE
     | self::STORE_USER
@@ -74,6 +84,11 @@ class Permission
     | self::ATTACH_ROLE_TO_USER
     | self::DETACH_ROLE_TO_USER
     | self::VIEW_SELF_ROLES
-    | self::VIEW_ROLES_PERMISSIONS;
+    | self::VIEW_ROLES_PERMISSIONS
+    | self::STORE_COMMENT
+    | self::UPDATE_ANY_COMMENT
+    | self::UPDATE_COMMENT
+    | self::DELETE_ANY_COMMENT
+    | self::DELETE_COMMENT;
 
 }

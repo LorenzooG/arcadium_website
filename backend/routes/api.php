@@ -62,18 +62,19 @@ Route::prefix('users')->group(function () {
   });
 });
 
-Route::prefix('comments')->group(function () {
-	Route::get('/', 'CommentController@index')->name('comments.index');
-});
-
 Route::prefix('posts')->group(function () {
   Route::get('/', 'PostsController@index')->name('posts.index');
   Route::get('{post}', 'PostsController@show')->name('posts.show');
   Route::put('{post}', 'PostsController@update')->middleware(['xss', 'can:update,post'])->name('posts.update');
   Route::post('{post}/like', 'PostsController@like')->middleware(['auth:api', 'can:like,post'])->name('posts.like');
   Route::delete('{post}', 'PostsController@delete')->middleware('can:delete,post')->name('posts.delete');
-	Route::post('{post}', 'CommentController@store')->middleware('can:store,App\Comment')->name('comments.store');
-	Route::get('{post}/comments', 'CommentController@post')->middleware('can:viewAny,App\Comment')->name('post.comments.index');
+  Route::post('{post}/comments', 'CommentController@store')->middleware(['can:create,App\Comment', 'xss'])->name('posts.comments.store');
+	Route::get('{post}/comments', 'CommentController@post')->name('posts.comments.index');
+});
+
+Route::prefix('comments')->group(function () {
+  Route::put('{comment}', 'CommentController@update')->middleware(['can:update,comment', 'xss'])->name('comments.update');
+  Route::delete('{comment}', 'CommentController@delete')->middleware('can:delete,comment')->name('comments.delete');
 });
 
 Route::prefix("/payments")

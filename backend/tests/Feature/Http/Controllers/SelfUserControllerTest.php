@@ -20,7 +20,7 @@ class SelfUserControllerTest extends TestCase
   use AdditionalAssertions;
 
   public function testShouldDeleteUserWhenDeleteUserAndHavePermission()
-  {
+	{
     $password = $this->faker->password(8, 16);
 
     $user = factory(User::class)->create([

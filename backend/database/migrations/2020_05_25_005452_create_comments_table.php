@@ -21,7 +21,8 @@ class CreateCommentsTable extends Migration
 
       $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
       $table->foreign('post_id')->references('id')->on('posts')->cascadeOnDelete();
-
+      
+      $table->boolean('updated')->default(true);
       $table->string('content', 140);
 
       $table->timestamps();

@@ -37,6 +37,11 @@ class Post extends Model
     return $this->belongsToMany(User::class);
   }
 
+  public function comments()
+  {
+    return $this->hasMany(Comment::class);
+  }
+
   public static function byLikes()
   {
     return self::query()->selectRaw('posts.*, count(*) as total')
