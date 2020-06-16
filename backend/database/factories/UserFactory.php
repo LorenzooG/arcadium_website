@@ -6,6 +6,7 @@ use App\Role;
 use App\User;
 use App\Utils\Permission;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Str;
 
 $factory->define(User::class, function (Faker $faker) {
@@ -20,7 +21,8 @@ $factory->define(User::class, function (Faker $faker) {
 
 $factory->afterCreatingState(User::class, 'admin', function (User $user, Faker $faker) {
   $role = Role::create([
-    'title' => 'Administrator',
+    'title' => $faker->text(16),
+    'color' => $faker->hexColor,
     'permission_level' => Permission::ALL
   ]);
 

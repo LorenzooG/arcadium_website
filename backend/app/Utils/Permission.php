@@ -68,6 +68,14 @@ final class Permission
 
   const UPDATE_ANY_COMMENT = 134217728;
 
+  const STORE_PRODUCT = 268435456;
+
+  const UPDATE_PRODUCT = 536870912;
+
+  const DELETE_PRODUCT = 1073741824;
+
+  const VIEW_PRODUCT_COMMANDS = 2147483648;
+
   const ALL =
     self::NONE
     | self::STORE_USER
@@ -96,6 +104,10 @@ final class Permission
     | self::UPDATE_ANY_COMMENT
     | self::UPDATE_COMMENT
     | self::DELETE_ANY_COMMENT
-    | self::DELETE_COMMENT;
+    | self::DELETE_COMMENT
+    | self::STORE_PRODUCT
+    | self::UPDATE_PRODUCT
+    | self::DELETE_PRODUCT
+    | self::VIEW_PRODUCT_COMMANDS;
 
 }

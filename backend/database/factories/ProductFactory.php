@@ -9,15 +9,15 @@ use Illuminate\Http\UploadedFile;
 
 $factory->define(Product::class, function (Faker $faker) {
   return [
-    "name" => $faker->title,
-    "image" => UploadedFile::fake()->image("png"),
-    "price" => $faker->numberBetween(0, 100),
-    "description" => $faker->text
+    'title' => $faker->text(72),
+    'description' => $faker->text(6000),
+    'image' => UploadedFile::fake()->image($faker->text(8) . '.png', 100, 100),
+    'price' => $faker->numberBetween(5, 15)
   ];
 });
 
-$factory->afterCreating(Product::class, function (Product $product, Faker $_) {
+$factory->afterCreating(Product::class, function (Product $product, Faker $faker) {
   $product->commands()->create([
-    "command" => "Simple command"
+    'command' => $faker->text(72)
   ]);
 });

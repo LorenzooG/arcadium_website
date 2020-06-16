@@ -13,7 +13,7 @@ final class ProductStoreRequest extends FormRequest
    */
   public final function authorize()
   {
-    return false;
+    return true;
   }
 
   /**

@@ -6,9 +6,11 @@ use App\Auth\JwtGuard;
 use App\Comment;
 use App\Policies\CommentPolicy;
 use App\Policies\PostPolicy;
+use App\Policies\ProductPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use App\Post;
+use App\Product;
 use App\Role;
 use App\User;
 use App\Utils\Permission;
@@ -30,10 +32,11 @@ class AuthServiceProvider extends ServiceProvider
    * @var array
    */
   protected $policies = [
-		User::class => UserPolicy::class,
-		Role::class => RolePolicy::class,
+    User::class => UserPolicy::class,
+    Role::class => RolePolicy::class,
     Post::class => PostPolicy::class,
-    Comment::class => CommentPolicy::class
+    Comment::class => CommentPolicy::class,
+    Product::class => ProductPolicy::class
     // 'App\Model' => 'App\Policies\ModelPolicy',
   ];
 
