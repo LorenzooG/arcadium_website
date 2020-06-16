@@ -10,6 +10,11 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+/**
+ * Class PostRepository
+ *
+ * @package App\Repositories
+ */
 final class PostRepository
 {
 

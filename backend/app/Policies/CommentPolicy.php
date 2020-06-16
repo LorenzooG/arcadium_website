@@ -7,6 +7,11 @@ use App\User;
 use App\Utils\Permission;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
+/**
+ * Class CommentPolicy
+ *
+ * @package App\Policies
+ */
 final class CommentPolicy
 {
   use HandlesAuthorization;

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 
@@ -35,12 +36,21 @@ final class Product extends Model
     "commands"
   ];
 
+  /**
+   * Retrieve the commands of this product
+   *
+   * @return HasMany
+   */
   public final function commands()
   {
     return $this->hasMany(ProductCommand::class);
   }
 
-  /** @noinspection PhpUnused */
+  /**
+   * Sets image attribute
+   *
+   * @param UploadedFile $image
+   */
   public final function setImageAttribute(UploadedFile $image)
   {
     $imageDirectory = Str::random();

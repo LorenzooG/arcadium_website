@@ -2,6 +2,13 @@
 
 namespace App\Utils;
 
+/**
+ * Class Permission
+ *
+ * Permission handler
+ *
+ * @package App\Utils
+ */
 final class Permission
 {
 

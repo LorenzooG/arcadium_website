@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @package App
@@ -23,6 +24,11 @@ final class PurchasedProduct extends Model
     "amount",
   ];
 
+  /**
+   * Retrieve the product owner of this purchased product entity
+   *
+   * @return BelongsTo
+   */
   public final function product()
   {
     return $this->belongsTo(Product::class);

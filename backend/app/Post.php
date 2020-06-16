@@ -3,7 +3,11 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Ramsey\Collection\Collection;
 
 /**
@@ -27,21 +31,41 @@ final class Post extends Model
     'description'
   ];
 
+  /**
+   * Retrieve the user owner of this post
+   *
+   * @return BelongsTo
+   */
   public final function user()
   {
     return $this->belongsTo(User::class);
   }
 
+  /**
+   * Retrieve the likes of this post
+   *
+   * @return BelongsToMany
+   */
   public final function likes()
   {
     return $this->belongsToMany(User::class);
   }
 
+  /**
+   * Retrieve the comments of this post
+   *
+   * @return HasMany
+   */
   public final function comments()
   {
     return $this->hasMany(Comment::class);
   }
 
+  /**
+   * Retrieve paginated posts ordered by the like count
+   *
+   * @return Builder
+   */
   public static function byLikes()
   {
     return self::query()->selectRaw('posts.*, count(*) as total')

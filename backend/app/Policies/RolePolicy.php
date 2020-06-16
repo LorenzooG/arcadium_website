@@ -6,6 +6,11 @@ use App\User;
 use App\Utils\Permission;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
+/**
+ * Class RolePolicy
+ *
+ * @package App\Policies
+ */
 final class RolePolicy
 {
   use HandlesAuthorization;

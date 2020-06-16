@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @package App
@@ -18,11 +19,16 @@ use Illuminate\Database\Eloquent\Model;
 final class Role extends Model
 {
   protected $fillable = [
-		'title',
-		'color',
+    'title',
+    'color',
     'permission_level'
   ];
 
+  /**
+   * Retrieve the users that have this role
+   *
+   * @return BelongsToMany
+   */
   public final function users()
   {
     return $this->belongsToMany(User::class);

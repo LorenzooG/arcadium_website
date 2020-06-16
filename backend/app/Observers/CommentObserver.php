@@ -5,6 +5,11 @@ namespace App\Observers;
 use App\Comment;
 use App\Repositories\CommentRepository;
 
+/**
+ * Class CommentObserver
+ *
+ * @package App\Observers
+ */
 final class CommentObserver
 {
   private CommentRepository $commentRepository;
