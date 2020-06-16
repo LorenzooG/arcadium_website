@@ -5,11 +5,11 @@ namespace App\Observers;
 use App\Comment;
 use App\Repositories\CommentRepository;
 
-class CommentObserver
+final class CommentObserver
 {
   private CommentRepository $commentRepository;
 
-  public function __construct(CommentRepository $commentRepository)
+  public final function __construct(CommentRepository $commentRepository)
   {
     $this->commentRepository = $commentRepository;
   }
@@ -20,7 +20,7 @@ class CommentObserver
    * @param Comment $comment
    * @return void
    */
-  public function created(Comment $comment)
+  public final function created(Comment $comment)
   {
     $this->commentRepository->flushCache();
   }
@@ -31,7 +31,7 @@ class CommentObserver
    * @param Comment $comment
    * @return void
    */
-  public function updated(Comment $comment)
+  public final function updated(Comment $comment)
   {
     $this->commentRepository->flushCache();
   }
@@ -42,7 +42,7 @@ class CommentObserver
    * @param Comment $comment
    * @return void
    */
-  public function deleted(Comment $comment)
+  public final function deleted(Comment $comment)
   {
     $this->commentRepository->flushCache();
   }
@@ -53,7 +53,7 @@ class CommentObserver
    * @param Comment $comment
    * @return void
    */
-  public function restored(Comment $comment)
+  public final function restored(Comment $comment)
   {
     $this->commentRepository->flushCache();
   }
@@ -64,7 +64,7 @@ class CommentObserver
    * @param Comment $comment
    * @return void
    */
-  public function forceDeleted(Comment $comment)
+  public final function forceDeleted(Comment $comment)
   {
     $this->commentRepository->flushCache();
   }

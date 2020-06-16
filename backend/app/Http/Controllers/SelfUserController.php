@@ -17,47 +17,49 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
 
-class SelfUserController extends Controller
+final class SelfUserController extends Controller
 {
 
-	private PostRepository $postRepository;
-	private RoleRepository $roleRepository;
-	
-	/**
-	 * SelfUserController constructor
-	 *
-	 * @param PostRepository $postRepository
-	 * @param RoleRepository $roleRepository
-	 */
-	public function __construct(PostRepository $postRepository, RoleRepository $roleRepository)
-	{
-		$this->postRepository = $postRepository;
-		$this->roleRepository = $roleRepository;
-	}
+  private PostRepository $postRepository;
+  private RoleRepository $roleRepository;
 
-	/**
-	 * Show the current user's posts
-	 *
-	 * @return AnonymousResourceCollection
-	 */
-	public function roles(Request $request)
-	{
-		$page = Paginator::resolveCurrentPage();
+  /**
+   * SelfUserController constructor
+   *
+   * @param PostRepository $postRepository
+   * @param RoleRepository $roleRepository
+   */
+  public final function __construct(PostRepository $postRepository, RoleRepository $roleRepository)
+  {
+    $this->postRepository = $postRepository;
+    $this->roleRepository = $roleRepository;
+  }
 
-		return RoleResource::collection($this->roleRepository->findPaginatedRolesForUser($request->user(), $page));
-	}
+  /**
+   * Show the current user's posts
+   *
+   * @param Request $request
+   * @return AnonymousResourceCollection
+   */
+  public final function roles(Request $request)
+  {
+    $page = Paginator::resolveCurrentPage();
 
-	/**
-	 * Show the current user's roles
-	 *
-	 * @return AnonymousResourceCollection
-	 */
-	public function posts(Request $request)
-	{
-		$page = Paginator::resolveCurrentPage();
+    return RoleResource::collection($this->roleRepository->findPaginatedRolesForUser($request->user(), $page));
+  }
 
-		return PostResource::collection($this->postRepository->findPaginatedPostsForUser($request->user(), $page));
-	}
+  /**
+   * Show the current user's roles
+   *
+   * @param Request $request
+   * @return AnonymousResourceCollection
+   */
+  public final function posts(Request $request)
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return PostResource::collection($this->postRepository->findPaginatedPostsForUser($request->user(), $page));
+  }
 
   /**
    * Update current user's name and user name
@@ -65,7 +67,7 @@ class SelfUserController extends Controller
    * @param UserUpdateRequest $request
    * @return Response
    */
-  public function update(UserUpdateRequest $request)
+  public final function update(UserUpdateRequest $request)
   {
     $request->user()
       ->fill($request->only([
@@ -83,7 +85,7 @@ class SelfUserController extends Controller
    * @param UserUpdatePasswordRequest $request
    * @return Response
    */
-  public function updatePassword(UserUpdatePasswordRequest $request)
+  public final function updatePassword(UserUpdatePasswordRequest $request)
   {
     $request->user()
       ->fill([
@@ -101,7 +103,7 @@ class SelfUserController extends Controller
    * @param UserUpdateEmailRequest $request
    * @return Response
    */
-  public function updateEmail(EmailUpdate $email_update, UserUpdateEmailRequest $request)
+  public final function updateEmail(EmailUpdate $email_update, UserUpdateEmailRequest $request)
   {
     $email_update->already_used = true;
 
@@ -121,7 +123,7 @@ class SelfUserController extends Controller
    * @return Response
    * @throws Exception
    */
-  public function delete(UserDeleteRequest $request)
+  public final function delete(UserDeleteRequest $request)
   {
     $request->user()->delete();
 

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Throwable;
 
-class PurchasedProductResource extends JsonResource
+final class PurchasedProductResource extends JsonResource
 {
   /**
    * Transform the resource into an array.
@@ -15,7 +15,7 @@ class PurchasedProductResource extends JsonResource
    * @param Request $request
    * @return array
    */
-  public function toArray($request)
+  public final function toArray($request)
   {
     $product = $this->product_id;
 

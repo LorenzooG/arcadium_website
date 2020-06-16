@@ -12,7 +12,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
 
-class UsersController extends Controller
+final class UsersController extends Controller
 {
 
   private UserRepository $userRepository;
@@ -22,7 +22,7 @@ class UsersController extends Controller
    *
    * @param UserRepository $userRepository
    */
-  public function __construct(UserRepository $userRepository)
+  public final function __construct(UserRepository $userRepository)
   {
     $this->userRepository = $userRepository;
   }
@@ -32,7 +32,7 @@ class UsersController extends Controller
    *
    * @return ResourceCollection
    */
-  public function index()
+  public final function index()
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -45,7 +45,7 @@ class UsersController extends Controller
    * @param User $user
    * @return UserResource
    */
-  public function show(User $user)
+  public final function show(User $user)
   {
     return new UserResource($user);
   }
@@ -56,7 +56,7 @@ class UsersController extends Controller
    * @param UserStoreRequest $request
    * @return UserResource
    */
-  public function store(UserStoreRequest $request)
+  public final function store(UserStoreRequest $request)
   {
     $data = $request->only([
       'email',
@@ -79,7 +79,7 @@ class UsersController extends Controller
    * @param UserUpdateRequest $request
    * @return Response
    */
-  public function update(User $user, UserUpdateRequest $request)
+  public final function update(User $user, UserUpdateRequest $request)
   {
     $user->update($request->only([
       'email',
@@ -98,7 +98,7 @@ class UsersController extends Controller
    * @return Response
    * @throws Exception
    */
-  public function delete(User $user)
+  public final function delete(User $user)
   {
     $user->delete();
 

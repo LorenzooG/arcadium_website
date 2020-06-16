@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\EmailUpdate;
+use App\Repositories\CommentRepository;
 use App\Repositories\PostRepository;
+use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +23,8 @@ class RouteServiceProvider extends ServiceProvider
 
   private UserRepository $userRepository;
   private PostRepository $postRepository;
+  private RoleRepository $roleRepository;
+  private CommentRepository $commentRepository;
 
   /**
    * Define your route model bindings, pattern filters, etc.
@@ -31,6 +35,8 @@ class RouteServiceProvider extends ServiceProvider
   {
     $this->postRepository = resolve(PostRepository::class);
     $this->userRepository = resolve(UserRepository::class);
+    $this->roleRepository = resolve(RoleRepository::class);
+    $this->commentRepository = resolve(CommentRepository::class);
 
     $this->bind('email_update', function (string $email_update) {
       return EmailUpdate::query()
@@ -44,6 +50,14 @@ class RouteServiceProvider extends ServiceProvider
 
     $this->bind('post', function (int $post) {
       return $this->postRepository->findPostById($post);
+    });
+
+    $this->bind('comment', function (int $comment) {
+      return $this->commentRepository->findCommentById($comment);
+    });
+
+    $this->bind('role', function (int $role) {
+      return $this->roleRepository->findRoleById($role);
     });
 
     parent::boot();

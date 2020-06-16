@@ -6,7 +6,7 @@ use App\User;
 use App\Utils\Permission;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+final class UserPolicy
 {
   use HandlesAuthorization;
 
@@ -16,7 +16,7 @@ class UserPolicy
    * @param User $user
    * @return mixed
    */
-  public function viewAny(User $user)
+  public final function viewAny(User $user)
   {
     return true;
   }
@@ -28,7 +28,7 @@ class UserPolicy
    * @param User $model
    * @return mixed
    */
-  public function view(User $user, User $model)
+  public final function view(User $user, User $model)
   {
     return true;
   }
@@ -39,7 +39,7 @@ class UserPolicy
    * @param User $user
    * @return mixed
    */
-  public function create(User $user)
+  public final function create(User $user)
   {
     return true;
   }
@@ -50,7 +50,7 @@ class UserPolicy
    * @param User $user
    * @return mixed
    */
-  public function update(User $user)
+  public final function update(User $user)
   {
     return $user->hasPermission(Permission::UPDATE_ANY_USER);
   }
@@ -61,7 +61,7 @@ class UserPolicy
    * @param User $user
    * @return mixed
    */
-  public function delete(User $user)
+  public final function delete(User $user)
   {
     return $user->hasPermission(Permission::DELETE_ANY_USER);
   }
@@ -72,7 +72,7 @@ class UserPolicy
    * @param User $user
    * @return mixed
    */
-  public function restore(User $user)
+  public final function restore(User $user)
   {
     return $user->hasPermission(Permission::RESTORE_ANY_USER);
   }
@@ -84,7 +84,7 @@ class UserPolicy
    * @param User $model
    * @return mixed
    */
-  public function forceDelete(User $user, User $model)
+  public final function forceDelete(User $user, User $model)
   {
     return true;
   }

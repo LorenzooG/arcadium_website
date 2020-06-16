@@ -6,7 +6,6 @@ use App\Http\Requests\RoleStoreRequest;
 use App\Http\Requests\RoleUpdateRequest;
 use App\Http\Resources\RoleResource;
 use App\Repositories\RoleRepository;
-use App\Repositories\UserRepository;
 use App\Role;
 use App\User;
 use Exception;
@@ -14,7 +13,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
 
-class RolesController extends Controller
+final class RolesController extends Controller
 {
   private RoleRepository $roleRepository;
 
@@ -22,12 +21,10 @@ class RolesController extends Controller
    * RolesController constructor
    *
    * @param RoleRepository $roleRepository
-   * @param UserRepository $userRepository
    */
-  public function __construct(RoleRepository $roleRepository, UserRepository $userRepository)
-	{
+  public final function __construct(RoleRepository $roleRepository)
+  {
     $this->roleRepository = $roleRepository;
-    $this->userRepository = $userRepository;
   }
 
   /**
@@ -35,21 +32,23 @@ class RolesController extends Controller
    *
    * @return ResourceCollection
    */
-  public function index()
+  public final function index()
   {
     $page = Paginator::resolveCurrentPage();
 
     return RoleResource::collection($this->roleRepository->findPaginatedRoles($page));
-	}
+  }
 
-	/**
-	 * Find and show role
-	 *
-	 * @return RoleResource
-	 */
-	public function show(Role $role) {
-		return new RoleResource($role);
-	}
+  /**
+   * Find and show role
+   *
+   * @param Role $role
+   * @return RoleResource
+   */
+  public final function show(Role $role)
+  {
+    return new RoleResource($role);
+  }
 
   /**
    * Find and show all user's roles in a page
@@ -57,9 +56,9 @@ class RolesController extends Controller
    * @param User $user
    * @return ResourceCollection
    */
-  public function user(User $user)
+  public final function user(User $user)
   {
-		$page = Paginator::resolveCurrentPage();
+    $page = Paginator::resolveCurrentPage();
 
     return RoleResource::collection($this->roleRepository->findPaginatedRolesForUser($user, $page));
   }
@@ -70,7 +69,7 @@ class RolesController extends Controller
    * @param RoleStoreRequest $request
    * @return RoleResource
    */
-  public function store(RoleStoreRequest $request)
+  public final function store(RoleStoreRequest $request)
   {
     $role = $this->roleRepository->createRole($request->only([
       'title',
@@ -88,7 +87,7 @@ class RolesController extends Controller
    * @return Response
    * @throws Exception
    */
-  public function delete(Role $role)
+  public final function delete(Role $role)
   {
     $role->delete();
 
@@ -102,7 +101,7 @@ class RolesController extends Controller
    * @param RoleUpdateRequest $request
    * @return Response
    */
-  public function update(Role $role, RoleUpdateRequest $request)
+  public final function update(Role $role, RoleUpdateRequest $request)
   {
     $role->update($request->only([
       'title',
@@ -120,7 +119,7 @@ class RolesController extends Controller
    * @param User $user
    * @return Response
    */
-  public function attach(Role $role, User $user)
+  public final function attach(Role $role, User $user)
   {
     $user->roles()->attach($role->id);
 
@@ -134,7 +133,7 @@ class RolesController extends Controller
    * @param User $user
    * @return Response
    */
-  public function detach(Role $role, User $user)
+  public final function detach(Role $role, User $user)
   {
     $user->roles()->detach($role->id);
 

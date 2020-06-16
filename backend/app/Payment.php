@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Payment create(array $array)
  * @method static Payment findOrFail(int $int)
  */
-class Payment extends Model
+final class Payment extends Model
 {
 
   protected $fillable = [
@@ -34,12 +34,12 @@ class Payment extends Model
     'delivered' => 'boolean',
   ];
 
-  public function user()
+  public final function user()
   {
     return $this->belongsTo(User::class);
   }
 
-  public function products()
+  public final function products()
   {
     return $this->belongsToMany(Product::class, 'purchased_products');
   }

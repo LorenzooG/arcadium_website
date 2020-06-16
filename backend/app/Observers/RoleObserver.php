@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Repositories\RoleRepository;
 use App\Role;
 
-class RoleObserver
+final class RoleObserver
 {
 
   private RoleRepository $roleRepository;
@@ -15,7 +15,7 @@ class RoleObserver
    *
    * @param RoleRepository $roleRepository
    */
-  public function __construct(RoleRepository $roleRepository)
+  public final function __construct(RoleRepository $roleRepository)
   {
     $this->roleRepository = $roleRepository;
   }
@@ -26,7 +26,7 @@ class RoleObserver
    * @param Role $role
    * @return void
    */
-  public function created(Role $role)
+  public final function created(Role $role)
   {
     $this->roleRepository->flushCache();
   }
@@ -37,7 +37,7 @@ class RoleObserver
    * @param Role $role
    * @return void
    */
-  public function updated(Role $role)
+  public final function updated(Role $role)
   {
     $this->roleRepository->flushCache();
   }
@@ -48,7 +48,7 @@ class RoleObserver
    * @param Role $role
    * @return void
    */
-  public function deleted(Role $role)
+  public final function deleted(Role $role)
   {
     $this->roleRepository->flushCache();
   }
@@ -59,7 +59,7 @@ class RoleObserver
    * @param Role $role
    * @return void
    */
-  public function restored(Role $role)
+  public final function restored(Role $role)
   {
     $this->roleRepository->flushCache();
   }
@@ -70,7 +70,7 @@ class RoleObserver
    * @param Role $role
    * @return void
    */
-  public function forceDeleted(Role $role)
+  public final function forceDeleted(Role $role)
   {
     $this->roleRepository->flushCache();
   }

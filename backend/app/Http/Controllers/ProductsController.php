@@ -10,20 +10,20 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 
-class ProductsController extends Controller
+final class ProductsController extends Controller
 {
 
-  public function index()
+  public final function index()
   {
     return ProductResource::collection(Product::all());
   }
 
-  public function show(Product $product)
+  public final function show(Product $product)
   {
     return new ProductResource($product);
   }
 
-  public function store(Request $request)
+  public final function store(Request $request)
   {
     $content = $request->validate([
       "name" => "required|string|max:255",
@@ -64,7 +64,7 @@ class ProductsController extends Controller
    * @return Response
    * @throws Exception
    */
-  public function update(Product $product, Request $request)
+  public final function update(Product $product, Request $request)
   {
     $content = $request->validate([
       "name" => "string|max:255",
@@ -104,7 +104,7 @@ class ProductsController extends Controller
     return response()->noContent();
   }
 
-  public function image(Product $product)
+  public final function image(Product $product)
   {
     return response()->file(storage_path("app/images/{$product->image}"));
   }
@@ -114,7 +114,7 @@ class ProductsController extends Controller
    * @return Response
    * @throws Exception
    */
-  public function delete(Product $product)
+  public final function delete(Product $product)
   {
     $product->delete();
 

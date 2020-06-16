@@ -20,24 +20,24 @@ use Ramsey\Collection\Collection;
  * @method static Post create(array $array)
  * @method static Post findOrFail(int $int)
  */
-class Post extends Model
+final class Post extends Model
 {
   protected $fillable = [
     'title',
     'description'
   ];
 
-  public function user()
+  public final function user()
   {
     return $this->belongsTo(User::class);
   }
 
-  public function likes()
+  public final function likes()
   {
     return $this->belongsToMany(User::class);
   }
 
-  public function comments()
+  public final function comments()
   {
     return $this->hasMany(Comment::class);
   }

@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Repositories\UserRepository;
 use App\User;
 
-class UserObserver
+final class UserObserver
 {
 
   private UserRepository $userRepository;
@@ -15,7 +15,7 @@ class UserObserver
    *
    * @param UserRepository $userRepository
    */
-  public function __construct(UserRepository $userRepository)
+  public final function __construct(UserRepository $userRepository)
   {
     $this->userRepository = $userRepository;
   }
@@ -27,7 +27,7 @@ class UserObserver
    * @param User $user
    * @return void
    */
-  public function created(User $user)
+  public final function created(User $user)
   {
     $this->userRepository->flushCache();
   }
@@ -38,7 +38,7 @@ class UserObserver
    * @param User $user
    * @return void
    */
-  public function updated(User $user)
+  public final function updated(User $user)
   {
     $this->userRepository->flushCache();
   }
@@ -49,7 +49,7 @@ class UserObserver
    * @param User $user
    * @return void
    */
-  public function deleted(User $user)
+  public final function deleted(User $user)
   {
     $this->userRepository->flushCache();
   }
@@ -60,7 +60,7 @@ class UserObserver
    * @param User $user
    * @return void
    */
-  public function restored(User $user)
+  public final function restored(User $user)
   {
     $this->userRepository->flushCache();
   }
@@ -71,7 +71,7 @@ class UserObserver
    * @param User $user
    * @return void
    */
-  public function forceDeleted(User $user)
+  public final function forceDeleted(User $user)
   {
     $this->userRepository->flushCache();
   }

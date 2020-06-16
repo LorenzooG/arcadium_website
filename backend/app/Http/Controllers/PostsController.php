@@ -14,7 +14,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
 
-class PostsController extends Controller
+final class PostsController extends Controller
 {
 
   private PostRepository $postRepository;
@@ -24,7 +24,7 @@ class PostsController extends Controller
    *
    * @param PostRepository $postRepository
    */
-  public function __construct(PostRepository $postRepository)
+  public final function __construct(PostRepository $postRepository)
   {
     $this->postRepository = $postRepository;
   }
@@ -35,7 +35,7 @@ class PostsController extends Controller
    *
    * @return ResourceCollection
    */
-  public function index()
+  public final function index()
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -48,14 +48,14 @@ class PostsController extends Controller
    * @param User $user
    * @return ResourceCollection
    */
-  public function user(User $user)
+  public final function user(User $user)
   {
     $page = Paginator::resolveCurrentPage();
 
     return PostResource::collection($this->postRepository->findPaginatedPostsForUser($user, $page));
   }
 
-  public function show(Post $post)
+  public final function show(Post $post)
   {
     return new PostResource($post);
   }
@@ -66,7 +66,7 @@ class PostsController extends Controller
    * @param PostStoreRequest $request
    * @return PostResource
    */
-  public function store(PostStoreRequest $request)
+  public final function store(PostStoreRequest $request)
   {
     $post = $this->postRepository->createPost($request->user(), $request->only([
       'title',
@@ -83,7 +83,7 @@ class PostsController extends Controller
    * @param Post $post
    * @return Response
    */
-  public function like(PostLikeRequest $request, Post $post)
+  public final function like(PostLikeRequest $request, Post $post)
   {
     $post->likes()->save($request->user());
 
@@ -97,7 +97,7 @@ class PostsController extends Controller
    * @param PostUpdateRequest $request
    * @return Response
    */
-  public function update(Post $post, PostUpdateRequest $request)
+  public final function update(Post $post, PostUpdateRequest $request)
   {
     $post->update($request->only([
       'title',
@@ -114,7 +114,7 @@ class PostsController extends Controller
    * @return Response
    * @throws Exception
    */
-  public function delete(Post $post)
+  public final function delete(Post $post)
   {
     $post->delete();
 

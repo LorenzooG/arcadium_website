@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static PurchasedProduct findOrFail(int $int)
  *
  */
-class PurchasedProduct extends Model
+final class PurchasedProduct extends Model
 {
 
   protected $fillable = [
@@ -23,7 +23,7 @@ class PurchasedProduct extends Model
     "amount",
   ];
 
-  public function product()
+  public final function product()
   {
     return $this->belongsTo(Product::class);
   }

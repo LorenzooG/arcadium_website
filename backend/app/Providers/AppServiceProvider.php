@@ -13,14 +13,14 @@ use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+final class AppServiceProvider extends ServiceProvider
 {
   /**
    * Register any application services.
    *
    * @return void
    */
-  public function register()
+  public final function register()
   {
     //
   }
@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
    *
    * @return void
    */
-  public function boot()
+  public final function boot()
   {
     JsonResource::withoutWrapping();
 

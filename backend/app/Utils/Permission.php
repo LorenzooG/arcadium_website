@@ -2,7 +2,7 @@
 
 namespace App\Utils;
 
-class Permission
+final class Permission
 {
 
   const NONE = 1;

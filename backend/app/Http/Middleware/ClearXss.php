@@ -5,13 +5,13 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class ClearXss
+final class ClearXss
 {
   private array $ignoreFields = [
     'password'
   ];
 
-  public function clearXss(array $array)
+  public final function clearXss(array $array)
   {
     foreach ($array as $key => $value) {
       if (is_string($value)) {
@@ -32,7 +32,7 @@ class ClearXss
    * @param Closure $next
    * @return mixed
    */
-  public function handle($request, Closure $next)
+  public final function handle($request, Closure $next)
   {
     $request->replace($this->clearXss($request->all()));
 

@@ -10,7 +10,7 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 
-class RoleRepository
+final class RoleRepository
 {
 
   const CACHE_KEY = 'roles';
@@ -22,7 +22,7 @@ class RoleRepository
    *
    * @param CacheRepository $cacheRepository
    */
-  public function __construct(CacheRepository $cacheRepository)
+  public final function __construct(CacheRepository $cacheRepository)
   {
     $this->cacheRepository = $cacheRepository;
   }
@@ -33,7 +33,7 @@ class RoleRepository
    * @param int $page
    * @return LengthAwarePaginator
    */
-  public function findPaginatedRoles($page)
+  public final function findPaginatedRoles($page)
   {
     return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () {
       return Role::query()->paginate();
@@ -47,7 +47,7 @@ class RoleRepository
    * @param int $page
    * @return LengthAwarePaginator
    */
-  public function findPaginatedRolesForUser($user, $page)
+  public final function findPaginatedRolesForUser($user, $page)
   {
     return $this->cacheRepository->remember($this->getCacheKey("for.$user.paginated.$page"), now()->addHour(), function () use ($user) {
       return $user->roles()->paginate();
@@ -60,7 +60,7 @@ class RoleRepository
    * @param array $data
    * @return Model
    */
-  public function createRole(array $data)
+  public final function createRole(array $data)
   {
     return Role::create($data);
   }
@@ -71,7 +71,7 @@ class RoleRepository
    * @param int $id
    * @return User
    */
-  public function findRoleById($id)
+  public final function findRoleById($id)
   {
     return $this->cacheRepository->remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($id) {
       return Role::findOrFail($id);
@@ -83,7 +83,7 @@ class RoleRepository
    *
    * @return void
    */
-  public function flushCache()
+  public final function flushCache()
   {
     $this->cacheRepository->getStore()->flush();
   }
