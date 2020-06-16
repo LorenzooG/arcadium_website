@@ -37,14 +37,12 @@ class CommentController extends Controller
   public function post(Post $post) {
     $page = Paginator::resolveCurrentPage();
 
-    echo json_encode($post->comments()->paginate());
-
-    return CommentResource::collection($post->comments);
+    return CommentResource::collection($this->commentRepository->findPaginatedCommentsForPost($post, $page));
   }
 
   /**
    * Store comment in database
-   * 
+   *
    * @param Post $post
    * @param CommentStoreRequest $request
    *
@@ -60,7 +58,7 @@ class CommentController extends Controller
 
   /**
    * Find and update comment
-   * 
+   *
    * @param Comment $comment
    * @param CommentUpdateRequest $request
    *
@@ -77,7 +75,7 @@ class CommentController extends Controller
 
   /**
    * Find and delete comment
-   * 
+   *
    * @param Comment $comment
    *
    * @throws Exception

@@ -36,13 +36,11 @@ class CommentsControllerTest extends TestCase
       'user_id' => $user->id,
       'post_id' => $post->id,
       'content' => $commentContent
-    ]); 
+    ]);
 
     $response = $this->getJson(route('posts.comments.index', [
       'post' => $post->id
     ]));
-
-    echo "\n".json_encode($response->json(), JSON_PRETTY_PRINT)."\n";
 
     $response->assertOk()
       ->assertJson([
@@ -58,7 +56,7 @@ class CommentsControllerTest extends TestCase
           ],
         ],
       ]);
-  } 
+  }
 
   /**
    * Create
@@ -141,7 +139,7 @@ class CommentsControllerTest extends TestCase
   public function testShouldDeleteCommentsWhenDeleteComments()
   {
     $user = factory(User::class)->create();
-    
+
     $user->roles()->create([
       'title' => 'Administrator',
       'permission_level' => Permission::DELETE_ANY_COMMENT
@@ -151,7 +149,7 @@ class CommentsControllerTest extends TestCase
       'title' => $this->faker->title,
       'description' => $this->faker->text,
     ]);
-    
+
     $comment = $post->comments()->create([
       'user_id' => $user->id,
       'post_id' => $post->id,
@@ -161,7 +159,7 @@ class CommentsControllerTest extends TestCase
     $response = $this->actingAs($user)->deleteJson(route('comments.delete', [
       'comment' => $comment->id
     ]));
-    
+
     $this->assertDeleted($comment);
 
     $response->assertNoContent();
@@ -182,12 +180,12 @@ class CommentsControllerTest extends TestCase
   public function testShouldUpdatePostWhenPutPosts()
   {
     $user = factory(User::class)->create();
-    
+
     $user->roles()->create([
       'title' => 'Permission',
       'permission_level' => Permission::UPDATE_ANY_COMMENT
     ]);
- 
+
     $post = $user->posts()->create([
       'title' => $this->faker->title,
       'description' => $this->faker->text,
@@ -198,7 +196,7 @@ class CommentsControllerTest extends TestCase
       'post_id' => $post->id,
       'content' => $this->faker->text(140)
     ]);
-    
+
     $content = $this->faker->text(140);
 
     $response = $this->actingAs($user)->putJson(route('comments.update', [
