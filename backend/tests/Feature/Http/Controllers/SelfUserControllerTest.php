@@ -240,7 +240,7 @@ class SelfUserControllerTest extends TestCase
       'can:update_self'
     );
   }
-	
+
   public function testShouldShowPostsOrderedByDescIdWhenGetUserPosts()
   {
     /* @var User $user */
@@ -313,7 +313,7 @@ class SelfUserControllerTest extends TestCase
             'id' => $role->id,
             'title' => $title,
             'permission_level' => $permissionLevel,
-            'color' => $color, 
+            'color' => $color,
             'created_at' => $role->created_at->toISOString(),
             'updated_at' => $role->updated_at->toISOString()
           ]

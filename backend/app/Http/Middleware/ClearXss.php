@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 final class ClearXss
 {
   private array $ignoreFields = [
-    'password'
+    'password',
+    'new_password'
   ];
 
   public final function clearXss(array $array)
