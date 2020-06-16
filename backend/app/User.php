@@ -3,6 +3,8 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -65,31 +67,62 @@ final class User extends Authenticatable
     'is_admin' => 'boolean'
   ];
 
+  /**
+   * Retrieve the payments that this user have
+   *
+   * @return HasMany
+   */
   public final function payments()
   {
     return $this->hasMany(Payment::class);
   }
 
+  /**
+   * Retrieve the roles that this user have
+   *
+   * @return BelongsToMany
+   */
   public final function roles()
   {
     return $this->belongsToMany(Role::class);
   }
 
+  /**
+   * Retrieve the comments that this user made
+   *
+   * @return HasMany
+   */
   public final function comments()
   {
     return $this->hasMany(Comment::class);
   }
 
+  /**
+   * Retrieve the posts that this user post
+   *
+   * @return HasMany
+   */
   public final function posts()
   {
     return $this->hasMany(Post::class);
   }
 
+  /**
+   * Checks user permission
+   *
+   * @param int $permission
+   * @return bool
+   */
   public final function hasPermission(int $permission)
   {
     return ($this->permissions() & $permission) !== 0;
   }
 
+  /**
+   * Retrieve user's all permissions
+   *
+   * @return int
+   */
   public final function permissions(): int
   {
     return $this->roles
@@ -97,12 +130,19 @@ final class User extends Authenticatable
       ->reduce(fn($role, $otherRole) => $role | $otherRole, 1);
   }
 
+  /**
+   * Retrieve the email updates that this user have
+   *
+   * @return HasMany
+   */
   public final function emailUpdates()
   {
     return $this->hasMany(EmailUpdate::class);
   }
 
   /**
+   * Sets username attribute
+   *
    * @param string $value
    * @throws ConflictHttpException
    */
@@ -111,6 +151,11 @@ final class User extends Authenticatable
     $this->attributes["user_name"] = $value;
   }
 
+  /**
+   * Sets password attribute
+   *
+   * @param string $value
+   */
   public final function setPasswordAttribute(string $value)
   {
     $this->attributes["password"] = Hash::make(htmlspecialchars_decode($value));

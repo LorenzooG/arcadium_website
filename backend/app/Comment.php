@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @package App
@@ -26,11 +27,22 @@ final class Comment extends Model
     'post_id'
   ];
 
+  /**
+   * Retrieve the user owner of this comment
+   *
+   * @return BelongsTo
+   */
   public final function user()
   {
     return $this->belongsTo(User::class);
   }
 
+
+  /**
+   * Retrieve the post owner of this comment
+   *
+   * @return BelongsTo
+   */
   public final function post()
   {
     return $this->belongsTo(Post::class);

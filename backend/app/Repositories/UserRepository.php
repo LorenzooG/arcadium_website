@@ -8,6 +8,11 @@ use App\User;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+/**
+ * Class UserRepository
+ *
+ * @package App\Repositories
+ */
 final class UserRepository
 {
 

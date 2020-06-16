@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @package App
@@ -34,11 +36,21 @@ final class Payment extends Model
     'delivered' => 'boolean',
   ];
 
+  /**
+   * Retrieve the user owner of this payment
+   *
+   * @return BelongsTo
+   */
   public final function user()
   {
     return $this->belongsTo(User::class);
   }
 
+  /**
+   * Retrieve the products of this payment
+   *
+   * @return BelongsToMany
+   */
   public final function products()
   {
     return $this->belongsToMany(Product::class, 'purchased_products');

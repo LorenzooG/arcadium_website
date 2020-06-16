@@ -4,6 +4,11 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class PaymentServiceProvider
+ *
+ * @package App\Providers
+ */
 class PaymentServiceProvider extends ServiceProvider
 {
   /**

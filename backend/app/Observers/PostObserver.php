@@ -5,6 +5,11 @@ namespace App\Observers;
 use App\Post;
 use App\Repositories\PostRepository;
 
+/**
+ * Class PostObserver
+ *
+ * @package App\Observers
+ */
 final class PostObserver
 {
   private PostRepository $postRepository;

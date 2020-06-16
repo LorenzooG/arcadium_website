@@ -5,6 +5,13 @@ namespace App\Utils;
 use MercadoPago\MerchantOrder;
 use MercadoPago\Payment;
 
+/**
+ * Class MercadoPago
+ *
+ * MercadoPago's payment service handle
+ *
+ * @package App\Utils
+ */
 final class MercadoPago
 {
 

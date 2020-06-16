@@ -5,6 +5,11 @@ namespace App\Observers;
 use App\Repositories\RoleRepository;
 use App\Role;
 
+/**
+ * Class RoleObserver
+ *
+ * @package App\Observers
+ */
 final class RoleObserver
 {
 

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class UpdateEmailRequest
@@ -29,6 +30,11 @@ final class EmailUpdate extends Model
     'token'
   ];
 
+  /**
+   * Retrieve the user owner of this email update
+   *
+   * @return BelongsTo
+   */
   public final function user()
   {
     return $this->belongsTo(User::class);

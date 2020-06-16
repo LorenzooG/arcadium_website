@@ -5,6 +5,11 @@ namespace App\Observers;
 use App\Repositories\UserRepository;
 use App\User;
 
+/**
+ * Class UserObserver
+ *
+ * @package App\Observers
+ */
 final class UserObserver
 {
 

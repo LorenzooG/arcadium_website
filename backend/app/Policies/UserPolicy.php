@@ -6,6 +6,11 @@ use App\User;
 use App\Utils\Permission;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
+/**
+ * Class UserPolicy
+ *
+ * @package App\Policies
+ */
 final class UserPolicy
 {
   use HandlesAuthorization;
