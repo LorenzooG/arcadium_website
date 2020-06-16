@@ -8,6 +8,7 @@ use App\Repositories\PostRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -38,6 +39,8 @@ class RouteServiceProvider extends ServiceProvider
    */
   public function boot()
   {
+    Log::info("Bootstrapping route service.");
+
     $this->postRepository = resolve(PostRepository::class);
     $this->userRepository = resolve(UserRepository::class);
     $this->roleRepository = resolve(RoleRepository::class);
@@ -66,6 +69,8 @@ class RouteServiceProvider extends ServiceProvider
     });
 
     parent::boot();
+
+    Log::info("Bootstrapped route service.");
   }
 
   /**
