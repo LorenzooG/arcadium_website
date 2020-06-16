@@ -11,13 +11,9 @@ use App\Post;
 use App\Role;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
-/**
- * Class AppServiceProvider
- *
- * @package App\Providers
- */
 final class AppServiceProvider extends ServiceProvider
 {
   /**
@@ -37,6 +33,8 @@ final class AppServiceProvider extends ServiceProvider
    */
   public final function boot()
   {
+    Log::info("Bootstrapped application.");
+
     JsonResource::withoutWrapping();
 
     User::observe(UserObserver::class);

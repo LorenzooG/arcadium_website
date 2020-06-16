@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Log\Logger;
 
 /**
  * Class RoleRepository
@@ -20,15 +21,18 @@ final class RoleRepository
 
   const CACHE_KEY = 'roles';
 
+  private Logger $logger;
   private CacheRepository $cacheRepository;
 
   /**
    * RoleRepository constructor
    *
+   * @param Logger $logger
    * @param CacheRepository $cacheRepository
    */
-  public final function __construct(CacheRepository $cacheRepository)
+  public final function __construct(Logger $logger, CacheRepository $cacheRepository)
   {
+    $this->logger = $logger;
     $this->cacheRepository = $cacheRepository;
   }
 
@@ -40,7 +44,11 @@ final class RoleRepository
    */
   public final function findPaginatedRoles($page)
   {
-    return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () {
+    $this->logger->info("Retrieving roles in page {$page}.");
+
+    return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () use ($page) {
+      $this->logger->info("Caching roles in page {$page}.");
+
       return Role::query()->paginate();
     });
   }
@@ -54,7 +62,11 @@ final class RoleRepository
    */
   public final function findPaginatedRolesForUser($user, $page)
   {
-    return $this->cacheRepository->remember($this->getCacheKey("for.$user.paginated.$page"), now()->addHour(), function () use ($user) {
+    $this->logger->info("Retrieving user {$user->id}'s roles in page {$page}.");
+
+    return $this->cacheRepository->remember($this->getCacheKey("for.$user.paginated.$page"), now()->addHour(), function () use ($user, $page) {
+      $this->logger->info("Caching user {$user->id}'s roles in page {$page}.");
+
       return $user->roles()->paginate();
     });
   }
@@ -67,6 +79,8 @@ final class RoleRepository
    */
   public final function createRole(array $data)
   {
+    $this->logger->info("Creating role with title {$data['title']}.");
+
     return Role::create($data);
   }
 
@@ -78,7 +92,11 @@ final class RoleRepository
    */
   public final function findRoleById($id)
   {
+    $this->logger->info("Retrieving role {$id}.");
+
     return $this->cacheRepository->remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($id) {
+      $this->logger->info("Caching role {$id}.");
+
       return Role::findOrFail($id);
     });
   }
@@ -90,6 +108,8 @@ final class RoleRepository
    */
   public final function flushCache()
   {
+    $this->logger->info("Flushing cache for key {$this->getCacheKey('*')}.");
+
     $this->cacheRepository->getStore()->flush();
   }
 

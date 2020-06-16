@@ -8,12 +8,14 @@ use App\Policies\CommentPolicy;
 use App\Policies\PostPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
+use App\Post;
 use App\Role;
 use App\User;
 use App\Utils\Permission;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class AuthServiceProvider
@@ -42,6 +44,8 @@ class AuthServiceProvider extends ServiceProvider
    */
   public function boot()
   {
+    Log::info("Bootstrapping authentication service.");
+
     $this->registerPolicies();
 
     $jwtAuth = new JwtGuard();
@@ -57,5 +61,7 @@ class AuthServiceProvider extends ServiceProvider
     Auth::extend("jwt", function () use ($jwtAuth) {
       return $jwtAuth;
     });
+
+    Log::info("Bootstrapped authentication service.");
   }
 }

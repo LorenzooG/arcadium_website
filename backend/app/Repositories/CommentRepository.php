@@ -8,6 +8,7 @@ use App\Post;
 use App\User;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Log\Logger;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
@@ -20,15 +21,18 @@ final class CommentRepository
 
   const CACHE_KEY = 'comments';
 
+  private Logger $logger;
   private CacheRepository $cacheRepository;
 
   /**
    * PostRepository constructor
    *
+   * @param Logger $logger
    * @param CacheRepository $cacheRepository
    */
-  public final function __construct(CacheRepository $cacheRepository)
+  public final function __construct(Logger $logger, CacheRepository $cacheRepository)
   {
+    $this->logger = $logger;
     $this->cacheRepository = $cacheRepository;
   }
 
@@ -41,7 +45,11 @@ final class CommentRepository
    */
   public final function findPaginatedCommentsForPost($post, $page)
   {
-    return $this->cacheRepository->remember($this->getCacheKey("for.$post.paginated.$page"), now()->addHour(), function () use ($post) {
+    $this->logger->info("Retrieving post {$post->id}'s comments in page {$page}.");
+
+    return $this->cacheRepository->remember($this->getCacheKey("for.$post.paginated.$page"), now()->addHour(), function () use ($post, $page) {
+      $this->logger->info("Caching post {$post->id}'s comments in page {$page}.");
+
       return $post->comments()->paginate();
     });
   }
@@ -54,7 +62,11 @@ final class CommentRepository
    */
   public final function findCommentById($id)
   {
+    $this->logger->info("Retrieving comment {$id}.");
+
     return $this->cacheRepository->remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($id) {
+      $this->logger->info("Caching comment {$id}.");
+
       return Comment::findOrFail($id);
     });
   }
@@ -69,6 +81,8 @@ final class CommentRepository
    */
   public final function createComment(User $user, Post $post, array $data)
   {
+    $this->logger->info("Creating comment for user {$user->id} and for post {$post->id}.");
+
     $data['user_id'] = $user->id;
     $data['post_id'] = $post->id;
 
@@ -82,6 +96,8 @@ final class CommentRepository
    */
   public final function flushCache()
   {
+    $this->logger->info("Flushing cache for key {$this->getCacheKey('*')}.");
+
     $this->cacheRepository->getStore()->flush();
   }
 
