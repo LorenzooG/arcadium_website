@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Role findOrFail(int $int)
  *
  */
-class Role extends Model
+final class Role extends Model
 {
   protected $fillable = [
 		'title',
@@ -23,7 +23,7 @@ class Role extends Model
     'permission_level'
   ];
 
-  public function users()
+  public final function users()
   {
     return $this->belongsToMany(User::class);
   }

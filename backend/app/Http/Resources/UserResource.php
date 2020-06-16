@@ -15,7 +15,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property mixed updated_at
  * @property mixed name
  */
-class UserResource extends JsonResource
+final class UserResource extends JsonResource
 {
   /**
    * Transform the resource into an array.
@@ -23,7 +23,7 @@ class UserResource extends JsonResource
    * @param Request $request
    * @return array
    */
-  public function toArray($request)
+  public final function toArray($request)
   {
     return [
       "id" => $this->id,

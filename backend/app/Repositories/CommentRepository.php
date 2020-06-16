@@ -10,7 +10,7 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class CommentRepository
+final class CommentRepository
 {
 
   const CACHE_KEY = 'comments';
@@ -22,7 +22,7 @@ class CommentRepository
    *
    * @param CacheRepository $cacheRepository
    */
-  public function __construct(CacheRepository $cacheRepository)
+  public final function __construct(CacheRepository $cacheRepository)
   {
     $this->cacheRepository = $cacheRepository;
   }
@@ -34,10 +34,10 @@ class CommentRepository
    * @param int $page
    * @return LengthAwarePaginator
    */
-  public function findPaginatedCommentsForPost($post, $page)
+  public final function findPaginatedCommentsForPost($post, $page)
   {
     return $this->cacheRepository->remember($this->getCacheKey("for.$post.paginated.$page"), now()->addHour(), function () use ($post) {
-        return $post->comments()->paginate();
+      return $post->comments()->paginate();
     });
   }
 
@@ -47,7 +47,7 @@ class CommentRepository
    * @param int $id
    * @return Post
    */
-  public function findCommentById($id)
+  public final function findCommentById($id)
   {
     return $this->cacheRepository->remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($id) {
       return Comment::findOrFail($id);
@@ -62,11 +62,11 @@ class CommentRepository
    * @param array $data
    * @return Model
    */
-  public function createComment(User $user, Post $post, array $data)
+  public final function createComment(User $user, Post $post, array $data)
   {
     $data['user_id'] = $user->id;
     $data['post_id'] = $post->id;
-    
+
     return Comment::create($data);
   }
 
@@ -75,7 +75,7 @@ class CommentRepository
    *
    * @return void
    */
-  public function flushCache()
+  public final function flushCache()
   {
     $this->cacheRepository->getStore()->flush();
   }

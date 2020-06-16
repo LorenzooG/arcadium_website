@@ -5,14 +5,14 @@ namespace App\Http\Requests;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostLikeRequest extends FormRequest
+final class PostLikeRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
    *
    * @return bool
    */
-  public function authorize()
+  public final function authorize()
   {
     /* @var User $user */
     $user = $this->user();
@@ -25,7 +25,7 @@ class PostLikeRequest extends FormRequest
    *
    * @return array
    */
-  public function rules()
+  public final function rules()
   {
     return [
       //

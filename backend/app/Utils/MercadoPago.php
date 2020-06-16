@@ -5,22 +5,22 @@ namespace App\Utils;
 use MercadoPago\MerchantOrder;
 use MercadoPago\Payment;
 
-class MercadoPago
+final class MercadoPago
 {
 
   public static ?MercadoPago $instance = null;
 
-  public function accessToken(): string
+  public final function accessToken(): string
   {
     return config("app.mp_access_token");
   }
 
-  public function findOrderById(int $id): MerchantOrder
+  public final function findOrderById(int $id): MerchantOrder
   {
     return MerchantOrder::find_by_id($id);
   }
 
-  public function findPaymentById(int $id): Payment
+  public final function findPaymentById(int $id): Payment
   {
     return MerchantOrder::find_by_id($id);
   }

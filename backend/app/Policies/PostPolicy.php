@@ -7,7 +7,7 @@ use App\User;
 use App\Utils\Permission;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PostPolicy
+final class PostPolicy
 {
   use HandlesAuthorization;
 
@@ -17,7 +17,7 @@ class PostPolicy
    * @param User $user
    * @return mixed
    */
-  public function viewAny(User $user)
+  public final function viewAny(User $user)
   {
     return true;
   }
@@ -29,7 +29,7 @@ class PostPolicy
    * @param Post $post
    * @return mixed
    */
-  public function view(User $user, Post $post)
+  public final function view(User $user, Post $post)
   {
     return true;
   }
@@ -40,7 +40,7 @@ class PostPolicy
    * @param User $user
    * @return mixed
    */
-  public function create(User $user)
+  public final function create(User $user)
   {
     return $user->hasPermission(Permission::STORE_POST);
   }
@@ -52,7 +52,7 @@ class PostPolicy
    * @param Post|null $post
    * @return mixed
    */
-  public function update(User $user, ?Post $post = null)
+  public final function update(User $user, ?Post $post = null)
   {
     return $user->hasPermission(Permission::DELETE_ANY_POST)
       || ($user->hasPermission(Permission::UPDATE_POST)
@@ -66,14 +66,14 @@ class PostPolicy
    * @param Post|null $post
    * @return mixed
    */
-  public function delete(User $user, ?Post $post = null)
+  public final function delete(User $user, ?Post $post = null)
   {
     return $user->hasPermission(Permission::DELETE_ANY_POST)
       || ($user->hasPermission(Permission::DELETE_POST)
         && $user->is($post->user));
   }
 
-  public function like(User $user)
+  public final function like(User $user)
   {
     return $user->hasPermission(Permission::LIKE_POST);
   }

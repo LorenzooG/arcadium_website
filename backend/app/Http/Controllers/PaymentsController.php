@@ -22,15 +22,15 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Throwable;
 
-class PaymentsController extends Controller
+final class PaymentsController extends Controller
 {
 
-  public function index()
+  public final function index()
   {
     return PaymentResource::collection(Payment::all());
   }
 
-  public function show(Payment $payment)
+  public final function show(Payment $payment)
   {
     return new PaymentResource($payment);
   }
@@ -39,7 +39,7 @@ class PaymentsController extends Controller
    * @param Request $request
    * @return JsonResponse
    */
-  public function ipn(Request $request)
+  public final function ipn(Request $request)
   {
     $topic = $request->query("topic");
     $id = $request->query("id");
@@ -108,7 +108,7 @@ class PaymentsController extends Controller
    * @return array
    * @throws Exception
    */
-  public function checkout(Request $request)
+  public final function checkout(Request $request)
   {
 
     /**

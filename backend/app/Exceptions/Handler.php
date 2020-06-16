@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
-class Handler extends ExceptionHandler
+final class Handler extends ExceptionHandler
 {
   /**
    * A list of the exception types that are not reported.
@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler
    *
    * @throws Exception
    */
-  public function report(Throwable $exception)
+  public final function report(Throwable $exception)
   {
     parent::report($exception);
   }
@@ -57,9 +57,9 @@ class Handler extends ExceptionHandler
    *
    * @throws Throwable
    */
-  public function render($request, Throwable $exception)
+  public final function render($request, Throwable $exception)
   {
-    if($request->acceptsJson()) {
+    if ($request->acceptsJson()) {
       if ($exception instanceof ModelNotFoundException) {
         return response()->json([
           'message' => 'Model not found!',

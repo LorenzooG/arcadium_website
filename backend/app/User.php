@@ -26,7 +26,7 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
  * @method static User create(array $array)
  * @method static User findOrFail(int $int)
  */
-class User extends Authenticatable
+final class User extends Authenticatable
 {
   use Notifiable, SoftDeletes;
 
@@ -65,39 +65,39 @@ class User extends Authenticatable
     'is_admin' => 'boolean'
   ];
 
-  public function payments()
+  public final function payments()
   {
     return $this->hasMany(Payment::class);
   }
 
-  public function roles()
+  public final function roles()
   {
     return $this->belongsToMany(Role::class);
   }
-  
-  public function comments() 
+
+  public final function comments()
   {
     return $this->hasMany(Comment::class);
   }
 
-  public function posts()
+  public final function posts()
   {
     return $this->hasMany(Post::class);
   }
 
-  public function hasPermission(int $permission)
+  public final function hasPermission(int $permission)
   {
     return ($this->permissions() & $permission) !== 0;
   }
 
-  public function permissions(): int
+  public final function permissions(): int
   {
     return $this->roles
       ->map(fn($role) => $role->permission_level)
       ->reduce(fn($role, $otherRole) => $role | $otherRole, 1);
   }
 
-  public function emailUpdates()
+  public final function emailUpdates()
   {
     return $this->hasMany(EmailUpdate::class);
   }
@@ -106,12 +106,12 @@ class User extends Authenticatable
    * @param string $value
    * @throws ConflictHttpException
    */
-  public function setUserNameAttribute(string $value)
+  public final function setUserNameAttribute(string $value)
   {
     $this->attributes["user_name"] = $value;
   }
 
-  public function setPasswordAttribute(string $value)
+  public final function setPasswordAttribute(string $value)
   {
     $this->attributes["password"] = Hash::make(htmlspecialchars_decode($value));
   }

@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
  * @method static Product findOrFail(int $int)
  *
  */
-class Product extends Model
+final class Product extends Model
 {
 
   protected $fillable = [
@@ -35,13 +35,13 @@ class Product extends Model
     "commands"
   ];
 
-  public function commands()
+  public final function commands()
   {
     return $this->hasMany(ProductCommand::class);
   }
 
   /** @noinspection PhpUnused */
-  public function setImageAttribute(UploadedFile $image)
+  public final function setImageAttribute(UploadedFile $image)
   {
     $imageDirectory = Str::random();
 

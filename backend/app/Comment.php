@@ -18,11 +18,21 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Comment create(array $array)
  * @method static Comment findOrFail(int $int)
  */
-class Comment extends Model
+final class Comment extends Model
 {
   protected $fillable = [
     'content',
     'user_id',
     'post_id'
   ];
+
+  public final function user()
+  {
+    return $this->belongsTo(User::class);
+  }
+
+  public final function post()
+  {
+    return $this->belongsTo(Post::class);
+  }
 }

@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class AdminOnly
+final class AdminOnly
 {
   /**
    * Handle an incoming request.
@@ -15,7 +15,7 @@ class AdminOnly
    * @param Closure $next
    * @return mixed
    */
-  public function handle(Request $request, Closure $next)
+  public final function handle(Request $request, Closure $next)
   {
     $user = $request->user();
 

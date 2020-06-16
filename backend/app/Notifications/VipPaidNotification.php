@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Collection;
 
-class VipPaidNotification extends Notification
+final class VipPaidNotification extends Notification
 {
   use Queueable;
 
@@ -23,7 +23,7 @@ class VipPaidNotification extends Notification
    *
    * @param Collection<Product> $products
    */
-  public function __construct(Collection $products)
+  public final function __construct(Collection $products)
   {
     $this->products = $products;
   }
@@ -34,7 +34,7 @@ class VipPaidNotification extends Notification
    * @param User $notifiable
    * @return array
    */
-  public function via(User $notifiable)
+  public final function via(User $notifiable)
   {
     return ['mail'];
   }
@@ -45,7 +45,7 @@ class VipPaidNotification extends Notification
    * @param User $notifiable
    * @return MailMessage
    */
-  public function toMail(User $notifiable)
+  public final function toMail(User $notifiable)
   {
     return (new MailMessage)->subject("Vip")->markdown('mail.vip.paid', [
       "user" => $notifiable,
@@ -59,7 +59,7 @@ class VipPaidNotification extends Notification
    * @param User $notifiable
    * @return array
    */
-  public function toArray(User $notifiable)
+  public final function toArray(User $notifiable)
   {
     return [
       "products" => $this->products,

@@ -13,7 +13,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
 
-class CommentController extends Controller
+final class CommentController extends Controller
 {
   private CommentRepository $commentRepository;
 
@@ -22,7 +22,7 @@ class CommentController extends Controller
    *
    * @param $commentRepository
    */
-  public function __construct(CommentRepository $commentRepository)
+  public final function __construct(CommentRepository $commentRepository)
   {
     $this->commentRepository = $commentRepository;
   }
@@ -34,7 +34,8 @@ class CommentController extends Controller
    *
    * @return AnonymousResourceCollection
    */
-  public function post(Post $post) {
+  public final function post(Post $post)
+  {
     $page = Paginator::resolveCurrentPage();
 
     return CommentResource::collection($this->commentRepository->findPaginatedCommentsForPost($post, $page));
@@ -48,7 +49,8 @@ class CommentController extends Controller
    *
    * @return CommentResource
    */
-  public function store(Post $post, CommentStoreRequest $request) {
+  public final function store(Post $post, CommentStoreRequest $request)
+  {
     $post = $this->commentRepository->createComment($request->user(), $post, [
       'content' => $request->json('content')
     ]);
@@ -64,7 +66,8 @@ class CommentController extends Controller
    *
    * @return Response
    */
-  public function update(Comment $comment, CommentUpdateRequest $request) {
+  public final function update(Comment $comment, CommentUpdateRequest $request)
+  {
     $comment->update([
       'content' => $request->json('content'),
       'updated' => true
@@ -82,7 +85,8 @@ class CommentController extends Controller
    *
    * @return Response
    */
-  public function delete(Comment $comment) {
+  public final function delete(Comment $comment)
+  {
     $comment->delete();
 
     return response()->noContent();

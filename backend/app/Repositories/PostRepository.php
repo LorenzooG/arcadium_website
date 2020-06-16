@@ -10,7 +10,7 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class PostRepository
+final class PostRepository
 {
 
   const CACHE_KEY = 'posts';
@@ -22,7 +22,7 @@ class PostRepository
    *
    * @param CacheRepository $cacheRepository
    */
-  public function __construct(CacheRepository $cacheRepository)
+  public final function __construct(CacheRepository $cacheRepository)
   {
     $this->cacheRepository = $cacheRepository;
   }
@@ -33,7 +33,7 @@ class PostRepository
    * @param int $page
    * @return LengthAwarePaginator
    */
-  public function findPaginatedPosts($page)
+  public final function findPaginatedPosts($page)
   {
     return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () {
       return Post::byLikes()->paginate();
@@ -47,7 +47,7 @@ class PostRepository
    * @param int $page
    * @return LengthAwarePaginator
    */
-  public function findPaginatedPostsForUser($user, $page)
+  public final function findPaginatedPostsForUser($user, $page)
   {
     return $this->cacheRepository->remember($this->getCacheKey("for.$user.paginated.$page"), now()->addHour(), function () use ($user) {
       return $user->posts()->orderByDesc('id')->paginate();
@@ -60,7 +60,7 @@ class PostRepository
    * @param int $id
    * @return Post
    */
-  public function findPostById($id)
+  public final function findPostById($id)
   {
     return $this->cacheRepository->remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($id) {
       return Post::findOrFail($id);
@@ -74,7 +74,7 @@ class PostRepository
    * @param array $data
    * @return Model
    */
-  public function createPost(User $user, array $data)
+  public final function createPost(User $user, array $data)
   {
     return $user->posts()->create($data);
   }
@@ -84,7 +84,7 @@ class PostRepository
    *
    * @return void
    */
-  public function flushCache()
+  public final function flushCache()
   {
     $this->cacheRepository->getStore()->flush();
   }

@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static EmailUpdate create(array $data)
  * @method static EmailUpdate findOrFail(int $id)
  */
-class EmailUpdate extends Model
+final class EmailUpdate extends Model
 {
   protected $fillable = [
     'token',
@@ -29,7 +29,7 @@ class EmailUpdate extends Model
     'token'
   ];
 
-  public function user()
+  public final function user()
   {
     return $this->belongsTo(User::class);
   }

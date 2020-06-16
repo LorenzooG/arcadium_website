@@ -5,14 +5,14 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UserUpdateEmailRequest extends FormRequest
+final class UserUpdateEmailRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
    *
    * @return bool
    */
-  public function authorize()
+  public final function authorize()
   {
     return !$this->email_update->already_used;
   }
@@ -22,7 +22,7 @@ class UserUpdateEmailRequest extends FormRequest
    *
    * @return array
    */
-  public function rules()
+  public final function rules()
   {
     return [
       'new_email' => [

@@ -2,12 +2,11 @@
 
 namespace App\Policies;
 
-use App\Role;
 use App\User;
 use App\Utils\Permission;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class RolePolicy
+final class RolePolicy
 {
   use HandlesAuthorization;
 
@@ -17,7 +16,7 @@ class RolePolicy
    * @param User $user
    * @return mixed
    */
-  public function viewAny(User $user)
+  public final function viewAny(User $user)
   {
     return $user->hasPermission(Permission::VIEW_ANY_ROLE);
   }
@@ -26,10 +25,9 @@ class RolePolicy
    * Determine whether the user can view the model.
    *
    * @param User $user
-   * @param Role $role
    * @return mixed
    */
-  public function view(User $user)
+  public final function view(User $user)
   {
     return $user->hasPermission(Permission::VIEW_ROLE);
   }
@@ -40,8 +38,8 @@ class RolePolicy
    * @param User $user
    * @return mixed
    */
-  public function create(User $user)
-	{
+  public final function create(User $user)
+  {
     return $user->hasPermission(Permission::STORE_ROLE);
   }
 
@@ -51,7 +49,7 @@ class RolePolicy
    * @param User $user
    * @return mixed
    */
-  public function update(User $user)
+  public final function update(User $user)
   {
     return $user->hasPermission(Permission::UPDATE_ROLE);
   }
@@ -62,7 +60,7 @@ class RolePolicy
    * @param User $user
    * @return mixed
    */
-  public function delete(User $user)
+  public final function delete(User $user)
   {
     return $user->hasPermission(Permission::DELETE_ROLE);
   }
@@ -73,10 +71,10 @@ class RolePolicy
    * @param User $user
    * @return bool
    */
-  public function viewSelf(User $user)
+  public final function viewSelf(User $user)
   {
-		return $user->hasPermission(Permission::VIEW_SELF_ROLES) 
-			|| $user->hasPermission(Permission::VIEW_ANY_ROLE);
+    return $user->hasPermission(Permission::VIEW_SELF_ROLES)
+      || $user->hasPermission(Permission::VIEW_ANY_ROLE);
   }
 
   /**
@@ -85,7 +83,7 @@ class RolePolicy
    * @param User $user
    * @return bool
    */
-  public function attach(User $user)
+  public final function attach(User $user)
   {
     return $user->hasPermission(Permission::ATTACH_ROLE_TO_USER);
   }
@@ -96,7 +94,7 @@ class RolePolicy
    * @param User $user
    * @return bool
    */
-  public function detach(User $user)
+  public final function detach(User $user)
   {
     return $user->hasPermission(Permission::DETACH_ROLE_TO_USER);
   }

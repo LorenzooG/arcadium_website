@@ -8,7 +8,7 @@ use App\User;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class UserRepository
+final class UserRepository
 {
 
   const CACHE_KEY = 'users';
@@ -20,7 +20,7 @@ class UserRepository
    *
    * @param CacheRepository $cacheRepository
    */
-  public function __construct(CacheRepository $cacheRepository)
+  public final function __construct(CacheRepository $cacheRepository)
   {
     $this->cacheRepository = $cacheRepository;
   }
@@ -31,7 +31,7 @@ class UserRepository
    * @param int $page
    * @return LengthAwarePaginator
    */
-  public function findPaginatedUsers($page)
+  public final function findPaginatedUsers($page)
   {
     return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () {
       return User::query()->paginate();
@@ -44,7 +44,7 @@ class UserRepository
    * @param int $id
    * @return User
    */
-  public function findUserById($id)
+  public final function findUserById($id)
   {
     return $this->cacheRepository->remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($id) {
       return User::findOrFail($id);
@@ -57,7 +57,7 @@ class UserRepository
    * @param array $data
    * @return User
    */
-  public function createUser(array $data)
+  public final function createUser(array $data)
   {
     return User::create($data);
   }
@@ -67,7 +67,7 @@ class UserRepository
    *
    * @return void
    */
-  public function flushCache()
+  public final function flushCache()
   {
     $this->cacheRepository->getStore()->flush();
   }

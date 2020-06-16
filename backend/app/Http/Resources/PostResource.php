@@ -23,7 +23,7 @@ use Ramsey\Collection\Collection;
  *
  * @method BelongsToMany likes()
  */
-class PostResource extends JsonResource
+final class PostResource extends JsonResource
 {
   /**
    * Transform the resource into an array.
@@ -31,7 +31,7 @@ class PostResource extends JsonResource
    * @param Request $request
    * @return array
    */
-  public function toArray($request)
+  public final function toArray($request)
   {
     return [
       'id' => $this->id,

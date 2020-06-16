@@ -16,7 +16,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Carbon created_at
  * @property Carbon updated_at
  */
-class RoleResource extends JsonResource
+final class RoleResource extends JsonResource
 {
   /**
    * Transform the resource into an array.
@@ -24,12 +24,12 @@ class RoleResource extends JsonResource
    * @param Request $request
    * @return array
    */
-  public function toArray($request)
+  public final function toArray($request)
   {
     return [
       'id' => $this->id,
-			'title' => $this->title,
-			'color' => $this->color,
+      'title' => $this->title,
+      'color' => $this->color,
       'permission_level' => $this->when($request->user()->hasPermission(Permission::VIEW_ROLES_PERMISSIONS), $this->permission_level),
       'created_at' => $this->created_at,
       'updated_at' => $this->updated_at
