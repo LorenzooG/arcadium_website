@@ -19,7 +19,7 @@ class CreateRolesTable extends Migration
 
       $table->string('title', 32);
       $table->string('color', 12)->default('#fff');
-      $table->integer('permission_level')->default(Permission::NONE);
+      $table->double('permission_level', 16)->default(Permission::NONE);
 
       $table->timestamps();
     });

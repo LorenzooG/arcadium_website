@@ -39,7 +39,7 @@ Route::prefix('roles')->group(function () {
 
   Route::post('{role}/attach/{user}')->middleware('can:attach,App\Role')->name('roles.attach');
   Route::post('{role}/dettach/{user}')->middleware('can:detach,App\Role')->name('roles.detach');
-	
+
 	Route::middleware('xss')->group(function () {
     Route::post('/', 'RolesController@store')->middleware('can:create,App\Role')->name('roles.store');
     Route::put('{role}', 'RolesController@update')->middleware('can:update,App\Role')->name('roles.update');
@@ -90,20 +90,30 @@ Route::prefix('checkout')->group(function () {
 });
 
 
-Route::prefix("products")->name('products.')->group(function () {
-  Route::get("/", "ProductsController@index")->name('index');
-  Route::get("{product}", "ProductsController@show")->name('show');
-  Route::get("{product}/image", "ProductsController@image")->name('image');
+Route::prefix('products')->name('products.')->group(function () {
+  Route::get('/', 'ProductsController@index')->name('index');
 
-  Route::middleware(AdminOnly::class)->group(function () {
-    Route::get('{product}/commands', 'CommandsController@index')->name('commands.index');
-    Route::delete("{product}", "ProductsController@delete")->name('delete');
+  Route::middleware('xss')->group(function () {
+    Route::post('/', 'ProductsController@store')->middleware('can:create,App\Product')->name('store');
+    Route::put('{product}', 'ProductsController@update')->middleware('can:update,App\Product')->name('update');
+  });
 
-    Route::middleware('xss')->group(function () {
-      Route::post("/", "ProductsController@store")->name('store');
-      Route::post("{product}", "ProductsController@update")->name('update'); // this use post cause' needs FormData request
-      Route::post('{product}/commands', 'CommandsController@store')->name('commands.store');
-      Route::put('commands/{command}', 'CommandsController@update')->name('commands.update');
+  Route::prefix('{product}')->group(function () {
+    Route::get("/", "ProductsController@show")->name('show');
+    Route::delete('/', 'ProductsController@delete')->middleware('can:delete,App\Product')->name('delete');
+
+    Route::prefix('image')->name('image.')->group(function () {
+      Route::get('/', 'ProductsController@image')->name('show');
+      Route::post('/', 'ProductsController@updateImage')->middleware('can:update,App\Product')->name('update');
+    });
+
+    Route::prefix('commands')->name('commands.')->group(function () {
+      Route::get('/', 'CommandsController@index')->middleware('can:viewAny,App\ProductCommand')->name('index');
+
+      Route::middleware('xss')->group(function () {
+        Route::put('{command}', 'CommandsController@update')->middleware('can:update,App\ProductCommand')->name('update');
+        Route::post('{command}', 'CommandsController@store')->middleware('can:store,App\ProductCommand')->name('store');
+      });
     });
   });
 });

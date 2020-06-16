@@ -13,7 +13,7 @@ final class ProductUpdateRequest extends FormRequest
    */
   public final function authorize()
   {
-    return false;
+    return true;
   }
 
   /**
