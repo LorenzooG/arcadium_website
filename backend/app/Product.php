@@ -71,7 +71,7 @@ final class Product extends Model
       $imageDirectory = $this->attributes['image_url'];
     }
 
-    $image->storeAs('image_url', $imageDirectory);
+    $image->storeAs('products.images', $imageDirectory);
 
     $this->attributes['image_url'] = $imageDirectory;
   }

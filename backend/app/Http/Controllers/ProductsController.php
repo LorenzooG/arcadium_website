@@ -8,6 +8,7 @@ use App\Http\Resources\ProductResource;
 use App\Product;
 use App\Repositories\ProductRepository;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
@@ -98,7 +99,23 @@ final class ProductsController extends Controller
    */
   public final function image(Product $product)
   {
-    return response()->file(Storage::get("images/{$product->image}"));
+    return Storage::download('products.images/' . $product->image);
+  }
+
+  /**
+   * Find and update product's image
+   *
+   * @param Product $product
+   * @param Request $request
+   * @return Response
+   */
+  public final function updateImage(Product $product, Request $request)
+  {
+    $product->update([
+      'image' => $request->file('image')
+    ]);
+
+    return response()->noContent();
   }
 
   /**

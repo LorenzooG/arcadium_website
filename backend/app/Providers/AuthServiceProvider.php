@@ -6,11 +6,13 @@ use App\Auth\JwtGuard;
 use App\Comment;
 use App\Policies\CommentPolicy;
 use App\Policies\PostPolicy;
+use App\Policies\ProductCommandPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use App\Post;
 use App\Product;
+use App\ProductCommand;
 use App\Role;
 use App\User;
 use App\Utils\Permission;
@@ -36,7 +38,8 @@ class AuthServiceProvider extends ServiceProvider
     Role::class => RolePolicy::class,
     Post::class => PostPolicy::class,
     Comment::class => CommentPolicy::class,
-    Product::class => ProductPolicy::class
+    Product::class => ProductPolicy::class,
+    ProductCommand::class => ProductCommandPolicy::class
     // 'App\Model' => 'App\Policies\ModelPolicy',
   ];
 

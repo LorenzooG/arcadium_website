@@ -196,7 +196,7 @@ class ProductsControllerTest extends TestCase
   /**
    * Delete
    */
-  public function testShouldDeleteUserWhenDeleteUsersAndHavePermission()
+  public function testShouldDeleteProductWhenDeleteProductsAndHavePermission()
   {
     $user = factory(User::class)->state('admin')->create();
     $product = factory(Product::class)->create();
@@ -222,7 +222,7 @@ class ProductsControllerTest extends TestCase
   /**
    * Update
    */
-  public function testShouldUpdateUserWhenPutUsersAndHavePermission()
+  public function testShouldUpdateProductWhenPutProductsAndHavePermission()
   {
     $user = factory(User::class)->state('admin')->create();
     $product = factory(Product::class)->create();
@@ -251,6 +251,22 @@ class ProductsControllerTest extends TestCase
     $response->assertNoContent();
   }
 
+  public function testShouldUpdateProductImageWhenPostProductsImageAndHavePermission()
+  {
+    $user = factory(User::class)->state('admin')->create();
+    $product = factory(Product::class)->create();
+
+    $file = UploadedFile::fake()->image('profile.png', 100, 100);
+
+    $response = $this->actingAs($user)->postJson(route('products.image.update', [
+      'product' => $product->id
+    ]), [
+      'image' => $file
+    ]);
+
+    $response->assertNoContent();
+  }
+
   public function testAssertUpdateUsesFormRequest()
   {
     $this->assertActionUsesFormRequest(
@@ -266,6 +282,12 @@ class ProductsControllerTest extends TestCase
       ActualProductsController::class,
       'update',
       'xss'
+    );
+
+    $this->assertActionUsesMiddleware(
+      ActualProductsController::class,
+      'updateImage',
+      'can:update,App\Product'
     );
 
     $this->assertActionUsesMiddleware(
