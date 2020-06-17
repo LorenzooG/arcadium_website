@@ -3,7 +3,7 @@
 
 namespace Tests\Feature\Payment\Handlers;
 
-use App\Payment\Contracts\PaymentHandlerContract;
+use App\Payment\Contracts\PaymentRepositoryContract;
 use App\Payment\Repositories\MercadoPagoPaymentRepository;
 use App\User;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -37,12 +37,15 @@ class MercadoPagoHandlerTest extends TestCase
       return $this->app->make(MercadoPagoPaymentRepositoryMock::class, [
         'paymentMock' => $payment,
         'preferencePaymentMockId' => $preferencePaymentIdMock,
+        'notificationUrl' => 'fuck.com',
         'productsMock' => []
       ]);
     });
 
-    /** @var PaymentHandlerContract $handler */
+    /** @var PaymentRepositoryContract $handler */
     $handler = $this->app->make(MercadoPagoPaymentRepository::class);
+
+    get_class($handler);
 
     $this->assertNotNull($handler->findMerchantOrderById($preferenceOrderIdMock));
   }

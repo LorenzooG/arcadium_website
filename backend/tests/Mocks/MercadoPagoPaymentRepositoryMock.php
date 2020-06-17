@@ -4,9 +4,7 @@
 namespace Tests\Mocks;
 
 use App\Payment;
-use App\Payment\Contracts\PaymentHandlerContract;
 use App\Payment\Contracts\PaymentRepositoryContract;
-use App\Payment\Handlers\MercadoPagoPaymentHandler;
 use App\Product;
 use Exception;
 use Illuminate\Support\Collection;
@@ -16,18 +14,17 @@ use MercadoPago\Payment as MercadoPagoPayment;
 
 final class MercadoPagoPaymentRepositoryMock implements PaymentRepositoryContract
 {
-  private PaymentHandlerContract $originalHandler;
   private Payment $paymentMock;
   private array $productsMock;
   private int $preferencePaymentMockId;
+  private string $notificationUrl;
 
-  public function __construct(Payment $paymentMock, int $preferencePaymentMockId, array $productsMock, MercadoPagoPaymentHandler $originalHandler)
+  public function __construct(Payment $paymentMock, int $preferencePaymentMockId, array $productsMock, string $notificationUrl)
   {
     $this->preferencePaymentMockId = $preferencePaymentMockId;
     $this->paymentMock = $paymentMock;
     $this->productsMock = $productsMock;
-
-    $this->originalHandler = $originalHandler;
+    $this->notificationUrl = $notificationUrl;
   }
 
   /**
@@ -55,7 +52,7 @@ final class MercadoPagoPaymentRepositoryMock implements PaymentRepositoryContrac
       'externalReference' => 'default',
       'preferenceId' => $id,
       'marketplace' => 'none',
-      'notification_url' => $this->originalHandler->getNotificationUrl(),
+      'notification_url' => $this->notificationUrl,
       'date_created' => '2019-04-02T14:35:35.000-04:00',
       'sponsor_id' => null,
       'shipping_cost' => 0,
