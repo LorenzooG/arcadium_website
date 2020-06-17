@@ -5,7 +5,7 @@ namespace App\Payment\Contracts;
 
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 interface PaymentHandlerContract
 {
@@ -16,7 +16,7 @@ interface PaymentHandlerContract
 
   public function findItemById($id);
 
-  public function handleCheckout(User $user, array $items): Response;
+  public function handleCheckout(User $user, string $userName, string $originIpAddress, array $items): Response;
 
   public function handleNotification(Request $request): Response;
 

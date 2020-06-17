@@ -57,7 +57,7 @@ final class ProductRepository
    * Find post by it's id
    *
    * @param int $id
-   * @return Post
+   * @return Product
    */
   public final function findProductById($id)
   {
