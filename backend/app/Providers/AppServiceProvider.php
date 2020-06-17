@@ -7,6 +7,7 @@ use App\Observers\CommentObserver;
 use App\Observers\PostObserver;
 use App\Observers\RoleObserver;
 use App\Observers\UserObserver;
+use App\Payment\Contracts\PaymentHandlerContract;
 use App\Payment\Handlers\BankSlipHandler as BankSlipPaymentHandler;
 use App\Payment\Handlers\MercadoPagoHandler as MercadoPagoPaymentHandler;
 use App\Payment\Handlers\PaypalHandler as PaypalPaymentHandler;
@@ -43,7 +44,12 @@ final class AppServiceProvider extends ServiceProvider
 
     // Singleton payment handlers
     $this->app->singleton(BankSlipPaymentHandler::class);
-    $this->app->singleton(MercadoPagoPaymentHandler::class);
+    $this->app->singleton(MercadoPagoPaymentHandler::class, function () {
+      /** @var PaymentHandlerContract $mercadoPagoPaymentHandler */
+      $mercadoPagoPaymentHandler = $this->app->make(MercadoPagoPaymentHandler::class);
+      $mercadoPagoPaymentHandler->setupCredentials();
+      return $mercadoPagoPaymentHandler;
+    });
     $this->app->singleton(PaypalPaymentHandler::class);
 
     JsonResource::withoutWrapping();
