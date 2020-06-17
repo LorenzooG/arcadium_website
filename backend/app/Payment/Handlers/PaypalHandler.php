@@ -35,7 +35,7 @@ final class PaypalHandler implements PaymentHandlerContract
     // TODO: Implement findItemById() method.
   }
 
-  public function handleCheckout(User $user, array $items): Response
+  public function handleCheckout(User $user, string $userName, string $originIpAddress, array $items): \Symfony\Component\HttpFoundation\Response
   {
     // TODO: Implement handleCheckout() method.
   }
