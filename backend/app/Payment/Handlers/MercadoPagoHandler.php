@@ -33,7 +33,12 @@ final class MercadoPagoHandler implements PaymentHandlerContract
   private ProductRepository $productRepository;
   private PaymentRepository $paymentRepository;
 
-  private string $notificationUrl;
+  /**
+   * Payment notification url
+   *
+   * @var string
+   */
+  public string $notificationUrl;
 
   /**
    * MercadoPagoHandler constructor
