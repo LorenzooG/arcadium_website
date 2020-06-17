@@ -5,37 +5,29 @@ namespace Tests\Mocks;
 
 use App\Payment;
 use App\Payment\Contracts\PaymentHandlerContract;
-use App\Payment\Handlers\MercadoPagoHandler;
+use App\Payment\Contracts\PaymentRepositoryContract;
+use App\Payment\Handlers\MercadoPagoPaymentHandler;
 use App\Product;
-use App\Repositories\PaymentRepository;
-use App\Repositories\ProductRepository;
-use App\User;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use MercadoPago\Item as MercadoPagoItem;
 use MercadoPago\MerchantOrder as MercadoPagoMerchantOrder;
 use MercadoPago\Payment as MercadoPagoPayment;
-use Symfony\Component\HttpFoundation\Response;
 
-final class MercadoPagoPaymentHandlerMock implements PaymentHandlerContract
+final class MercadoPagoPaymentRepositoryMock implements PaymentRepositoryContract
 {
   private PaymentHandlerContract $originalHandler;
   private Payment $paymentMock;
   private array $productsMock;
   private int $preferencePaymentMockId;
 
-  public function __construct(Payment $paymentMock, int $preferencePaymentMockId, array $productsMock, PaymentRepository $paymentRepository, ProductRepository $productRepository)
+  public function __construct(Payment $paymentMock, int $preferencePaymentMockId, array $productsMock, MercadoPagoPaymentHandler $originalHandler)
   {
     $this->preferencePaymentMockId = $preferencePaymentMockId;
     $this->paymentMock = $paymentMock;
     $this->productsMock = $productsMock;
-    $this->originalHandler = new MercadoPagoHandler($paymentRepository, $productRepository);
-  }
 
-  public function setupCredentials(): void
-  {
-    $this->originalHandler->setupCredentials();
+    $this->originalHandler = $originalHandler;
   }
 
   /**
@@ -63,7 +55,7 @@ final class MercadoPagoPaymentHandlerMock implements PaymentHandlerContract
       'externalReference' => 'default',
       'preferenceId' => $id,
       'marketplace' => 'none',
-      'notification_url' => $this->originalHandler->notificationUrl,
+      'notification_url' => $this->originalHandler->getNotificationUrl(),
       'date_created' => '2019-04-02T14:35:35.000-04:00',
       'sponsor_id' => null,
       'shipping_cost' => 0,
@@ -112,27 +104,5 @@ final class MercadoPagoPaymentHandlerMock implements PaymentHandlerContract
   public function findItemById($id)
   {
     return $this->findMerchantOrderById($id)->getAttributes()['payments'][0];
-  }
-
-  /**
-   * @param User $user
-   * @param string $userName
-   * @param string $originIpAddress
-   * @param array $items
-   * @return Response
-   * @throws Exception
-   */
-  public function handleCheckout(User $user, string $userName, string $originIpAddress, array $items): Response
-  {
-    return $this->originalHandler->handleCheckout($user, $userName, $originIpAddress, $items);
-  }
-
-  /**
-   * @param Request $request
-   * @return Response
-   */
-  public function handleNotification(Request $request): Response
-  {
-    return $this->originalHandler->handleNotification($request);
   }
 }

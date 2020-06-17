@@ -5,9 +5,13 @@ namespace App\Payment;
 
 
 use App\Payment\Contracts\PaymentHandlerContract;
-use App\Payment\Handlers\BankSlipHandler;
-use App\Payment\Handlers\MercadoPagoHandler;
-use App\Payment\Handlers\PaypalHandler;
+use App\Payment\Handlers\BankSlipPaymentHandler;
+use App\Payment\Handlers\MercadoPagoPaymentHandler;
+use App\Payment\Handlers\PaypalPaymentHandler;
+use App\Payment\Repositories\BankSlipPaymentRepository;
+use App\Payment\Repositories\MercadoPagoPaymentRepository;
+use App\Payment\Repositories\PaypalPaymentRepository;
+use Illuminate\Foundation\Application;
 
 /**
  * Class PaymentService
@@ -29,17 +33,15 @@ final class PaymentService
    *
    * Setup payment handlers
    *
-   * @param MercadoPagoHandler $mercadoPagoHandler
-   * @param PaypalHandler $paypalHandler
-   * @param BankSlipHandler $bankSlipHandler
+   * @param Application $app
    */
-  public final function __construct(MercadoPagoHandler $mercadoPagoHandler, PaypalHandler $paypalHandler, BankSlipHandler $bankSlipHandler)
+  public final function __construct(Application $app)
   {
     $this->paymentHandlers = [];
 
-    $this->paymentHandlers[MercadoPagoHandler::KEY] = $mercadoPagoHandler;
-    $this->paymentHandlers[PaypalHandler::KEY] = $paypalHandler;
-    $this->paymentHandlers[BankSlipHandler::KEY] = $bankSlipHandler;
+    $this->paymentHandlers[MercadoPagoPaymentHandler::KEY] = $app->make(MercadoPagoPaymentHandler::class);
+    $this->paymentHandlers[PaypalPaymentHandler::KEY] = $app->make(PaypalPaymentHandler::class);
+    $this->paymentHandlers[BankSlipPaymentHandler::KEY] = $app->make(BankSlipPaymentHandler::class);
   }
 
   /**
