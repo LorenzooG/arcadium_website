@@ -89,6 +89,10 @@ Route::prefix('checkout')->group(function () {
   Route::post("ipn/mp", "PaymentsController@ipn")->name("ipn");
 });
 
+Route::prefix('product_commands')->name('product_commands.')->group(function () {
+  Route::put('{command}', 'CommandsController@update')->middleware(['xss', 'can:update,App\ProductCommand'])->name('update');
+  Route::delete('{command}', 'CommandsController@delete')->middleware('can:delete,App\ProductCommand')->name('delete');
+});
 
 Route::prefix('products')->name('products.')->group(function () {
   Route::get('/', 'ProductsController@index')->name('index');
@@ -108,12 +112,8 @@ Route::prefix('products')->name('products.')->group(function () {
     });
 
     Route::prefix('commands')->name('commands.')->group(function () {
-      Route::get('/', 'CommandsController@index')->middleware('can:viewAny,App\ProductCommand')->name('index');
-
-      Route::middleware('xss')->group(function () {
-        Route::put('{command}', 'CommandsController@update')->middleware('can:update,App\ProductCommand')->name('update');
-        Route::post('{command}', 'CommandsController@store')->middleware('can:store,App\ProductCommand')->name('store');
-      });
+      Route::get('/', 'CommandsController@product')->middleware('can:viewAny,App\ProductCommand')->name('index');
+      Route::post('', 'CommandsController@store')->middleware(['xss', 'can:create,App\ProductCommand'])->name('store');
     });
   });
 });

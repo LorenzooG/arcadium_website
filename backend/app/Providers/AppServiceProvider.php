@@ -7,6 +7,10 @@ use App\Observers\CommentObserver;
 use App\Observers\PostObserver;
 use App\Observers\RoleObserver;
 use App\Observers\UserObserver;
+use App\Payment\Handlers\BankSlipHandler as BankSlipPaymentHandler;
+use App\Payment\Handlers\MercadoPagoHandler as MercadoPagoPaymentHandler;
+use App\Payment\Handlers\PaypalHandler as PaypalPaymentHandler;
+use App\Payment\PaymentService;
 use App\Post;
 use App\Role;
 use App\User;
@@ -34,6 +38,13 @@ final class AppServiceProvider extends ServiceProvider
   public final function boot()
   {
     Log::info("Bootstrapped application.");
+
+    $this->app->singleton(PaymentService::class);
+
+    // Singleton payment handlers
+    $this->app->singleton(BankSlipPaymentHandler::class);
+    $this->app->singleton(MercadoPagoPaymentHandler::class);
+    $this->app->singleton(PaypalPaymentHandler::class);
 
     JsonResource::withoutWrapping();
 

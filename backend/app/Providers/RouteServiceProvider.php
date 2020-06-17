@@ -3,8 +3,11 @@
 namespace App\Providers;
 
 use App\EmailUpdate;
+use App\Payment\PaymentService;
 use App\Repositories\CommentRepository;
+use App\Repositories\PaymentRepository;
 use App\Repositories\PostRepository;
+use App\Repositories\ProductCommandRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -31,6 +34,9 @@ class RouteServiceProvider extends ServiceProvider
   private PostRepository $postRepository;
   private RoleRepository $roleRepository;
   private CommentRepository $commentRepository;
+  private ProductCommandRepository $productCommandRepository;
+  private PaymentRepository $paymentRepository;
+  private PaymentService $paymentService;
 
   /**
    * Define your route model bindings, pattern filters, etc.
@@ -45,6 +51,9 @@ class RouteServiceProvider extends ServiceProvider
     $this->userRepository = resolve(UserRepository::class);
     $this->roleRepository = resolve(RoleRepository::class);
     $this->commentRepository = resolve(CommentRepository::class);
+    $this->productCommandRepository = resolve(ProductCommandRepository::class);
+    $this->paymentRepository = resolve(PaymentRepository::class);
+    $this->paymentService = resolve(PaymentService::class);
 
     $this->bind('email_update', function (string $email_update) {
       return EmailUpdate::query()
@@ -64,8 +73,20 @@ class RouteServiceProvider extends ServiceProvider
       return $this->commentRepository->findCommentById($comment);
     });
 
+    $this->bind('command', function (int $command) {
+      return $this->productCommandRepository->findProductCommandById($command);
+    });
+
     $this->bind('role', function (int $role) {
       return $this->roleRepository->findRoleById($role);
+    });
+
+    $this->bind('payment', function (int $payment) {
+      return $this->paymentRepository->findPaymentById($payment);
+    });
+
+    $this->bind('paymentHandler', function (string $paymentHandler) {
+      return $this->paymentService->findPaymentHandlerByPaymentMethodString($paymentHandler);
     });
 
     parent::boot();
