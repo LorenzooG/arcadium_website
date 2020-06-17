@@ -36,7 +36,6 @@ class RouteServiceProvider extends ServiceProvider
   private CommentRepository $commentRepository;
   private ProductCommandRepository $productCommandRepository;
   private PaymentRepository $paymentRepository;
-  private PaymentService $paymentService;
 
   /**
    * Define your route model bindings, pattern filters, etc.
@@ -53,7 +52,6 @@ class RouteServiceProvider extends ServiceProvider
     $this->commentRepository = resolve(CommentRepository::class);
     $this->productCommandRepository = resolve(ProductCommandRepository::class);
     $this->paymentRepository = resolve(PaymentRepository::class);
-    $this->paymentService = resolve(PaymentService::class);
 
     $this->bind('email_update', function (string $email_update) {
       return EmailUpdate::query()
@@ -83,10 +81,6 @@ class RouteServiceProvider extends ServiceProvider
 
     $this->bind('payment', function (int $payment) {
       return $this->paymentRepository->findPaymentById($payment);
-    });
-
-    $this->bind('paymentHandler', function (string $paymentHandler) {
-      return $this->paymentService->findPaymentHandlerByPaymentMethodString($paymentHandler);
     });
 
     parent::boot();

@@ -69,7 +69,7 @@ Route::prefix('posts')->group(function () {
   Route::post('{post}/like', 'PostsController@like')->middleware(['auth:api', 'can:like,post'])->name('posts.like');
   Route::delete('{post}', 'PostsController@delete')->middleware('can:delete,post')->name('posts.delete');
   Route::post('{post}/comments', 'CommentController@store')->middleware(['can:create,App\Comment', 'xss'])->name('posts.comments.store');
-	Route::get('{post}/comments', 'CommentController@post')->name('posts.comments.index');
+  Route::get('{post}/comments', 'CommentController@post')->name('posts.comments.index');
 });
 
 Route::prefix('comments')->group(function () {
@@ -77,11 +77,14 @@ Route::prefix('comments')->group(function () {
   Route::delete('{comment}', 'CommentController@delete')->middleware('can:delete,comment')->name('comments.delete');
 });
 
+Route::get("_FUCK_FUCK", "PaymentsController@show")->name('payments.notification');
+
 Route::prefix("/payments")
   ->middleware(AdminOnly::class)
+  ->name('payments.')
   ->group(function () {
-    Route::get("/", "PaymentsController@index")->name('payments.index');
-    Route::get("{payment}", "PaymentsController@show")->name('payments.show');
+    Route::get("/", "PaymentsController@index")->name('index');
+    Route::get("{payment}", "PaymentsController@show")->name('show');
   });
 
 Route::prefix('checkout')->group(function () {
