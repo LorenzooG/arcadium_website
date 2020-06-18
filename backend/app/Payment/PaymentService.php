@@ -5,12 +5,10 @@ namespace App\Payment;
 
 
 use App\Payment\Contracts\PaymentHandlerContract;
+use App\Payment\Contracts\PaymentServiceContract;
 use App\Payment\Handlers\BankSlipPaymentHandler;
 use App\Payment\Handlers\MercadoPagoPaymentHandler;
 use App\Payment\Handlers\PaypalPaymentHandler;
-use App\Payment\Repositories\BankSlipPaymentRepository;
-use App\Payment\Repositories\MercadoPagoPaymentRepository;
-use App\Payment\Repositories\PaypalPaymentRepository;
 use Illuminate\Foundation\Application;
 
 /**
@@ -18,7 +16,7 @@ use Illuminate\Foundation\Application;
  *
  * @package App\Payment
  */
-final class PaymentService
+final class PaymentService implements PaymentServiceContract
 {
 
   /**
