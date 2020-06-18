@@ -2,35 +2,36 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * @package App
  *
  * @property int id
  * @property int amount
+ * @property Payment payment
  * @property Product product
  *
  * @method static PurchasedProduct create(array $array)
  * @method static PurchasedProduct findOrFail(int $int)
  *
  */
-final class PurchasedProduct extends Model
+final class PurchasedProduct extends Pivot
 {
 
+  protected $table = 'purchased_products';
+
   protected $fillable = [
-    "product_id",
-    "amount",
+    'amount'
   ];
 
-  /**
-   * Retrieve the product owner of this purchased product entity
-   *
-   * @return BelongsTo
-   */
   public final function product()
   {
     return $this->belongsTo(Product::class);
+  }
+
+  public final function payment()
+  {
+    return $this->belongsTo(Payment::class);
   }
 }
