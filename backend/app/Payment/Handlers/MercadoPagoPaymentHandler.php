@@ -78,18 +78,20 @@ final class MercadoPagoPaymentHandler implements PaymentHandlerContract
     $totalPrice = 0;
     $mercadoPagoPreferenceItems = [];
 
-    foreach ($items as $item) {
+    foreach ($items as $index => $item) {
       $item['product'] = ($product = $this->productRepository->findProductById($item['product']));
+
+      $items[$index] = $item;
 
       $totalPrice += $product->price * $item['amount'];
     }
 
     /** @var Payment $payment */
     $payment = $user->payments()->create([
-      'payment_method' => MercadoPagoPaymentRepository::KEY,
+      'payment_method' => MercadoPagoPaymentHandler::KEY,
       'user_name' => $userName,
       'total_price' => $totalPrice,
-      'origin_ip_address' => $originIpAddress,
+      'origin_address' => $originIpAddress,
     ]);
 
     foreach ($items as $item) {

@@ -4,7 +4,6 @@
 namespace App\Repositories;
 
 
-use App\Post;
 use App\Product;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Database\Eloquent\Model;
@@ -66,7 +65,7 @@ final class ProductRepository
     return $this->cacheRepository->remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($id) {
       $this->logger->info("Caching post {$id}.");
 
-      return Post::findOrFail($id);
+      return Product::findOrFail($id);
     });
   }
 

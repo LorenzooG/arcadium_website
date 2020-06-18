@@ -3,44 +3,53 @@
 
 namespace Tests\Feature\Payment\Handlers;
 
+use App\Payment;
+use App\Payment\Contracts\PaymentHandlerContract;
 use App\Payment\Handlers\MercadoPagoPaymentHandler;
-use App\Payment\Repositories\MercadoPagoPaymentRepository;
+use App\Product;
 use App\User;
-use Tests\Mocks\MercadoPagoPaymentRepositoryMock;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Tests\TestCase;
 
 class MercadoPagoHandlerTest extends TestCase
 {
 
-  private function getDefaultPaymentAttributes()
-  {
-    return [
-      'user_name' => $this->faker->name,
-      'total_price' => 0,
-      'payment_method' => MercadoPagoPaymentHandler::KEY,
-      'origin_address' => '127.0.0.1'
-    ];
-  }
-
+  /**
+   * @throws BindingResolutionException
+   */
   public function testShouldCheckoutPayment()
   {
     /** @var User $user */
     $user = factory(User::class)->create();
-    $payment = $user->payments()->create($this->getDefaultPaymentAttributes());
-    $preferencePaymentIdMock = 1000;
-    $preferenceOrderIdMock = 1000;
+    /** @var Product $product */
+    $product = factory(Product::class)->create();
 
-    $this->app->singleton(MercadoPagoPaymentRepository::class, function () use ($payment, $preferencePaymentIdMock) {
-      return $this->app->make(MercadoPagoPaymentRepositoryMock::class, [
-        'paymentMock' => $payment,
-        'preferencePaymentMockId' => $preferencePaymentIdMock,
-        'notificationUrl' => 'fuck.com',
-        'productsMock' => []
-      ]);
-    });
-
-//    /** @var PaymentHandlerContract $handler */
+    /** @var PaymentHandlerContract $handler */
     $handler = $this->app->make(MercadoPagoPaymentHandler::class);
+
+    $ipAddress = $this->faker->ipv4;
+    $userName = $user->user_name;
+
+    $amount = 1;
+
+    $response = $handler->handleCheckout($user, $userName, $ipAddress, [
+      [
+        'product' => $product->id,
+        'amount' => $amount
+      ]
+    ]);
+
+    $responseContent = json_decode($response->getContent(), true);
+
+    $payments = Payment::query()
+      ->where('id', $responseContent['id'])
+      ->where('origin_address', $ipAddress)
+      ->where('user_name', $userName)
+      ->where('user_id', $user->id)
+      ->where('total_price', $amount * $product->price)
+      ->get();
+
+    $this->assertCount(1, $payments);
   }
 
 }
