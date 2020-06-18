@@ -6,6 +6,7 @@ namespace App\Payment\Handlers;
 
 use App\Payment;
 use App\Payment\Contracts\PaymentHandlerContract;
+use App\Payment\Contracts\PaymentRepositoryContract;
 use App\Payment\Repositories\MercadoPagoPaymentRepository;
 use App\Product;
 use App\Repositories\PaymentRepository;
@@ -32,18 +33,18 @@ final class MercadoPagoPaymentHandler implements PaymentHandlerContract
   private ProductRepository $productRepository;
   private PaymentRepository $paymentRepository;
 
-  private MercadoPagoPaymentRepository $mercadoPagoPaymentRepository;
+  private PaymentRepositoryContract $mercadoPagoPaymentRepository;
 
   private string $notificationUrl;
 
   /**
    * MercadoPagoPaymentHandler constructor
    *
-   * @param MercadoPagoPaymentRepository $mercadoPagoPaymentRepository
+   * @param PaymentRepositoryContract $mercadoPagoPaymentRepository
    * @param PaymentRepository $paymentRepository
    * @param ProductRepository $productRepository
    */
-  public final function __construct(MercadoPagoPaymentRepository $mercadoPagoPaymentRepository, PaymentRepository $paymentRepository, ProductRepository $productRepository)
+  public final function __construct(PaymentRepositoryContract $mercadoPagoPaymentRepository, PaymentRepository $paymentRepository, ProductRepository $productRepository)
   {
     $this->mercadoPagoPaymentRepository = $mercadoPagoPaymentRepository;
     $this->productRepository = $productRepository;
