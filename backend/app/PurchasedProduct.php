@@ -33,7 +33,8 @@ final class PurchasedProduct extends Pivot
    * @var array
    */
   protected $fillable = [
-    'amount'
+    'amount',
+    'product_id'
   ];
 
   /**
