@@ -16,9 +16,7 @@ class PaymentObserver
    */
   public function created(Payment $payment)
   {
-    $payment->user->notify(new ProductPurchasedNotification($payment->products()->get()->map(function ($item) {
-      return $item['product'];
-    })));
+    $payment->user->notify(new ProductPurchasedNotification($payment->products));
   }
 
   /**
@@ -32,8 +30,6 @@ class PaymentObserver
     if ($payment->total_paid <= $payment->total_price) return;
     if ($payment->is_delivered) return;
 
-    $payment->user->notify(new ProductPaidNotification($payment->products()->get()->map(function ($item) {
-      return $item['product'];
-    })));
+    $payment->user->notify(new ProductPaidNotification($payment->products));
   }
 }
