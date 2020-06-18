@@ -4,7 +4,6 @@
 namespace App\Payment\Handlers;
 
 
-use App\Notifications\ProductPurchasedNotification;
 use App\Payment;
 use App\Payment\Contracts\PaymentHandlerContract;
 use App\Payment\Contracts\PaymentRepositoryContract;
@@ -16,7 +15,7 @@ use App\User;
 use Exception;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use MercadoPago\Item as MercadoPagoItem;
 use MercadoPago\Payer as MercadoPagoPayer;
 use MercadoPago\Preference as MercadoPagoPreference;
@@ -32,6 +31,8 @@ use Symfony\Component\HttpFoundation\Response;
 final class MercadoPagoPaymentHandler implements PaymentHandlerContract
 {
   const KEY = 'MERCADO_PAGO';
+  const INVALID_TOPIC_MESSAGE = 'Please input a valid topic';
+  const INVALID_ITEMS_MESSAGE = 'Please a merchant order that have valid items';
 
   private ProductRepository $productRepository;
   private PaymentRepository $paymentRepository;
@@ -138,7 +139,39 @@ final class MercadoPagoPaymentHandler implements PaymentHandlerContract
 
   public function handleNotification(Request $request): Response
   {
-    // TODO: Implement handleNotification() method.
+    $requestedTopic = $request->query('topic');
+    $requestedId = $request->query('id');
+
+    $mercadoPagoMerchantOrder = null;
+
+    switch ($requestedTopic) {
+      case 'payment':
+        $payment = $this->mercadoPagoPaymentRepository->findItemById($requestedId);
+
+        $mercadoPagoMerchantOrder = $payment->order->id;
+        break;
+      case 'merchant_order':
+        $mercadoPagoMerchantOrder = $this->mercadoPagoPaymentRepository->findMerchantOrderById($requestedId);
+        break;
+    }
+
+    if ($mercadoPagoMerchantOrder == null) return response()->json([
+      'message' => self::INVALID_TOPIC_MESSAGE
+    ], 400);
+
+    $id = isset ($mercadoPagoMerchantOrder->items[0]) ? $mercadoPagoMerchantOrder->items[0]->id : null;
+
+    if ($id == null) return response()->json([
+      'message' => self::INVALID_ITEMS_MESSAGE
+    ], 400);
+
+    $paymentId = Str::after($id, '_');
+
+    $payment = $this->paymentRepository->findPaymentById($paymentId);
+    $payment->total_paid = $mercadoPagoMerchantOrder->paidAmount;
+    $payment->save();
+
+    return response()->noContent();
   }
 
   public function getNotificationUrl(): string
