@@ -102,10 +102,8 @@ final class MercadoPagoPaymentHandler implements PaymentHandlerContract
       $product = $item['product'];
       $amount = $item['amount'];
 
-      $payment->products()->attach([
+      $payment->products()->save($product, [
         'amount' => $amount
-      ], [
-        'product' => $product
       ]);
 
       $mercadoPagoPreferenceItems[] = new MercadoPagoItem([

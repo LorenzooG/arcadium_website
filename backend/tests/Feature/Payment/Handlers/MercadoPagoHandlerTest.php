@@ -99,10 +99,8 @@ class MercadoPagoHandlerTest extends TestCase
       'origin_address' => $this->faker->ipv4
     ]);
 
-    $payment->products()->attach([
+    $payment->products()->save($product, [
       'amount' => $amount
-    ], [
-      'product' => $product
     ]);
 
     $notificationUrlMock = $this->faker->url;
