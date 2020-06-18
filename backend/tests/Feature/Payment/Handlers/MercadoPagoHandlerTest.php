@@ -121,10 +121,7 @@ class MercadoPagoHandlerTest extends TestCase
 
     $request = Request::create(route('payments.notifications', [
       'paymentHandler' => $this->faker->word
-    ]), 'POST', [
-      'id' => $preferencePaymentIdMock,
-      'topic' => 'merchant_order'
-    ]);
+    ]), 'POST');
 
     $request->query->set('id', $preferencePaymentIdMock);
     $request->query->set('topic', 'merchant_order');
