@@ -7,6 +7,7 @@ use App\Payment;
 use App\Payment\Contracts\PaymentHandlerContract;
 use App\Payment\Handlers\MercadoPagoPaymentHandler;
 use App\Product;
+use App\PurchasedProduct;
 use App\User;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Tests\TestCase;
@@ -49,7 +50,19 @@ class MercadoPagoHandlerTest extends TestCase
       ->where('total_price', $amount * $product->price)
       ->get();
 
+    $paymentsPurchasedProducts = PurchasedProduct::query()
+      ->where('payment_id', $responseContent['id'])
+      ->get();
+
+    $purchasedProducts = PurchasedProduct::query()
+      ->where('product_id', $product->id)
+      ->where('payment_id', $responseContent['id'])
+      ->where('amount', $amount)
+      ->get();
+
     $this->assertCount(1, $payments);
+    $this->assertCount(1, $purchasedProducts);
+    $this->assertCount(1, $paymentsPurchasedProducts);
   }
 
 }

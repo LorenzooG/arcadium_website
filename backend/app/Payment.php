@@ -53,7 +53,8 @@ final class Payment extends Model
    */
   public final function products()
   {
-    return $this->belongsToMany(Product::class, 'purchased_products');
+    return $this->belongsToMany(Product::class, 'purchased_products')
+      ->using(PurchasedProduct::class);
   }
 
 }
