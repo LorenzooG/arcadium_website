@@ -12,10 +12,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int id
  * @property string user_name
  * @property boolean is_delivered
- * @property string payment_type
- * @property boolean payment_response
- * @property string payment_raw_response
+ * @property string payment_method
+ * @property string origin_address
  * @property double total_price
+ * @property double total_paid
  * @property User user
  *
  * @method static Payment create(array $array)
@@ -24,17 +24,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 final class Payment extends Model
 {
 
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array
+   */
   protected $fillable = [
     'payment_method',
-    'delivered',
+    'is_delivered',
     'user_name',
     'origin_address',
     'total_paid',
     'total_price'
-  ];
-
-  protected $casts = [
-    'delivered' => 'boolean',
   ];
 
   /**
