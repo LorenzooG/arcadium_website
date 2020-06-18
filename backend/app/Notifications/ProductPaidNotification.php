@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Collection;
 
-final class VipPurchasedNotification extends Notification
+final class ProductPaidNotification extends Notification
 {
   use Queueable;
 
@@ -47,7 +47,7 @@ final class VipPurchasedNotification extends Notification
    */
   public final function toMail(User $notifiable)
   {
-    return (new MailMessage)->subject("Vip")->markdown('mail.vip.purchased', [
+    return (new MailMessage)->subject("Vip")->markdown('mail.vip.paid', [
       "user" => $notifiable,
       "products" => $this->products,
     ]);
