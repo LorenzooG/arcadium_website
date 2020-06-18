@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Comment;
 use App\Observers\CommentObserver;
+use App\Observers\PaymentObserver;
 use App\Observers\PostObserver;
 use App\Observers\RoleObserver;
 use App\Observers\UserObserver;
+use App\Payment;
 use App\Payment\PaymentService;
 use App\Payment\Repositories\BankSlipPaymentRepository as BankSlipPaymentHandler;
 use App\Payment\Repositories\MercadoPagoPaymentRepository as MercadoPagoPaymentHandler;
@@ -52,5 +54,6 @@ final class AppServiceProvider extends ServiceProvider
     Post::observe(PostObserver::class);
     Role::observe(RoleObserver::class);
     Comment::observe(CommentObserver::class);
+    Payment::observe(PaymentObserver::class);
   }
 }

@@ -11,11 +11,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  *
  * @property int id
  * @property string user_name
- * @property boolean delivered
+ * @property boolean is_delivered
  * @property string payment_type
  * @property boolean payment_response
  * @property string payment_raw_response
  * @property double total_price
+ * @property User user
  *
  * @method static Payment create(array $array)
  * @method static Payment findOrFail(int $int)

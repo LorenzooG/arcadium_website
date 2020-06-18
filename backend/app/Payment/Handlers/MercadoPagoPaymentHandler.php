@@ -129,10 +129,6 @@ final class MercadoPagoPaymentHandler implements PaymentHandlerContract
 
     $preferenceAttributes = $preference->getAttributes();
 
-    $user->notify(new ProductPurchasedNotification(Collection::make($items)->map(function ($item) {
-      return $item['product'];
-    })));
-
     return response()->json([
       'id' => $payment->id,
       'preference_id' => $preferenceAttributes['id'],
