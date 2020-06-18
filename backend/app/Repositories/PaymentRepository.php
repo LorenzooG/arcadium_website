@@ -58,7 +58,7 @@ class PaymentRepository
    * Find payment by it's id
    *
    * @param int $id
-   * @return User
+   * @return Payment
    */
   public final function findPaymentById($id)
   {
