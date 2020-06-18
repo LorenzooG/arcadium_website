@@ -4,6 +4,7 @@
 namespace App\Payment\Handlers;
 
 
+use App\Notifications\ProductPurchasedNotification;
 use App\Payment;
 use App\Payment\Contracts\PaymentHandlerContract;
 use App\Payment\Contracts\PaymentRepositoryContract;
@@ -15,6 +16,7 @@ use App\User;
 use Exception;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use MercadoPago\Item as MercadoPagoItem;
 use MercadoPago\Payer as MercadoPagoPayer;
 use MercadoPago\Preference as MercadoPagoPreference;
@@ -126,6 +128,10 @@ final class MercadoPagoPaymentHandler implements PaymentHandlerContract
     ]);
 
     $preferenceAttributes = $preference->getAttributes();
+
+    $user->notify(new ProductPurchasedNotification(Collection::make($items)->map(function ($item) {
+      return $item['product'];
+    })));
 
     return response()->json([
       'id' => $payment->id,

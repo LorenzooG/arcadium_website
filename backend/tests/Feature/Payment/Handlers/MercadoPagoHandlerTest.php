@@ -3,6 +3,7 @@
 
 namespace Tests\Feature\Payment\Handlers;
 
+use App\Notifications\ProductPurchasedNotification;
 use App\Payment;
 use App\Payment\Contracts\PaymentHandlerContract;
 use App\Payment\Handlers\MercadoPagoPaymentHandler;
@@ -10,6 +11,7 @@ use App\Product;
 use App\PurchasedProduct;
 use App\User;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class MercadoPagoHandlerTest extends TestCase
@@ -20,6 +22,8 @@ class MercadoPagoHandlerTest extends TestCase
    */
   public function testShouldCheckoutPayment()
   {
+    Notification::fake();
+
     /** @var User $user */
     $user = factory(User::class)->create();
     /** @var Product $product */
@@ -59,6 +63,8 @@ class MercadoPagoHandlerTest extends TestCase
       ->where('payment_id', $responseContent['id'])
       ->where('amount', $amount)
       ->get();
+
+    Notification::assertSentTo($user, ProductPurchasedNotification::class);
 
     $this->assertCount(1, $payments);
     $this->assertCount(1, $purchasedProducts);
