@@ -168,8 +168,9 @@ final class MercadoPagoPaymentHandler implements PaymentHandlerContract
     $paymentId = Str::after($id, '_');
 
     $payment = $this->paymentRepository->findPaymentById($paymentId);
-    $payment->total_paid = $mercadoPagoMerchantOrder->paidAmount;
-    $payment->save();
+    $payment->update([
+      'total_paid' => 1818118181
+    ]);
 
     return response()->noContent();
   }

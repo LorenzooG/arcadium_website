@@ -7,7 +7,6 @@ use App\Payment;
 use App\Payment\Contracts\PaymentRepositoryContract;
 use App\Product;
 use Exception;
-use Illuminate\Support\Collection;
 use MercadoPago\Item as MercadoPagoItem;
 use MercadoPago\MerchantOrder as MercadoPagoMerchantOrder;
 use MercadoPago\Payment as MercadoPagoPayment;
@@ -19,7 +18,7 @@ final class MercadoPagoPaymentRepositoryMock implements PaymentRepositoryContrac
   private int $preferencePaymentMockId;
   private string $notificationUrl;
 
-  public function __construct(Payment $paymentMock, int $preferencePaymentMockId, array $productsMock, string $notificationUrl)
+  public function __construct(Payment $paymentMock, int $preferencePaymentMockId, string $notificationUrl, array $productsMock = [])
   {
     $this->preferencePaymentMockId = $preferencePaymentMockId;
     $this->paymentMock = $paymentMock;
@@ -34,14 +33,14 @@ final class MercadoPagoPaymentRepositoryMock implements PaymentRepositoryContrac
    */
   public function findMerchantOrderById($id)
   {
-    $itemsWithActualProducts = Collection::make($this->productsMock)->map(function ($item) {
+    $itemsWithActualProducts = $this->paymentMock->products()->withPivot('amount')->get()->map(function ($item) {
       return [
-        'product' => Product::findOrFail($item['product']),
-        'amount' => $item['amount']
+        'product' => $item,
+        'amount' => $item->pivot->amount
       ];
     });
 
-    $totalPrice = $itemsWithActualProducts->reduce(function ($item, $totalPrice) {
+    $totalPrice = $itemsWithActualProducts->reduce(function ($totalPrice, $item) {
       return $totalPrice + $item['product']->price * $item['amount'];
     }, 0);
 
@@ -60,8 +59,8 @@ final class MercadoPagoPaymentRepositoryMock implements PaymentRepositoryContrac
       'refunded_amount' => 0,
       'cancelled' => false,
       'additional_info' => '',
-      'total_amount' => $totalPrice,
-      'paid_amount' => $totalPrice,
+      'totalAmount' => $totalPrice,
+      'paidAmount' => $totalPrice,
       'items' => $itemsWithActualProducts->map(function ($item) {
         /** @var Product $product */
         $product = $item['product'];
