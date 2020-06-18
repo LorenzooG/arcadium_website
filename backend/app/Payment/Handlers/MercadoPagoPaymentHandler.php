@@ -13,6 +13,7 @@ use App\Repositories\PaymentRepository;
 use App\Repositories\ProductRepository;
 use App\User;
 use Exception;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use MercadoPago\Item as MercadoPagoItem;
 use MercadoPago\Payer as MercadoPagoPayer;
@@ -40,15 +41,13 @@ final class MercadoPagoPaymentHandler implements PaymentHandlerContract
   /**
    * MercadoPagoPaymentHandler constructor
    *
-   * @param PaymentRepositoryContract $mercadoPagoPaymentRepository
-   * @param PaymentRepository $paymentRepository
-   * @param ProductRepository $productRepository
+   * @param Application $app
    */
-  public final function __construct(PaymentRepositoryContract $mercadoPagoPaymentRepository, PaymentRepository $paymentRepository, ProductRepository $productRepository)
+  public final function __construct(Application $app)
   {
-    $this->mercadoPagoPaymentRepository = $mercadoPagoPaymentRepository;
-    $this->productRepository = $productRepository;
-    $this->paymentRepository = $paymentRepository;
+    $this->mercadoPagoPaymentRepository = $app->make(MercadoPagoPaymentRepository::class);
+    $this->productRepository = $app->make(ProductRepository::class);
+    $this->paymentRepository = $app->make(PaymentRepository::class);
 
     $this->setupCredentials();
   }
