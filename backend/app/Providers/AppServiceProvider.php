@@ -19,6 +19,9 @@ use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use PayPalCheckoutSdk\Core\PayPalEnvironment;
+use PayPalCheckoutSdk\Core\ProductionEnvironment;
+use PayPalCheckoutSdk\Core\SandboxEnvironment;
 
 final class AppServiceProvider extends ServiceProvider
 {
@@ -47,6 +50,15 @@ final class AppServiceProvider extends ServiceProvider
     $this->app->singleton(BankSlipPaymentHandler::class);
     $this->app->singleton(MercadoPagoPaymentHandler::class);
     $this->app->singleton(PaypalPaymentHandler::class);
+
+    $this->app->singleton(PayPalEnvironment::class, function () {
+      $clientId = config('app.paypal_client_id');
+      $clientSecret = config('app.paypal_client_secret');
+
+      return config('app.env') === 'production'
+        ? new ProductionEnvironment($clientId, $clientSecret)
+        : new SandboxEnvironment($clientId, $clientSecret);
+    });
 
     JsonResource::withoutWrapping();
 
