@@ -27,7 +27,7 @@ class PaymentObserver
    */
   public function updated(Payment $payment)
   {
-    if ($payment->total_paid <= $payment->total_price) return;
+    if ($payment->total_paid < $payment->total_price) return;
     if ($payment->is_delivered) return;
 
     $payment->user->notify(new ProductPaidNotification($payment->products));
