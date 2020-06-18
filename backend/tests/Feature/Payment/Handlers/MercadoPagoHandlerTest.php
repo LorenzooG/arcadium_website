@@ -3,10 +3,10 @@
 
 namespace Tests\Feature\Payment\Handlers;
 
-use App\Payment\Contracts\PaymentRepositoryContract;
+use App\Payment\Contracts\PaymentHandlerContract;
+use App\Payment\Handlers\MercadoPagoPaymentHandler;
 use App\Payment\Repositories\MercadoPagoPaymentRepository;
 use App\User;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Tests\Mocks\MercadoPagoPaymentRepositoryMock;
 use Tests\TestCase;
 
@@ -22,10 +22,7 @@ class MercadoPagoHandlerTest extends TestCase
     ];
   }
 
-  /**
-   * @throws BindingResolutionException
-   */
-  public function test()
+  public function testShouldCheckoutPayment()
   {
     /** @var User $user */
     $user = factory(User::class)->create();
@@ -42,12 +39,8 @@ class MercadoPagoHandlerTest extends TestCase
       ]);
     });
 
-    /** @var PaymentRepositoryContract $handler */
-    $handler = $this->app->make(MercadoPagoPaymentRepository::class);
-
-    get_class($handler);
-
-    $this->assertNotNull($handler->findMerchantOrderById($preferenceOrderIdMock));
+    /** @var PaymentHandlerContract $handler */
+    $handler = $this->app->make(MercadoPagoPaymentHandler::class);
   }
 
 }

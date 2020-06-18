@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PaymentCheckoutRequest;
 use App\Http\Resources\PaymentResource;
 use App\Payment;
-use App\Payment\PaymentService;
+use App\Payment\Contracts\PaymentServiceContract as PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Symfony\Component\HttpFoundation\Response;

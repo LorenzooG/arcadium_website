@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\AdminOnly;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -79,13 +78,12 @@ Route::prefix('comments')->group(function () {
 
 Route::get("_FUCK_FUCK", "PaymentsController@show")->name('payments.notification');
 
-Route::prefix("/payments")
-  ->middleware(AdminOnly::class)
-  ->name('payments.')
-  ->group(function () {
-    Route::get("/", "PaymentsController@index")->name('index');
-    Route::get("{payment}", "PaymentsController@show")->name('show');
-  });
+Route::prefix("/payments")->name('payments.')->group(function () {
+  Route::get("/", "PaymentsController@index")->name('index');
+  Route::get("{payment}", "PaymentsController@show")->name('show');
+  Route::post("/{paymentHandler}/notifications", "PaymentsController@notification")->name('notifications');
+  Route::post("/{paymentHandler}/", "PaymentsController@payment")->name('checkout');
+});
 
 Route::prefix('checkout')->group(function () {
   Route::middleware("xss")->post("/", "PaymentsController@checkout")->name('checkout');
