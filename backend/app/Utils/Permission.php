@@ -128,6 +128,7 @@ final class Permission
     | self::DELETE_PRODUCT_COMMAND
     | self::STORE_NEWS
     | self::UPDATE_NEWS
-    | self::DELETE_NEWS;
+    | self::DELETE_NEWS
+    | self::VIEW_PAYMENT;
 
 }
