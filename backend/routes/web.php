@@ -12,3 +12,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/', function () {
+  $appName = config('app.name');
+
+  return [
+    'message' => "Welcome to the $appName api"
+  ];
+})->name('index');
