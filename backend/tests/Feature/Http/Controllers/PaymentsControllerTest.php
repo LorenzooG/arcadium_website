@@ -3,14 +3,111 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Payment;
 use App\Payment\Contracts\PaymentServiceContract;
+use App\Product;
+use App\PurchasedProduct;
 use App\User;
+use Illuminate\Support\Collection;
 use Tests\Mocks\PaymentHandlerMock;
 use Tests\Mocks\PaymentServiceMock;
 use Tests\TestCase;
 
 class PaymentsControllerTest extends TestCase
 {
+
+  public function testShouldShowAllPaymentsWhenGetPayments()
+  {
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+
+    factory(Payment::class, 3)->create();
+
+    $response = $this->actingAs($user)->getJson(route('payments.index'));
+
+    $response->assertOk()
+      ->assertJson([
+        'data' => Collection::make(Payment::query()->orderByDesc('id')->paginate()->items())->map(function (Payment $item) {
+          return [
+            'id' => $item->id,
+            'user_name' => $item->user_name,
+            'total_paid' => $item->total_paid,
+            'total_price' => $item->total_price,
+            'is_delivered' => $item->is_delivered,
+            'origin_ip_address' => $item->origin_address,
+            'payment_method' => $item->payment_method,
+            'products' => route('payments.products', [
+              'payment' => $item->id
+            ]),
+            'user' => route('users.show', [
+              'user' => $item->user_id
+            ]),
+            'created_at' => $item->created_at,
+            'updated_at' => $item->updated_at,
+          ];
+        })
+      ]);
+  }
+
+  public function testShouldShowAPaymentWhenGetPayments()
+  {
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+    /** @var Payment $payment */
+    $payment = factory(Payment::class)->create();
+
+    $response = $this->actingAs($user)->getJson(route('payments.index'));
+
+    $response->assertOk()
+      ->assertJson([
+        'id' => $payment->id,
+        'user_name' => $payment->user_name,
+        'total_paid' => $payment->total_paid,
+        'total_price' => $payment->total_price,
+        'is_delivered' => $payment->is_delivered,
+        'origin_ip_address' => $payment->origin_address,
+        'payment_method' => $payment->payment_method,
+        'products' => route('payments.products', [
+          'payment' => $payment->id
+        ]),
+        'user' => route('users.show', [
+          'user' => $payment->user_id
+        ]),
+        'created_at' => $payment->created_at,
+        'updated_at' => $payment->updated_at,
+      ]);
+  }
+
+  public function testShouldShowAllPaymentProductsWhenGetPaymentsProducts()
+  {
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+    /** @var Product $product */
+    $product = factory(Product::class)->create();
+    $amount = 1;
+    /** @var Payment $payment */
+    $payment = factory(Payment::class)->create();
+    $payment->products()->save($product, [
+      'amount' => $amount
+    ]);
+
+    $response = $this->actingAs($user)->getJson(route('payments.products', [
+      'payment' => $payment->id
+    ]));
+
+    $response->assertOk()
+      ->assertJson([
+        'data' => Collection::make(PurchasedProduct::query()->paginate()->items())->map(function (PurchasedProduct $item) use ($product) {
+          return [
+            'id' => $item->id,
+            'product' => route('products.show', [
+              'product' => $product->id
+            ]),
+            'amount' => $item->amount,
+          ];
+        })
+      ]);
+  }
 
   public function testShouldSendNotificationToWebsiteWhenPostPaymentsNotifications()
   {
