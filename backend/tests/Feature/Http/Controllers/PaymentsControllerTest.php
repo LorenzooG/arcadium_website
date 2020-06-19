@@ -9,6 +9,7 @@ use App\Product;
 use App\PurchasedProduct;
 use App\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Notification;
 use Tests\Mocks\PaymentHandlerMock;
 use Tests\Mocks\PaymentServiceMock;
 use Tests\TestCase;
@@ -18,6 +19,7 @@ class PaymentsControllerTest extends TestCase
 
   public function testShouldShowAllPaymentsWhenGetPayments()
   {
+    Notification::fake();
     /** @var User $user */
     $user = factory(User::class)->state('admin')->create();
 
@@ -53,6 +55,7 @@ class PaymentsControllerTest extends TestCase
 
   public function testShouldShowAPaymentWhenGetPayments()
   {
+    Notification::fake();
     /** @var User $user */
     $user = factory(User::class)->state('admin')->create();
     /** @var Payment $payment */
@@ -84,6 +87,7 @@ class PaymentsControllerTest extends TestCase
 
   public function testShouldShowAllPaymentProductsWhenGetPaymentsProducts()
   {
+    Notification::fake();
     /** @var User $user */
     $user = factory(User::class)->state('admin')->create();
     /** @var Product $product */
