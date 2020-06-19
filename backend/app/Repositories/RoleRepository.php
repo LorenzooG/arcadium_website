@@ -40,15 +40,14 @@ final class RoleRepository
   /**
    * Find and paginated all roles that are staff
    *
-   * @param int $page
    * @return Collection
    */
-  public final function findAllRolesThatAreStaff(int $page)
+  public final function findAllRolesThatAreStaff()
   {
-    $this->logger->info("Retrieving staff users in page {$page}.");
+    $this->logger->info("Retrieving staff users.");
 
-    return $this->cacheRepository->remember($this->getCacheKey("for.staff.paginated.$page"), now()->addHour(), function () use ($page) {
-      $this->logger->info("Caching staff users in page {$page}.");
+    return $this->cacheRepository->remember($this->getCacheKey("is_staff"), now()->addHour(), function () {
+      $this->logger->info("Caching staff users.");
 
       return Role::query()->where('is_staff', true)->get();
     });
