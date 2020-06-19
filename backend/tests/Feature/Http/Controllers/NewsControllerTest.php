@@ -200,7 +200,7 @@ class NewsControllerTest extends TestCase
     $this->assertActionUsesMiddleware(
       ActualNewsController::class,
       'update',
-      'can:update,post'
+      'can:update,App\News'
     );
   }
 }
