@@ -45,7 +45,7 @@ class PaymentsControllerTest extends TestCase
             'created_at' => $item->created_at,
             'updated_at' => $item->updated_at,
           ];
-        })
+        })->toArray()
       ]);
   }
 
@@ -105,7 +105,7 @@ class PaymentsControllerTest extends TestCase
             ]),
             'amount' => $item->amount,
           ];
-        })
+        })->toArray()
       ]);
   }
 
