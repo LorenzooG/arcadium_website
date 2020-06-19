@@ -32,7 +32,7 @@ Route::prefix('user')->middleware('auth:api')->group(function () {
 });
 
 Route::prefix('roles')->group(function () {
-  Route::get('/', 'RolesController@index')->middleware('can:viewAny,App\Role')->name('roles.index');
+  Route::get('/', 'RolesController@index')->middleware('can:view,App\Role')->name('roles.index');
   Route::delete('{role}', 'RolesController@delete')->middleware('can:delete,role')->name('roles.delete');
 	Route::get('{role}', 'RolesController@show')->middleware('can:view,App\Role')->name('roles.show');
 
@@ -60,7 +60,7 @@ Route::prefix('users')->group(function () {
   Route::get('/', 'UsersController@index')->name('users.index');
   Route::get('{user}', 'UsersController@show')->name('users.show');
 
-  Route::get('{user}/roles', 'RolesController@user')->middleware('can:viewAny,App\Role')->name('users.roles.index');
+  Route::get('{user}/roles', 'RolesController@user')->middleware('can:view,App\Role')->name('users.roles.index');
 
   Route::get('{user}/posts', 'PostsController@user')->name('users.posts.index');
 
@@ -127,7 +127,7 @@ Route::prefix('products')->name('products.')->group(function () {
     });
 
     Route::prefix('commands')->name('commands.')->group(function () {
-      Route::get('/', 'CommandsController@product')->middleware('can:viewAny,App\ProductCommand')->name('index');
+      Route::get('/', 'CommandsController@product')->middleware('can:view,App\ProductCommand')->name('index');
       Route::post('', 'CommandsController@store')->middleware(['xss', 'can:create,App\ProductCommand'])->name('store');
     });
   });

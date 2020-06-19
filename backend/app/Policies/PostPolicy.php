@@ -17,29 +17,6 @@ final class PostPolicy
   use HandlesAuthorization;
 
   /**
-   * Determine whether the user can view any models.
-   *
-   * @param User $user
-   * @return mixed
-   */
-  public final function viewAny(User $user)
-  {
-    return true;
-  }
-
-  /**
-   * Determine whether the user can view the model.
-   *
-   * @param User $user
-   * @param Post $post
-   * @return mixed
-   */
-  public final function view(User $user, Post $post)
-  {
-    return true;
-  }
-
-  /**
    * Determine whether the user can create models.
    *
    * @param User $user
