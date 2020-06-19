@@ -31,8 +31,8 @@ class NewsControllerTest extends TestCase
             'id' => $news->id,
             'title' => $news->title,
             'description' => $news->description,
-            'created_at' => $news->created_at,
-            'updated_at' => $news->updated_at,
+            'created_at' => $news->created_at->toISOString(),
+            'updated_at' => $news->updated_at->toISOString(),
           ];
         }),
       ]);
@@ -55,8 +55,8 @@ class NewsControllerTest extends TestCase
         'id' => $news->id,
         'title' => $news->title,
         'description' => $news->description,
-        'created_at' => $news->created_at,
-        'updated_at' => $news->updated_at,
+        'created_at' => $news->created_at->toISOString(),
+        'updated_at' => $news->updated_at->toISOString(),
       ]);
   }
 
@@ -92,8 +92,8 @@ class NewsControllerTest extends TestCase
         'id' => $news->id,
         'title' => $news->title,
         'description' => $news->description,
-        'created_at' => $news->created_at,
-        'updated_at' => $news->updated_at,
+        'created_at' => $news->created_at->toISOString(),
+        'updated_at' => $news->updated_at->toISOString(),
       ]);
   }
 
