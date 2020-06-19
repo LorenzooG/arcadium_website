@@ -21,7 +21,9 @@ class PaymentsControllerTest extends TestCase
     /** @var User $user */
     $user = factory(User::class)->state('admin')->create();
 
-    factory(Payment::class, 3)->create();
+    factory(Payment::class, 3)->create([
+      'user_id' => $user->id
+    ]);
 
     $response = $this->actingAs($user)->getJson(route('payments.index'));
 
@@ -54,7 +56,9 @@ class PaymentsControllerTest extends TestCase
     /** @var User $user */
     $user = factory(User::class)->state('admin')->create();
     /** @var Payment $payment */
-    $payment = factory(Payment::class)->create();
+    $payment = factory(Payment::class)->create([
+      'user_id' => $user->id
+    ]);
 
     $response = $this->actingAs($user)->getJson(route('payments.index'));
 
