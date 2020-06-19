@@ -69,6 +69,7 @@ Route::prefix('users')->group(function () {
 
     Route::put("{user}", "UsersController@update")->middleware('can:update,App\User')->name('users.update');
     Route::delete("{user}", "UsersController@delete")->middleware('can:delete,App\User')->name('users.delete');
+    Route::delete("{user}", "UsersController@restore")->middleware('can:restore,App\User')->name('users.restore');
   });
 });
 
@@ -77,6 +78,7 @@ Route::prefix('posts')->group(function () {
   Route::get('{post}', 'PostsController@show')->name('posts.show');
   Route::put('{post}', 'PostsController@update')->middleware(['xss', 'can:update,post'])->name('posts.update');
   Route::post('{post}/like', 'PostsController@like')->middleware(['auth:api', 'can:like,post'])->name('posts.like');
+  Route::post('{post}/unlike', 'PostsController@unlike')->middleware(['auth:api', 'can:unlike,post'])->name('posts.unlike');
   Route::delete('{post}', 'PostsController@delete')->middleware('can:delete,post')->name('posts.delete');
   Route::post('{post}/comments', 'CommentController@store')->middleware(['can:create,App\Comment', 'xss'])->name('posts.comments.store');
   Route::get('{post}/comments', 'CommentController@post')->name('posts.comments.index');
