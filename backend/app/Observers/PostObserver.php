@@ -51,26 +51,4 @@ final class PostObserver
   {
     $this->postRepository->flushCache();
   }
-
-  /**
-   * Handle the post "restored" event.
-   *
-   * @param Post $post
-   * @return void
-   */
-  public final function restored(Post $post)
-  {
-    $this->postRepository->flushCache();
-  }
-
-  /**
-   * Handle the post "force deleted" event.
-   *
-   * @param Post $post
-   * @return void
-   */
-  public final function forceDeleted(Post $post)
-  {
-    $this->postRepository->flushCache();
-  }
 }
