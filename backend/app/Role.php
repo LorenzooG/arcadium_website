@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
  * @property int id
  * @property string title
  * @property int permission_level
+ * @property string color
  * @property Collection<User> users
  * @property Carbon created_at
  * @property Carbon updated_at
