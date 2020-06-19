@@ -73,8 +73,8 @@ final class PaypalPaymentHandler implements PaymentHandlerContract
         ];
       }),
       'application_context' => [
-        'cancel_url' => route('/'),
-        'return_url' => route('/'),
+        'cancel_url' => route('index'),
+        'return_url' => route('index'),
         'user_action' => 'PAY_NOW'
       ]
     ];
