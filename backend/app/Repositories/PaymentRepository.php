@@ -71,6 +71,24 @@ class PaymentRepository
   }
 
   /**
+   * Find payment's paginated products
+   *
+   * @param Payment $payment
+   * @param int $page
+   * @return mixed
+   */
+  public final function findPaginatedPaymentProducts(Payment $payment, int $page)
+  {
+    $this->logger->info("Retrieving payment {$payment->id}'s products in page {$page}.");
+
+    return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () use ($payment, $page) {
+      $this->logger->info("Caching user payment {$payment->id}'s products in page {$page}.");
+
+      return $payment->products;
+    });
+  }
+
+  /**
    * Create payment in database
    *
    * @param User $user
