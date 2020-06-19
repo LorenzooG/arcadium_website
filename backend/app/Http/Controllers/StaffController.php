@@ -28,9 +28,7 @@ final class StaffController extends Controller
    */
   public final function index()
   {
-    $page = Paginator::resolveCurrentPage();
-
-    return $this->roleRepository->findAllRolesThatAreStaff($page)->map(function (Role $role) {
+    return $this->roleRepository->findAllRolesThatAreStaff()->map(function (Role $role) {
       return [
         'role' => new RoleResource($role),
         'users' => UserResource::collection($role->users),
