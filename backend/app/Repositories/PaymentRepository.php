@@ -84,7 +84,7 @@ class PaymentRepository
     return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () use ($payment, $page) {
       $this->logger->info("Caching user payment {$payment->id}'s products in page {$page}.");
 
-      return $payment->products()->withPivot('amount')->get();
+      return $payment->products()->withPivot('amount')->paginate();
     });
   }
 
