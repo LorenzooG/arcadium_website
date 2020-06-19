@@ -39,6 +39,7 @@ final class Payment extends Model
     'payment_method',
     'is_delivered',
     'user_name',
+    'user_id',
     'origin_address',
     'total_paid',
     'total_price'
