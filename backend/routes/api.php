@@ -37,7 +37,7 @@ Route::prefix('roles')->group(function () {
 	Route::get('{role}', 'RolesController@show')->middleware('can:view,App\Role')->name('roles.show');
 
   Route::post('{role}/attach/{user}')->middleware('can:attach,App\Role')->name('roles.attach');
-  Route::post('{role}/dettach/{user}')->middleware('can:detach,App\Role')->name('roles.detach');
+  Route::post('{role}/detach/{user}')->middleware('can:detach,App\Role')->name('roles.detach');
 
   Route::middleware('xss')->group(function () {
     Route::post('/', 'RolesController@store')->middleware('can:create,App\Role')->name('roles.store');
