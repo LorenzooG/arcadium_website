@@ -46,8 +46,8 @@ class PaymentsControllerTest extends TestCase
             'user' => route('users.show', [
               'user' => $item->user_id
             ]),
-            'created_at' => $item->created_at,
-            'updated_at' => $item->updated_at,
+            'created_at' => $item->created_at->toISOString(),
+            'updated_at' => $item->updated_at->toISOString(),
           ];
         })->toArray()
       ]);
@@ -63,7 +63,7 @@ class PaymentsControllerTest extends TestCase
       'user_id' => $user->id
     ]);
 
-    $response = $this->actingAs($user)->getJson(route('payments.index'));
+    $response = $this->actingAs($user)->getJson(route('payments.show'));
 
     $response->assertOk()
       ->assertJson([
