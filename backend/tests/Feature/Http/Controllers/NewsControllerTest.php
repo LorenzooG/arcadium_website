@@ -65,8 +65,8 @@ class NewsControllerTest extends TestCase
    */
   public function testShouldStorePostWhenPostUsersPosts()
   {
-    $title = $this->faker->title;
-    $description = $this->faker->text;
+    $title = $this->faker->text(72);
+    $description = $this->faker->text(100);
 
     /* @var User $user */
     $user = factory(User::class)->state('admin')->create();
@@ -154,8 +154,8 @@ class NewsControllerTest extends TestCase
    */
   public function testShouldUpdatePostWhenPutPosts()
   {
-    $title = $this->faker->title;
-    $description = $this->faker->text;
+    $title = $this->faker->text(72);
+    $description = $this->faker->text(100);
 
     /* @var User $user */
     $user = factory(User::class)->state('admin')->create();

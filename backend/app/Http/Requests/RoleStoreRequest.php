@@ -26,7 +26,7 @@ final class RoleStoreRequest extends FormRequest
     return [
       'title' => 'required|string|max:32',
       'color' => 'required|string|max:12',
-      'is_staff' => 'required|boolean',
+      'permission_level' => 'required|numeric',
     ];
   }
 }

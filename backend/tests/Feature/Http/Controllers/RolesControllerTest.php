@@ -36,14 +36,14 @@ class RolesControllerTest extends TestCase
 		]);
 
     $response = $this->actingAs($user)->getJson(route('roles.index'));
-		
+
     $response->assertOk()
       ->assertJson([
 				'data' => [
           [
             'id' => $role->id,
             'title' => $title,
-            'color' => $color, 
+            'color' => $color,
             'permission_level' => $permissionLevel,
             'created_at' => $role->created_at->toISOString(),
             'updated_at' => $role->updated_at->toISOString()
@@ -76,7 +76,7 @@ class RolesControllerTest extends TestCase
             'id' => $role->id,
             'title' => $title,
             'permission_level' => $permissionLevel,
-            'color' => $color, 
+            'color' => $color,
             'created_at' => $role->created_at->toISOString(),
             'updated_at' => $role->updated_at->toISOString()
           ]
@@ -100,7 +100,7 @@ class RolesControllerTest extends TestCase
 			'color' => $color,
 			'permission_level' => $permissionLevel
 		]);
-		
+
 		$response = $this->actingAs($user)->getJson(route('roles.show', [
       'role' => $role->id
 		]));
@@ -121,9 +121,9 @@ class RolesControllerTest extends TestCase
    */
   public function testShouldStoreRoleWhenPostRoles()
   {
-    $title = $this->faker->title;
-		$color = $this->faker->hexColor;
-		$permissionLevel = Permission::STORE_ROLE | Permission::VIEW_ROLES_PERMISSIONS; 
+    $title = $this->faker->text(32);
+    $color = $this->faker->hexColor;
+		$permissionLevel = Permission::STORE_ROLE | Permission::VIEW_ROLES_PERMISSIONS;
 
     $user = factory(User::class)->create();
     $role = $user->roles()->create([
@@ -224,7 +224,7 @@ class RolesControllerTest extends TestCase
 			'permission_level' => Permission::UPDATE_ROLE,
 			'color' => $this->faker->hexColor
     ]);
-	
+
 		$title = $this->faker->title;
 		$color = $this->faker->hexColor;
 		$permissionLevel = Permission::NONE;

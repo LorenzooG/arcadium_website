@@ -154,7 +154,12 @@ class PaymentsControllerTest extends TestCase
       'paymentHandler' => $this->faker->text(10)
     ]), [
       'user_name' => $user->user_name,
-      'items' => []
+      'items' => [
+        [
+          'product' => 1,
+          'amount' => 1,
+        ]
+      ]
     ]);
 
     $response->assertOk()

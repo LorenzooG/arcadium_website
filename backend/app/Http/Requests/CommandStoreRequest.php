@@ -24,7 +24,7 @@ final class CommandStoreRequest extends FormRequest
   public final function rules()
   {
     return [
-      'content' => 'required|string|max:96'
+      'command' => 'string|max:96'
     ];
   }
 }

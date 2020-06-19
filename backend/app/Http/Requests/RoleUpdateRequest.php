@@ -26,6 +26,7 @@ final class RoleUpdateRequest extends FormRequest
     return [
       'title' => 'string|max:32',
       'color' => 'string|max:12',
+      'permission_level' => 'numeric',
       'is_staff' => 'boolean',
     ];
   }
