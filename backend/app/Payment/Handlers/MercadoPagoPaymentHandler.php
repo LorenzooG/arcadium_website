@@ -163,7 +163,7 @@ final class MercadoPagoPaymentHandler implements PaymentHandlerContract
       'message' => self::INVALID_ITEMS_MESSAGE
     ], 400);
 
-    $paymentId = Str::after($id, '_');
+    $paymentId = Str::before($id, '_');
 
     $payment = $this->paymentRepository->findPaymentById($paymentId);
     $payment->update([
