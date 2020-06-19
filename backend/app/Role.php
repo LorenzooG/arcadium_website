@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 /**
  * @package App
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int id
  * @property string title
  * @property int permission_level
+ * @property Collection<User> users
  *
  * @method static Role create(array $array)
  * @method static Role findOrFail(int $int)
