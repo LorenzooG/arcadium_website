@@ -5,8 +5,10 @@ namespace App\Providers;
 use App\Auth\JwtGuard;
 use App\Comment;
 use App\News;
+use App\Payment;
 use App\Policies\CommentPolicy;
 use App\Policies\NewsPolicy;
+use App\Policies\PaymentPolicy;
 use App\Policies\PostPolicy;
 use App\Policies\ProductCommandPolicy;
 use App\Policies\ProductPolicy;
@@ -42,7 +44,8 @@ class AuthServiceProvider extends ServiceProvider
     Comment::class => CommentPolicy::class,
     Product::class => ProductPolicy::class,
     ProductCommand::class => ProductCommandPolicy::class,
-    News::class => NewsPolicy::class
+    News::class => NewsPolicy::class,
+    Payment::class => PaymentPolicy::class
     // 'App\Model' => 'App\Policies\ModelPolicy',
   ];
 

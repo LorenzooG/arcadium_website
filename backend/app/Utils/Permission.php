@@ -88,6 +88,8 @@ final class Permission
 
   const DELETE_NEWS = 137438953472;
 
+  const VIEW_PAYMENT = 274877906944;
+
   const ALL =
     self::NONE
     | self::STORE_USER
