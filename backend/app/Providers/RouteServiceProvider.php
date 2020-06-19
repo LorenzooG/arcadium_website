@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\EmailUpdate;
-use App\Payment\PaymentService;
 use App\Repositories\CommentRepository;
 use App\Repositories\PaymentRepository;
 use App\Repositories\PostRepository;
@@ -59,27 +58,27 @@ class RouteServiceProvider extends ServiceProvider
         ->firstOrFail();
     });
 
-    $this->bind('user', function (int $user) {
+    $this->bind('user', function ($user) {
       return $this->userRepository->findUserById($user);
     });
 
-    $this->bind('post', function (int $post) {
+    $this->bind('post', function ($post) {
       return $this->postRepository->findPostById($post);
     });
 
-    $this->bind('comment', function (int $comment) {
+    $this->bind('comment', function ($comment) {
       return $this->commentRepository->findCommentById($comment);
     });
 
-    $this->bind('command', function (int $command) {
+    $this->bind('command', function ($command) {
       return $this->productCommandRepository->findProductCommandById($command);
     });
 
-    $this->bind('role', function (int $role) {
+    $this->bind('role', function ($role) {
       return $this->roleRepository->findRoleById($role);
     });
 
-    $this->bind('payment', function (int $payment) {
+    $this->bind('payment', function ($payment) {
       return $this->paymentRepository->findPaymentById($payment);
     });
 
