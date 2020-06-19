@@ -34,7 +34,7 @@ class NewsControllerTest extends TestCase
             'created_at' => $news->created_at->toISOString(),
             'updated_at' => $news->updated_at->toISOString(),
           ];
-        }),
+        })->toArray(),
       ]);
   }
 
