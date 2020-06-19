@@ -57,26 +57,4 @@ final class RoleObserver
   {
     $this->roleRepository->flushCache();
   }
-
-  /**
-   * Handle the role "restored" event.
-   *
-   * @param Role $role
-   * @return void
-   */
-  public final function restored(Role $role)
-  {
-    $this->roleRepository->flushCache();
-  }
-
-  /**
-   * Handle the role "force deleted" event.
-   *
-   * @param Role $role
-   * @return void
-   */
-  public final function forceDeleted(Role $role)
-  {
-    $this->roleRepository->flushCache();
-  }
 }
