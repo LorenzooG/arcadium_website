@@ -10,6 +10,7 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Log\Logger;
+use Illuminate\Support\Collection;
 
 /**
  * Class RoleRepository
@@ -34,6 +35,23 @@ final class RoleRepository
   {
     $this->logger = $logger;
     $this->cacheRepository = $cacheRepository;
+  }
+
+  /**
+   * Find and paginated all roles that are staff
+   *
+   * @param int $page
+   * @return Collection
+   */
+  public final function findAllRolesThatAreStaff(int $page)
+  {
+    $this->logger->info("Retrieving staff users in page {$page}.");
+
+    return $this->cacheRepository->remember($this->getCacheKey("for.staff.paginated.$page"), now()->addHour(), function () use ($page) {
+      $this->logger->info("Caching staff users in page {$page}.");
+
+      return Role::query()->where('is_staff', true)->get();
+    });
   }
 
   /**

@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\UserRepository;
+use App\Http\Resources\RoleResource;
+use App\Http\Resources\UserResource;
+use App\Repositories\RoleRepository;
+use App\Role;
 use Illuminate\Pagination\Paginator;
 
 final class StaffController extends Controller
 {
 
-  private UserRepository $userRepository;
+  private RoleRepository $roleRepository;
 
   /**
    * StaffController constructor
    *
-   * @param UserRepository $userRepository
+   * @param RoleRepository $roleRepository
    */
-  public final function __construct(UserRepository $userRepository)
+  public final function __construct(RoleRepository $roleRepository)
   {
-    $this->userRepository = $userRepository;
+    $this->roleRepository = $roleRepository;
   }
 
   /**
@@ -27,7 +30,12 @@ final class StaffController extends Controller
   {
     $page = Paginator::resolveCurrentPage();
 
-    return $this->userRepository->findAllUsersThatAreStaff($page);
+    return $this->roleRepository->findAllRolesThatAreStaff($page)->map(function (Role $role) {
+      return [
+        'role' => new RoleResource($role),
+        'users' => UserResource::collection($role->users),
+      ];
+    });
   }
 
 }
