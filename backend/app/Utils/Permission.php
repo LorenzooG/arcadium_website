@@ -82,6 +82,12 @@ final class Permission
 
   const DELETE_PRODUCT_COMMAND = 17179869184;
 
+  const STORE_NEWS = 34359738368;
+
+  const UPDATE_NEWS = 68719476736;
+
+  const DELETE_NEWS = 137438953472;
+
   const ALL =
     self::NONE
     | self::STORE_USER
@@ -117,6 +123,9 @@ final class Permission
     | self::VIEW_PRODUCT_COMMANDS
     | self::STORE_PRODUCT_COMMAND
     | self::UPDATE_PRODUCT_COMMAND
-    | self::DELETE_PRODUCT_COMMAND;
+    | self::DELETE_PRODUCT_COMMAND
+    | self::STORE_NEWS
+    | self::UPDATE_NEWS
+    | self::DELETE_NEWS;
 
 }
