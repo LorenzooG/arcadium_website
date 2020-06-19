@@ -39,9 +39,20 @@ Route::prefix('roles')->group(function () {
   Route::post('{role}/attach/{user}')->middleware('can:attach,App\Role')->name('roles.attach');
   Route::post('{role}/dettach/{user}')->middleware('can:detach,App\Role')->name('roles.detach');
 
-	Route::middleware('xss')->group(function () {
+  Route::middleware('xss')->group(function () {
     Route::post('/', 'RolesController@store')->middleware('can:create,App\Role')->name('roles.store');
     Route::put('{role}', 'RolesController@update')->middleware('can:update,App\Role')->name('roles.update');
+  });
+});
+
+Route::prefix('news')->name('news.')->group(function () {
+  Route::get('/', 'NewsController@index')->name('index');
+  Route::get('/{news}', 'NewsController@news')->name('show');
+
+  Route::middleware('xss')->group(function () {
+    Route::post('/', 'NewsController@store')->middleware('can:create,App\News')->name('store');
+    Route::put('/{news}', 'NewsController@update')->middleware('can:update,App\News')->name('show');
+    Route::delete('/{news}', 'NewsController@delete')->middleware('can:delete,App\News')->name('delete');
   });
 });
 

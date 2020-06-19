@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\EmailUpdate;
 use App\Repositories\CommentRepository;
+use App\Repositories\NewsRepository;
 use App\Repositories\PaymentRepository;
 use App\Repositories\PostRepository;
 use App\Repositories\ProductCommandRepository;
@@ -35,6 +36,7 @@ class RouteServiceProvider extends ServiceProvider
   private CommentRepository $commentRepository;
   private ProductCommandRepository $productCommandRepository;
   private PaymentRepository $paymentRepository;
+  private NewsRepository $newsRepository;
 
   /**
    * Define your route model bindings, pattern filters, etc.
@@ -51,6 +53,7 @@ class RouteServiceProvider extends ServiceProvider
     $this->commentRepository = resolve(CommentRepository::class);
     $this->productCommandRepository = resolve(ProductCommandRepository::class);
     $this->paymentRepository = resolve(PaymentRepository::class);
+    $this->newsRepository = resolve(NewsRepository::class);
 
     $this->bind('email_update', function (string $email_update) {
       return EmailUpdate::query()
@@ -80,6 +83,10 @@ class RouteServiceProvider extends ServiceProvider
 
     $this->bind('payment', function ($payment) {
       return $this->paymentRepository->findPaymentById($payment);
+    });
+
+    $this->bind('news', function ($news) {
+      return $this->newsRepository->findNewsById($news);
     });
 
     parent::boot();

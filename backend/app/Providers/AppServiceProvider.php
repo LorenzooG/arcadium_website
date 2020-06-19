@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Comment;
+use App\News;
 use App\Observers\CommentObserver;
+use App\Observers\NewsObserver;
 use App\Observers\PaymentObserver;
 use App\Observers\PostObserver;
 use App\Observers\RoleObserver;
@@ -66,6 +68,7 @@ final class AppServiceProvider extends ServiceProvider
     Post::observe(PostObserver::class);
     Role::observe(RoleObserver::class);
     Comment::observe(CommentObserver::class);
+    News::observe(NewsObserver::class);
     Payment::observe(PaymentObserver::class);
   }
 }
