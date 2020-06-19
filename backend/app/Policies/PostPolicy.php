@@ -59,4 +59,9 @@ final class PostPolicy
   {
     return $user->hasPermission(Permission::LIKE_POST);
   }
+
+  public final function unlike(User $user)
+  {
+    return $user->hasPermission(Permission::UNLIKE_POST);
+  }
 }
