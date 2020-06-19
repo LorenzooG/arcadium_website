@@ -20,6 +20,8 @@ use Illuminate\Support\Str;
  * @property Carbon created_at
  * @property Carbon updated_at
  *
+ * @property PurchasedProduct pivot
+ *
  * @method static Product create(array $array)
  * @method static Product findOrFail(int $int)
  *

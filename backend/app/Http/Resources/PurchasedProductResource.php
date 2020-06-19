@@ -2,14 +2,14 @@
 
 namespace App\Http\Resources;
 
-use App\PurchasedProduct;
+use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class PurchasedProductResource
  *
- * @property PurchasedProduct $resource
+ * @property Product $resource
  *
  * @package App\Http\Resources
  */
@@ -24,11 +24,10 @@ final class PurchasedProductResource extends JsonResource
   public final function toArray($request)
   {
     return [
-      'id' => $this->resource->id,
       'product' => route('products.show', [
-        'product' => $this->resource->product_id
+        'product' => $this->resource->pivot->product_id
       ]),
-      'amount' => $this->resource->amount,
+      'amount' => $this->resource->pivot->amount,
     ];
   }
 }

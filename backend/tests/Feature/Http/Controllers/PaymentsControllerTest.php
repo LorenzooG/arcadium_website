@@ -96,7 +96,9 @@ class PaymentsControllerTest extends TestCase
     $product = factory(Product::class)->create();
     $amount = 1;
     /** @var Payment $payment */
-    $payment = factory(Payment::class)->create();
+    $payment = factory(Payment::class)->create([
+      'user_id' => $user->id
+    ]);
     $payment->products()->save($product, [
       'amount' => $amount
     ]);
@@ -109,7 +111,6 @@ class PaymentsControllerTest extends TestCase
       ->assertJson([
         'data' => Collection::make(PurchasedProduct::query()->paginate()->items())->map(function (PurchasedProduct $item) use ($product) {
           return [
-            'id' => $item->id,
             'product' => route('products.show', [
               'product' => $product->id
             ]),
