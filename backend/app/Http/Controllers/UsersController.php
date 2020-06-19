@@ -105,4 +105,18 @@ final class UsersController extends Controller
     return response()->noContent();
   }
 
+  /**
+   * Find and restore deleted user
+   *
+   * @param User $user
+   * @return Response
+   * @throws Exception
+   */
+  public final function restore(User $user)
+  {
+    $user->restore();
+
+    return response()->noContent();
+  }
+
 }
