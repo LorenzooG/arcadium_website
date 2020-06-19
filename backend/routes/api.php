@@ -69,7 +69,7 @@ Route::prefix('users')->group(function () {
 
     Route::put("{user}", "UsersController@update")->middleware('can:update,App\User')->name('users.update');
     Route::delete("{user}", "UsersController@delete")->middleware('can:delete,App\User')->name('users.delete');
-    Route::delete("{user}", "UsersController@restore")->middleware('can:restore,App\User')->name('users.restore');
+    Route::post("{user}/restore", "UsersController@restore")->middleware('can:restore,App\User')->name('users.restore');
   });
 });
 

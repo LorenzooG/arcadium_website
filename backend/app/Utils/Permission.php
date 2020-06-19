@@ -90,6 +90,8 @@ final class Permission
 
   const VIEW_PAYMENT = 274877906944;
 
+  const UNLIKE_POST = 549755813888;
+
   const ALL =
     self::NONE
     | self::STORE_USER
@@ -129,6 +131,7 @@ final class Permission
     | self::STORE_NEWS
     | self::UPDATE_NEWS
     | self::DELETE_NEWS
-    | self::VIEW_PAYMENT;
+    | self::VIEW_PAYMENT
+    | self::UNLIKE_POST;
 
 }
