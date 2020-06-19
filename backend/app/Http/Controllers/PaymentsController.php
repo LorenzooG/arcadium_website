@@ -6,12 +6,26 @@ use App\Http\Requests\PaymentCheckoutRequest;
 use App\Http\Resources\PaymentResource;
 use App\Payment;
 use App\Payment\Contracts\PaymentServiceContract as PaymentService;
+use App\Repositories\PaymentRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Response;
 
 final class PaymentsController extends Controller
 {
+
+  private PaymentRepository $paymentRepository;
+
+  /**
+   * PaymentsController constructor
+   *
+   * @param PaymentRepository $paymentRepository
+   */
+  public function __construct(PaymentRepository $paymentRepository)
+  {
+    $this->paymentRepository = $paymentRepository;
+  }
 
   /**
    * Find and show all payments
@@ -20,7 +34,9 @@ final class PaymentsController extends Controller
    */
   public final function index()
   {
-    return PaymentResource::collection(Payment::all());
+    $page = Paginator::resolveCurrentPage();
+
+    return PaymentResource::collection($this->paymentRepository->findPaginatedPayments($page));
   }
 
   /**
