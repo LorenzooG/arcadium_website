@@ -37,20 +37,19 @@ class PaymentRepository
   }
 
   /**
-   * Find all user's payments in a page
+   * Find all payments in a page
    *
-   * @param User $user
    * @param int $page
    * @return LengthAwarePaginator
    */
-  public final function findPaginatedPaymentsForUser($user, $page)
+  public final function findPaginatedPayments($page)
   {
-    $this->logger->info("Retrieving user {$user->id}'s payments in page {$page}.");
+    $this->logger->info("Retrieving payments in page {$page}.");
 
-    return $this->cacheRepository->remember($this->getCacheKey("for.$user.paginated.$page"), now()->addHour(), function () use ($user, $page) {
-      $this->logger->info("Caching user {$user->id}'s payments in page {$page}.");
+    return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () use ($page) {
+      $this->logger->info("Caching payments in page {$page}.");
 
-      return $user->payments()->paginate();
+      return Payment::query()->orderByDesc('id')->paginate();
     });
   }
 
