@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PaymentCheckoutRequest;
 use App\Http\Resources\PaymentResource;
+use App\Http\Resources\PurchasedProductResource;
 use App\Payment;
 use App\Payment\Contracts\PaymentServiceContract as PaymentService;
 use App\Repositories\PaymentRepository;
@@ -49,7 +50,7 @@ final class PaymentsController extends Controller
   {
     $page = Paginator::resolveCurrentPage();
 
-    return $this->paymentRepository->findPaginatedPaymentProducts($payment, $page);
+    return PurchasedProductResource::collection($this->paymentRepository->findPaginatedPaymentProducts($payment, $page));
   }
 
   /**
