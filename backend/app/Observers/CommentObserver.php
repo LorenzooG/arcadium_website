@@ -51,26 +51,4 @@ final class CommentObserver
   {
     $this->commentRepository->flushCache();
   }
-
-  /**
-   * Handle the comment "restored" event.
-   *
-   * @param Comment $comment
-   * @return void
-   */
-  public final function restored(Comment $comment)
-  {
-    $this->commentRepository->flushCache();
-  }
-
-  /**
-   * Handle the comment "force deleted" event.
-   *
-   * @param Comment $comment
-   * @return void
-   */
-  public final function forceDeleted(Comment $comment)
-  {
-    $this->commentRepository->flushCache();
-  }
 }

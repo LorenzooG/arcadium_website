@@ -49,15 +49,4 @@ class PaymentObserver
 
     $payment->user->notify(new ProductPaidNotification($payment->products));
   }
-
-  /**
-   * Handle the news "deleted" event.
-   *
-   * @param Payment $payment
-   * @return void
-   */
-  public function deleted(Payment $payment)
-  {
-    $this->paymentRepository->flushCache();
-  }
 }
