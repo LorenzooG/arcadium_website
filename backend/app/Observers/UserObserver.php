@@ -69,15 +69,4 @@ final class UserObserver
   {
     $this->userRepository->flushCache();
   }
-
-  /**
-   * Handle the user "force deleted" event.
-   *
-   * @param User $user
-   * @return void
-   */
-  public final function forceDeleted(User $user)
-  {
-    $this->userRepository->flushCache();
-  }
 }
