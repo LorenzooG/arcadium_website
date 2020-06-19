@@ -47,7 +47,7 @@ Route::prefix('roles')->group(function () {
 
 Route::prefix('news')->name('news.')->group(function () {
   Route::get('/', 'NewsController@index')->name('index');
-  Route::get('/{news}', 'NewsController@news')->name('show');
+  Route::get('/{news}', 'NewsController@show')->name('show');
 
   Route::middleware('xss')->group(function () {
     Route::post('/', 'NewsController@store')->middleware('can:create,App\News')->name('store');
