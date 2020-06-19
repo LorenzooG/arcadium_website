@@ -107,6 +107,8 @@ Route::prefix('product_commands')->name('product_commands.')->group(function () 
   Route::delete('{command}', 'CommandsController@delete')->middleware('can:delete,App\ProductCommand')->name('delete');
 });
 
+Route::get('staffs', 'StaffController@index')->name('staffs.index');
+
 Route::prefix('products')->name('products.')->group(function () {
   Route::get('/', 'ProductsController@index')->name('index');
 

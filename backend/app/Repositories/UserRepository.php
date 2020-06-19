@@ -4,6 +4,7 @@
 namespace App\Repositories;
 
 
+use App\Role;
 use App\User;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Log\Logger;
@@ -48,6 +49,25 @@ final class UserRepository
       $this->logger->info("Caching users in page {$page}.");
 
       return User::query()->paginate();
+    });
+  }
+
+  /**
+   * Find and paginated all users that are staff
+   *
+   * @param int $page
+   * @return LengthAwarePaginator
+   */
+  public final function findAllUsersThatAreStaff(int $page)
+  {
+    $this->logger->info("Retrieving staff users in page {$page}.");
+
+    return $this->cacheRepository->remember($this->getCacheKey("for.staff.paginated.$page"), now()->addHour(), function () use ($page) {
+      $this->logger->info("Caching staff users in page {$page}.");
+
+      return Role::query()->where('is_staff', true)->get()->map(function (Role $role) {
+        return $role->users;
+      });
     });
   }
 
