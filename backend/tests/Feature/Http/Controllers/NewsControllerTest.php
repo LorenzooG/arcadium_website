@@ -162,7 +162,7 @@ class NewsControllerTest extends TestCase
     /** @var News $news */
     $news = factory(News::class)->create();
 
-    $response = $this->actingAs($user)->postJson(route('news.update', [
+    $response = $this->actingAs($user)->putJson(route('news.update', [
       'news' => $news->id
     ]), [
       'title' => $title,
@@ -170,7 +170,7 @@ class NewsControllerTest extends TestCase
     ]);
 
     $allNews = News::query()
-      ->where('id', $response->json('id'))
+      ->where('id', $news->id)
       ->where('title', $title)
       ->where('description', $description)
       ->get();
