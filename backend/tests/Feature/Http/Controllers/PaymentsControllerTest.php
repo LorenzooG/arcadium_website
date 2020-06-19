@@ -73,8 +73,8 @@ class PaymentsControllerTest extends TestCase
         'user' => route('users.show', [
           'user' => $payment->user_id
         ]),
-        'created_at' => $payment->created_at,
-        'updated_at' => $payment->updated_at,
+        'created_at' => $payment->created_at->toISOString(),
+        'updated_at' => $payment->updated_at->toISOString(),
       ]);
   }
 
