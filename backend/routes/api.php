@@ -51,7 +51,7 @@ Route::prefix('news')->name('news.')->group(function () {
 
   Route::middleware('xss')->group(function () {
     Route::post('/', 'NewsController@store')->middleware('can:create,App\News')->name('store');
-    Route::put('/{news}', 'NewsController@update')->middleware('can:update,App\News')->name('show');
+    Route::put('/{news}', 'NewsController@update')->middleware('can:update,App\News')->name('update');
     Route::delete('/{news}', 'NewsController@delete')->middleware('can:delete,App\News')->name('delete');
   });
 });
