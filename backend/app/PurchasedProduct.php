@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  *
  * @property int id
  * @property int amount
+ * @property int payment_id
+ * @property int product_id
  * @property Payment payment
  * @property Product product
  *
