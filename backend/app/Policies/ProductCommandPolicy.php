@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\ProductCommand;
 use App\User;
 use App\Utils\Permission;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -12,24 +11,12 @@ class ProductCommandPolicy
   use HandlesAuthorization;
 
   /**
-   * Determine whether the user can view any models.
-   *
-   * @param User $user
-   * @return mixed
-   */
-  public function viewAny(User $user)
-  {
-    return $user->hasPermission(Permission::VIEW_PRODUCT_COMMANDS);
-  }
-
-  /**
    * Determine whether the user can view the model.
    *
    * @param User $user
-   * @param ProductCommand $productCommand
    * @return mixed
    */
-  public function view(User $user, ProductCommand $productCommand)
+  public function view(User $user)
   {
     return $user->hasPermission(Permission::VIEW_PRODUCT_COMMANDS);
   }

@@ -16,17 +16,6 @@ final class RolePolicy
   use HandlesAuthorization;
 
   /**
-   * Determine whether the user can view any models.
-   *
-   * @param User $user
-   * @return mixed
-   */
-  public final function viewAny(User $user)
-  {
-    return $user->hasPermission(Permission::VIEW_ANY_ROLE);
-  }
-
-  /**
    * Determine whether the user can view the model.
    *
    * @param User $user
