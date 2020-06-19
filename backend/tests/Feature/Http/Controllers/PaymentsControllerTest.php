@@ -63,7 +63,9 @@ class PaymentsControllerTest extends TestCase
       'user_id' => $user->id
     ]);
 
-    $response = $this->actingAs($user)->getJson(route('payments.show'));
+    $response = $this->actingAs($user)->getJson(route('payments.show', [
+      'payment' => $payment->id
+    ]));
 
     $response->assertOk()
       ->assertJson([
