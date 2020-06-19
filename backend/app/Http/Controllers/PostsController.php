@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostLikeRequest;
 use App\Http\Requests\PostStoreRequest;
+use App\Http\Requests\PostUnlikeRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Http\Resources\PostResource;
 use App\Post;
@@ -86,6 +87,20 @@ final class PostsController extends Controller
   public final function like(PostLikeRequest $request, Post $post)
   {
     $post->likes()->save($request->user());
+
+    return response()->noContent();
+  }
+
+  /**
+   * Find and unlike post
+   *
+   * @param PostUnlikeRequest $request
+   * @param Post $post
+   * @return Response
+   */
+  public final function unlike(PostUnlikeRequest $request, Post $post)
+  {
+    $post->likes()->detach($request->user()->id);
 
     return response()->noContent();
   }
