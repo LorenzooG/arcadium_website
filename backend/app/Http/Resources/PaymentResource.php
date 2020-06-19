@@ -31,7 +31,7 @@ final class PaymentResource extends JsonResource
       'is_delivered' => $this->resource->is_delivered,
       'origin_ip_address' => $this->resource->origin_address,
       'payment_method' => $this->resource->payment_method,
-      'products' => route('payments.products.index', [
+      'products' => route('payments.products', [
         'payment' => $this->resource->id
       ]),
       'user' => route('users.show', [
