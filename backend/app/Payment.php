@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -17,8 +18,11 @@ use Illuminate\Support\Collection;
  * @property string origin_address
  * @property double total_price
  * @property double total_paid
+ * @property int user_id
  * @property Collection<Product> products
  * @property User user
+ * @property Carbon created_at
+ * @property Carbon updated_at
  *
  * @method static Payment create(array $array)
  * @method static Payment findOrFail(int $int)
