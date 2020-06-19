@@ -8,6 +8,7 @@ use App\Observers\CommentObserver;
 use App\Observers\NewsObserver;
 use App\Observers\PaymentObserver;
 use App\Observers\PostObserver;
+use App\Observers\ProductObserver;
 use App\Observers\RoleObserver;
 use App\Observers\UserObserver;
 use App\Payment;
@@ -16,6 +17,7 @@ use App\Payment\Repositories\BankSlipPaymentRepository as BankSlipPaymentHandler
 use App\Payment\Repositories\MercadoPagoPaymentRepository as MercadoPagoPaymentHandler;
 use App\Payment\Repositories\PaypalPaymentRepository as PaypalPaymentHandler;
 use App\Post;
+use App\Product;
 use App\Role;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -69,6 +71,7 @@ final class AppServiceProvider extends ServiceProvider
     Role::observe(RoleObserver::class);
     Comment::observe(CommentObserver::class);
     News::observe(NewsObserver::class);
+    Product::observe(ProductObserver::class);
     Payment::observe(PaymentObserver::class);
   }
 }
