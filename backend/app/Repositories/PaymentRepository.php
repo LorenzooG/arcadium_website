@@ -89,20 +89,6 @@ class PaymentRepository
   }
 
   /**
-   * Create payment in database
-   *
-   * @param User $user
-   * @param array $data
-   * @return Model
-   */
-  public final function createPayment(User $user, array $data)
-  {
-    $this->logger->info("Creating payment for user {$user->id}.");
-
-    return $user->payments()->create($data);
-  }
-
-  /**
    * Remove all keys from cache
    *
    * @return void
