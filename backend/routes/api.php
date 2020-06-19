@@ -127,7 +127,7 @@ Route::prefix('products')->name('products.')->group(function () {
     });
 
     Route::prefix('commands')->name('commands.')->group(function () {
-      Route::get('/', 'CommandsController@product')->middleware('can:viewAny,App\ProductCommand')->name('index');
+      Route::get('/', 'CommandsController@product')->middleware('can:view,App\ProductCommand')->name('index');
       Route::post('', 'CommandsController@store')->middleware(['xss', 'can:create,App\ProductCommand'])->name('store');
     });
   });
