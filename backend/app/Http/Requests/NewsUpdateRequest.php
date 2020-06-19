@@ -24,7 +24,8 @@ class NewsUpdateRequest extends FormRequest
   public function rules()
   {
     return [
-      //
+      'title' => 'string|min:8|max:72',
+      'description' => 'string|max:6000'
     ];
   }
 }

@@ -24,7 +24,7 @@ final class CommandUpdateRequest extends FormRequest
   public final function rules()
   {
     return [
-      //
+      'content' => 'string|max:96'
     ];
   }
 }

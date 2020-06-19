@@ -24,7 +24,9 @@ final class RoleUpdateRequest extends FormRequest
   public final function rules()
   {
     return [
-      //
+      'title' => 'string|max:32',
+      'color' => 'string|max:12',
+      'is_staff' => 'boolean',
     ];
   }
 }

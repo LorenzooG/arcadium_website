@@ -24,7 +24,9 @@ final class ProductStoreRequest extends FormRequest
   public final function rules()
   {
     return [
-      //
+      'title' => 'required|string|max:72',
+      'description' => 'required|string|max:6000',
+      'price' => 'required|numeric'
     ];
   }
 }

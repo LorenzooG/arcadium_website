@@ -24,7 +24,8 @@ final class PostUpdateRequest extends FormRequest
   public final function rules()
   {
     return [
-      //
+      'title' => 'string|min:8|max:72',
+      'description' => 'string|max:6000'
     ];
   }
 }
