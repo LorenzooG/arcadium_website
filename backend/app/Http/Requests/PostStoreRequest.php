@@ -24,7 +24,8 @@ final class PostStoreRequest extends FormRequest
   public final function rules()
   {
     return [
-      //
+      'title' => 'required|string|min:8|max:72',
+      'description' => 'required|string|max:6000'
     ];
   }
 }

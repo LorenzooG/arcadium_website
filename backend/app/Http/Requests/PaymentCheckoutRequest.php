@@ -24,7 +24,9 @@ final class PaymentCheckoutRequest extends FormRequest
   public final function rules()
   {
     return [
-      //
+      'items' => 'required|array',
+      'items.*.product' => 'required|numeric',
+      'items.*.amount' => 'required|numeric'
     ];
   }
 }

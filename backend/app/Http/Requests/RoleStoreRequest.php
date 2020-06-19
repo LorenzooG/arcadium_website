@@ -24,7 +24,9 @@ final class RoleStoreRequest extends FormRequest
   public final function rules()
   {
     return [
-      //
+      'title' => 'required|string|max:32',
+      'color' => 'required|string|max:12',
+      'is_staff' => 'required|boolean',
     ];
   }
 }

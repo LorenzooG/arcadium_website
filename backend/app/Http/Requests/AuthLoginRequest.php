@@ -24,7 +24,8 @@ final class AuthLoginRequest extends FormRequest
   public final function rules()
   {
     return [
-      //
+      'email' => 'required|string|min:8|max:48|unique:users',
+      'password' => 'required|string|min:8|max:16',
     ];
   }
 }

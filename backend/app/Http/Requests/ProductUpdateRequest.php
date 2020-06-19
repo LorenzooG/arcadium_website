@@ -24,7 +24,9 @@ final class ProductUpdateRequest extends FormRequest
   public final function rules()
   {
     return [
-      //
+      'title' => 'string|max:72',
+      'description' => 'string|max:6000',
+      'price' => 'numeric'
     ];
   }
 }

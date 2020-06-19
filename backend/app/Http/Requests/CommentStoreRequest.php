@@ -24,7 +24,7 @@ final class CommentStoreRequest extends FormRequest
   public final function rules()
   {
     return [
-      //
+      'content' => 'required|string|max:140'
     ];
   }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 final class UserUpdateEmailRequest extends FormRequest
 {
@@ -25,13 +24,7 @@ final class UserUpdateEmailRequest extends FormRequest
   public final function rules()
   {
     return [
-      'new_email' => [
-        'required',
-        'string',
-        'min:8',
-        'max:32',
-        Rule::unique('users', 'email')->ignore($this->email_update->user->id)
-      ]
+      'new_email' => 'required|string|min:8|max:48'
     ];
   }
 }
