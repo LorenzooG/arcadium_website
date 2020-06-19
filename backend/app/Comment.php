@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string content
  * @property Post post
  * @property User user
+ * @property int user_id
  * @property Carbon created_at
  * @property Carbon updated_at
  *
