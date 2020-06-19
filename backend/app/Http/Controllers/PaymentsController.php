@@ -40,6 +40,19 @@ final class PaymentsController extends Controller
   }
 
   /**
+   * Find and show paginated payment's products
+   *
+   * @param Payment $payment
+   * @return mixed
+   */
+  public final function products(Payment $payment)
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return $this->paymentRepository->findPaginatedPaymentProducts($payment, $page);
+  }
+
+  /**
    * Find and show a payment
    *
    * @param Payment $payment

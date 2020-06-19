@@ -92,6 +92,7 @@ Route::get("_FUCK_FUCK", "PaymentsController@show")->name('payments.notification
 Route::prefix("/payments")->name('payments.')->group(function () {
   Route::get("/", "PaymentsController@index")->name('index');
   Route::get("{payment}", "PaymentsController@show")->name('show');
+  Route::get("{payment}/products", "PaymentsController@products")->name('products');
   Route::post("/{paymentHandler}/notifications", "PaymentsController@notification")->name('notifications');
   Route::post("/{paymentHandler}/", "PaymentsController@payment")->name('checkout');
 });
