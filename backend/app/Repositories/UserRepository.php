@@ -66,7 +66,15 @@ final class UserRepository
       $this->logger->info("Caching staff users in page {$page}.");
 
       return Role::query()->where('is_staff', true)->get()->map(function (Role $role) {
-        return $role->users;
+        return [
+          'role' => [
+            'id' => $role->id,
+            'title' => $role->title,
+            'created_at' => $role->created_at,
+            'updated_at' => $role->updated_at,
+          ],
+          'users' => $role->users
+        ];
       });
     });
   }
