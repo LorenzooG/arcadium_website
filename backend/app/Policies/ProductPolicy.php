@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Product;
 use App\User;
 use App\Utils\Permission;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -15,29 +14,6 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 final class ProductPolicy
 {
   use HandlesAuthorization;
-
-  /**
-   * Determine whether the user can view any models.
-   *
-   * @param User $user
-   * @return mixed
-   */
-  public function viewAny(User $user)
-  {
-    return true;
-  }
-
-  /**
-   * Determine whether the user can view the model.
-   *
-   * @param User $user
-   * @param Product $product
-   * @return mixed
-   */
-  public function view(User $user, Product $product)
-  {
-    return true;
-  }
 
   /**
    * Determine whether the user can create models.
