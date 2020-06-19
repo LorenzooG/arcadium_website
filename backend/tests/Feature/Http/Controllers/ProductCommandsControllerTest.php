@@ -49,7 +49,7 @@ class ProductCommandsControllerTest extends TestCase
     $this->assertActionUsesMiddleware(
       ActualProductCommandsController::class,
       'product',
-      'can:viewAny,App\ProductCommand'
+      'can:view,App\ProductCommand'
     );
   }
 
