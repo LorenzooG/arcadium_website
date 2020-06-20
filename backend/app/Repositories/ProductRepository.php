@@ -43,10 +43,10 @@ final class ProductRepository
    */
   public final function findPaginatedProducts($page)
   {
-    $this->logger->info("Retrieving posts in page {$page}.");
+    $this->logger->info("Retrieving products in page {$page}.");
 
     return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () use ($page) {
-      $this->logger->info("Caching posts in page {$page}.");
+      $this->logger->info("Caching products in page {$page}.");
 
       return Product::query()->paginate();
     });
@@ -77,10 +77,10 @@ final class ProductRepository
    */
   public final function findProductById($id)
   {
-    $this->logger->info("Retrieving post {$id}.");
+    $this->logger->info("Retrieving product {$id}.");
 
     return $this->cacheRepository->remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($id) {
-      $this->logger->info("Caching post {$id}.");
+      $this->logger->info("Caching product {$id}.");
 
       return Product::withTrashed()->findOrFail($id);
     });
