@@ -131,4 +131,29 @@ final class ProductsController extends Controller
 
     return response()->noContent();
   }
+
+  /**
+   * Find and restore product
+   *
+   * @param Product $product
+   * @return Response
+   */
+  public final function restore(Product $product)
+  {
+    $product->restore();
+
+    return response()->noContent();
+  }
+
+  /**
+   * Find and show all trashed products
+   *
+   * @return AnonymousResourceCollection
+   */
+  public final function trashed()
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return ProductResource::collection($this->productRepository->findPaginatedTrashedProducts($page));
+  }
 }

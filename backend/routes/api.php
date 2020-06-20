@@ -60,6 +60,10 @@ Route::prefix('trashed/users')->name('trashed.users.')->group(function () {
   Route::get('/', 'UsersController@trashed')->middleware('can:viewTrashed,App\User')->name('index');
 });
 
+Route::prefix('trashed/products')->name('trashed.products.')->group(function () {
+  Route::get('/', 'ProductsController@trashed')->middleware('can:viewTrashed,App\Product')->name('index');
+});
+
 Route::prefix('users')->group(function () {
   Route::get('/', 'UsersController@index')->name('users.index');
   Route::get('{user}', 'UsersController@show')->name('users.show');
@@ -73,8 +77,9 @@ Route::prefix('users')->group(function () {
 
     Route::put("{user}", "UsersController@update")->middleware('can:update,App\User')->name('users.update');
     Route::delete("{user}", "UsersController@delete")->middleware('can:delete,App\User')->name('users.delete');
-    Route::post("{user}/restore", "UsersController@restore")->middleware('can:restore,App\User')->name('users.restore');
   });
+
+  Route::post("{user}/restore", "UsersController@restore")->middleware('can:restore,App\User')->name('users.restore');
 });
 
 Route::prefix('posts')->group(function () {
@@ -125,6 +130,7 @@ Route::prefix('products')->name('products.')->group(function () {
 
   Route::prefix('{product}')->group(function () {
     Route::get("/", "ProductsController@show")->name('show');
+    Route::get("/", "ProductsController@restore")->middleware('can:restore,App\Product')->name('restore');
     Route::delete('/', 'ProductsController@delete')->middleware('can:delete,App\Product')->name('delete');
 
     Route::prefix('image')->name('image.')->group(function () {

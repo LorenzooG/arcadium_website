@@ -53,6 +53,23 @@ final class ProductRepository
   }
 
   /**
+   * Find all trashed products in a page
+   *
+   * @param int $page
+   * @return LengthAwarePaginator
+   */
+  public final function findPaginatedTrashedProducts($page)
+  {
+    $this->logger->info("Retrieving trashed products in page {$page}.");
+
+    return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () use ($page) {
+      $this->logger->info("Caching trashed products in page {$page}.");
+
+      return Product::withTrashed()->paginate();
+    });
+  }
+
+  /**
    * Find post by it's id
    *
    * @param int $id
@@ -65,7 +82,7 @@ final class ProductRepository
     return $this->cacheRepository->remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($id) {
       $this->logger->info("Caching post {$id}.");
 
-      return Product::findOrFail($id);
+      return Product::withTrashed()->findOrFail($id);
     });
   }
 
