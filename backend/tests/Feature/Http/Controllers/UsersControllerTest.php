@@ -7,6 +7,7 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\User;
 use App\Utils\Permission;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
@@ -62,6 +63,37 @@ class UsersControllerTest extends TestCase
             'updated_at' => $user->updated_at->toISOString(),
           ]
         ]
+      ]);
+  }
+
+  /**
+   * Trashed
+   */
+  public function testShouldShowTrashedUsersAndDoNotShowTheUsersEmailsWhenGetUsersTrashed()
+  {
+    $user = factory(User::class)->state('admin')->create();
+
+    factory(User::class, 5)->create()->map(function (User $user) {
+      $user->delete();
+
+      return $user;
+    });
+
+    $response = $this->actingAs($user)->getJson(route('trashed.users.index'));
+
+    $response->assertOk()
+      ->assertJson([
+        'data' => Collection::make(User::onlyTrashed()->paginate()->items())->map(function (User $user) {
+          return [
+            'id' => $user->id,
+            'email' => $user->email,
+            'user_name' => $user->user_name,
+            'name' => $user->name,
+            'deleted_at' => $user->deleted_at->toISOString(),
+            'created_at' => $user->created_at->toISOString(),
+            'updated_at' => $user->updated_at->toISOString()
+          ];
+        })->toArray()
       ]);
   }
 
