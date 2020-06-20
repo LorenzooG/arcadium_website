@@ -130,7 +130,7 @@ Route::prefix('products')->name('products.')->group(function () {
 
   Route::prefix('{product}')->group(function () {
     Route::get("/", "ProductsController@show")->name('show');
-    Route::get("/", "ProductsController@restore")->middleware('can:restore,App\Product')->name('restore');
+    Route::post("/restore", "ProductsController@restore")->middleware('can:restore,App\Product')->name('restore');
     Route::delete('/', 'ProductsController@delete')->middleware('can:delete,App\Product')->name('delete');
 
     Route::prefix('image')->name('image.')->group(function () {
