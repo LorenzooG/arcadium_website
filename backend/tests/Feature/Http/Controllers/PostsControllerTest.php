@@ -5,12 +5,12 @@ namespace Tests\Feature\Http\Controllers;
 use App\Http\Controllers\PostsController as ActualPostsController;
 use App\Http\Requests\PostLikeRequest;
 use App\Http\Requests\PostStoreRequest;
+use App\Http\Requests\PostUnlikeRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Post;
 use App\User;
 use App\Utils\Permission;
 use JMac\Testing\Traits\AdditionalAssertions;
-use Psy\Util\Json;
 use Tests\TestCase;
 
 class PostsControllerTest extends TestCase
@@ -388,6 +388,56 @@ class PostsControllerTest extends TestCase
       ActualPostsController::class,
       'like',
       'can:like,post'
+    );
+  }
+
+  /**
+   * Unlike
+   */
+  public function testShouldUnlikePostWhenPostPostsUnlike()
+  {
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+    /** @var Post $post */
+    $post = $user->posts()->create([
+      'title' => $this->faker->title,
+      'description' => $this->faker->text,
+    ]);
+
+    $post->likes()->save($user);
+
+    $response = $this->actingAs($user)->postJson(route('posts.unlike', [
+      'post' => $post->id
+    ]));
+
+    $post->refresh();
+
+    $this->assertNull($post->likes()->find($user->id));
+
+    $response->assertNoContent();
+  }
+
+  public function testAssertUnlikeUsesFormRequest()
+  {
+    $this->assertActionUsesFormRequest(
+      ActualPostsController::class,
+      'unlike',
+      PostUnlikeRequest::class
+    );
+  }
+
+  public function testAssertUnlikeUsesMiddleware()
+  {
+    $this->assertActionUsesMiddleware(
+      ActualPostsController::class,
+      'unlike',
+      'auth:api'
+    );
+
+    $this->assertActionUsesMiddleware(
+      ActualPostsController::class,
+      'unlike',
+      'can:unlike,post'
     );
   }
 }
