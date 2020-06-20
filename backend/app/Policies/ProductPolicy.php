@@ -47,4 +47,26 @@ final class ProductPolicy
   {
     return $user->hasPermission(Permission::DELETE_PRODUCT);
   }
+
+  /**
+   * Determine whether the user can restore the model.
+   *
+   * @param User $user
+   * @return mixed
+   */
+  public final function restore(User $user)
+  {
+    return $user->hasPermission(Permission::RESTORE_ANY_PRODUCT);
+  }
+
+  /**
+   * Determine whether the user can view trashed models.
+   *
+   * @param User $user
+   * @return mixed
+   */
+  public final function viewTrashed(User $user)
+  {
+    return $user->hasPermission(Permission::VIEW_TRASHED_PRODUCTS);
+  }
 }

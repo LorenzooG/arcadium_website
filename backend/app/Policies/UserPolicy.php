@@ -47,4 +47,15 @@ final class UserPolicy
   {
     return $user->hasPermission(Permission::RESTORE_ANY_USER);
   }
+
+  /**
+   * Determine whether the user can view trashed models.
+   *
+   * @param User $user
+   * @return mixed
+   */
+  public final function viewTrashed(User $user)
+  {
+    return $user->hasPermission(Permission::VIEW_TRASHED_USERS);
+  }
 }

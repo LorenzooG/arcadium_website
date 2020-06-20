@@ -92,6 +92,12 @@ final class Permission
 
   const UNLIKE_POST = 549755813888;
 
+  const RESTORE_ANY_PRODUCT = 1099511627776;
+
+  const VIEW_TRASHED_PRODUCTS = 2199023255552;
+
+  const VIEW_TRASHED_USERS = 4398046511104;
+
   const ALL =
     self::NONE
     | self::STORE_USER
@@ -132,6 +138,9 @@ final class Permission
     | self::UPDATE_NEWS
     | self::DELETE_NEWS
     | self::VIEW_PAYMENT
-    | self::UNLIKE_POST;
+    | self::UNLIKE_POST
+    | self::RESTORE_ANY_PRODUCT
+    | self::VIEW_TRASHED_PRODUCTS
+    | self::VIEW_TRASHED_USERS;
 
 }
