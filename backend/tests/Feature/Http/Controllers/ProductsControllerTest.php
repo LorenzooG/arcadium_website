@@ -77,7 +77,7 @@ class ProductsControllerTest extends TestCase
   /**
    * Trashed
    */
-  public function testShouldShowTrashedUsersAndDoNotShowTheUsersEmailsWhenGetUsersTrashed()
+  public function testShouldShowTrashedProductsAndDoNotShowItsCommandsWhenGetProductsTrashed()
   {
     $user = factory(User::class)->state('admin')->create();
 
@@ -270,7 +270,7 @@ class ProductsControllerTest extends TestCase
   /**
    * Restore
    */
-  public function testShouldRestoreUserWhenPostUsersRestoreAndHavePermission()
+  public function testShouldRestoreProductWhenPostProductsRestoreAndHavePermission()
   {
     /** @var User $user */
     $user = factory(User::class)->state('admin')->create();
