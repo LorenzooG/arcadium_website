@@ -222,6 +222,40 @@ class ProductsControllerTest extends TestCase
   }
 
   /**
+   * Restore
+   */
+  public function testShouldRestoreUserWhenPostUsersRestoreAndHavePermission()
+  {
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+
+    /** @var Product $dummyProduct */
+    $dummyProduct = factory(Product::class)->create();
+    $dummyProduct->delete();
+
+    $dummyProduct->refresh();
+
+    $response = $this->actingAs($user)->postJson(route('products.restore', [
+      'product' => $dummyProduct->id
+    ]));
+
+    $dummyProduct->refresh();
+
+    $this->assertFalse($dummyProduct->trashed());
+
+    $response->assertNoContent();
+  }
+
+  public function testAssertRestoreUsesMiddleware()
+  {
+    $this->assertActionUsesMiddleware(
+      ActualProductsController::class,
+      'restore',
+      'can:restore,App\Product'
+    );
+  }
+
+  /**
    * Update
    */
   public function testShouldUpdateProductWhenPutProductsAndHavePermission()
