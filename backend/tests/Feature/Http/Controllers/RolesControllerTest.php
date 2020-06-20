@@ -187,7 +187,7 @@ class RolesControllerTest extends TestCase
   /**
    * Delete
    */
-  public function testShouldDeletePostWhenDeletePosts()
+  public function testShouldDeleteRoleWhenDeleteRoles()
   {
     $user = factory(User::class)->create();
     $role = $user->roles()->create([
@@ -216,7 +216,7 @@ class RolesControllerTest extends TestCase
   /**
    * Update
    */
-  public function testShouldUpdatePostWhenPutPosts()
+  public function testShouldUpdateRoleWhenPutRoles()
   {
     $user = factory(User::class)->create();
 		$role = $user->roles()->create([
