@@ -219,28 +219,28 @@ class RolesControllerTest extends TestCase
   public function testShouldUpdateRoleWhenPutRoles()
   {
     $user = factory(User::class)->create();
-		$role = $user->roles()->create([
+    $role = $user->roles()->create([
       'title' => $this->faker->title,
-			'permission_level' => Permission::UPDATE_ROLE,
-			'color' => $this->faker->hexColor
+      'permission_level' => Permission::UPDATE_ROLE,
+      'color' => $this->faker->hexColor
     ]);
 
-		$title = $this->faker->title;
-		$color = $this->faker->hexColor;
-		$permissionLevel = Permission::NONE;
+    $title = $this->faker->title;
+    $color = $this->faker->hexColor;
+    $permissionLevel = Permission::NONE;
 
     $response = $this->actingAs($user)->putJson(route('roles.update', [
       'role' => $role->id
     ]), [
-			'title' => $title,
-			'color' => $color,
+      'title' => $title,
+      'color' => $color,
       'permission_level' => $permissionLevel,
-		]);
+    ]);
 
     $roles = Role::query()
       ->where('id', $role->id)
-			->where('title', $title)
-			->where('permission_level', $permissionLevel)
+      ->where('title', $title)
+      ->where('permission_level', $permissionLevel)
       ->where('color', $color)
       ->get();
 
@@ -271,5 +271,36 @@ class RolesControllerTest extends TestCase
       'update',
       'can:update,App\Role'
     );
-	}
+  }
+
+  /**
+   * Attach
+   */
+  public function testShouldAttachRoleToUserWhenPostRolesAttach()
+  {
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+    /** @var Role $role */
+    $role = factory(Role::class)->create();
+
+    $response = $this->actingAs($user)->postJson(route('roles.attach', [
+      'role' => $role->id,
+      'user' => $user->id
+    ]));
+
+    $role->refresh();
+
+    $this->assertNotNull($role->users()->find($user->id));
+
+    $response->assertNoContent();
+  }
+
+  public function testAssertAttachUsesMiddleware()
+  {
+    $this->assertActionUsesMiddleware(
+      ActualRolesController::class,
+      'attach',
+      'can:attach,App\Role'
+    );
+  }
 }
