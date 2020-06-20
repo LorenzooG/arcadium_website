@@ -87,7 +87,7 @@ class ProductsControllerTest extends TestCase
       return $user;
     });
 
-    $response = $this->actingAs($user)->getJson(route('trashed.users.index'));
+    $response = $this->actingAs($user)->getJson(route('trashed.products.index'));
 
     $response->assertOk()
       ->assertJson([
