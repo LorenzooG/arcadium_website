@@ -212,6 +212,38 @@ class UsersControllerTest extends TestCase
   }
 
   /**
+   * Restore
+   */
+  public function testShouldRestoreUserWhenPostUsersRestoreAndHavePermission()
+  {
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+
+    /** @var User $dummyUser */
+    $dummyUser = factory(User::class)->create();
+    $dummyUser->delete();
+
+    $response = $this->actingAs($user)->postJson(route('users.restore', [
+      'user' => $user->id
+    ]));
+
+    $dummyUser->refresh();
+
+    $this->assertFalse($dummyUser->trashed());
+
+    $response->assertNoContent();
+  }
+
+  public function testAssertRestoreUsesMiddleware()
+  {
+    $this->assertActionUsesMiddleware(
+      ActualUsersController::class,
+      'restore',
+      'can:restore,App\User'
+    );
+  }
+
+  /**
    * Update
    */
   public function testShouldUpdateUserWhenPutUsersAndHavePermission()
