@@ -7,7 +7,6 @@ use App\Http\Controllers\CommentController;
 use App\Http\Requests\CommentStoreRequest;
 use App\Http\Requests\CommentUpdateRequest;
 use App\User;
-use App\Utils\Permission;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
@@ -68,12 +67,7 @@ class CommentsControllerTest extends TestCase
 
     $commentContent = $this->faker->text(140);
 
-    $user = factory(User::class)->create();
-
-    $user->roles()->create([
-      'title' => 'Permission',
-      'permission_level' => Permission::STORE_COMMENT
-    ]);
+    $user = factory(User::class)->state('admin')->create();
 
     $post = $user->posts()->create([
       'title' => $title,
@@ -138,12 +132,7 @@ class CommentsControllerTest extends TestCase
    */
   public function testShouldDeleteCommentsWhenDeleteComments()
   {
-    $user = factory(User::class)->create();
-
-    $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::DELETE_ANY_COMMENT
-    ]);
+    $user = factory(User::class)->state('admin')->create();
 
     $post = $user->posts()->create([
       'title' => $this->faker->title,
@@ -179,12 +168,7 @@ class CommentsControllerTest extends TestCase
    */
   public function testShouldUpdatePostWhenPutPosts()
   {
-    $user = factory(User::class)->create();
-
-    $user->roles()->create([
-      'title' => 'Permission',
-      'permission_level' => Permission::UPDATE_ANY_COMMENT
-    ]);
+    $user = factory(User::class)->state('admin')->create();
 
     $post = $user->posts()->create([
       'title' => $this->faker->title,
