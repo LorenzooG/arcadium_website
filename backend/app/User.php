@@ -24,6 +24,7 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
  * @property Collection<Post> posts
  * @property Carbon created_at
  * @property Carbon updated_at
+ * @property Carbon deleted_at
  *
  * @method static User create(array $array)
  * @method static User findOrFail(int $int)
