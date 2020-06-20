@@ -56,6 +56,10 @@ Route::prefix('news')->name('news.')->group(function () {
   });
 });
 
+Route::prefix('trashed/users')->name('trashed.users.')->group(function () {
+  Route::get('/', 'UsersController@trashed')->middleware('can:viewTrashed,App\User')->name('index');
+});
+
 Route::prefix('users')->group(function () {
   Route::get('/', 'UsersController@index')->name('users.index');
   Route::get('{user}', 'UsersController@show')->name('users.show');

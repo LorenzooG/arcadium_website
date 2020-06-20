@@ -119,4 +119,16 @@ final class UsersController extends Controller
     return response()->noContent();
   }
 
+  /**
+   * Find and show all trashed users
+   *
+   * @return ResourceCollection
+   */
+  public final function trashed()
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return UserResource::collection($this->userRepository->findPaginatedTrashedUsers($page));
+  }
+
 }

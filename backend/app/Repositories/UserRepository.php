@@ -4,12 +4,10 @@
 namespace App\Repositories;
 
 
-use App\Role;
 use App\User;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Log\Logger;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 /**
  * Class UserRepository
@@ -54,6 +52,23 @@ final class UserRepository
   }
 
   /**
+   * Find all trashed users in a page
+   *
+   * @param int $page
+   * @return LengthAwarePaginator
+   */
+  public final function findPaginatedTrashedUsers($page)
+  {
+    $this->logger->info("Retrieving trashed users in page {$page}.");
+
+    return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () use ($page) {
+      $this->logger->info("Caching trashed users in page {$page}.");
+
+      return User::onlyTrashed()->paginate();
+    });
+  }
+
+  /**
    * Find user by it's id
    *
    * @param int $id
@@ -66,7 +81,7 @@ final class UserRepository
     return $this->cacheRepository->remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($id) {
       $this->logger->info("Caching user {$id}.");
 
-      return User::findOrFail($id);
+      return User::withTrashed()->findOrFail($id);
     });
   }
 
