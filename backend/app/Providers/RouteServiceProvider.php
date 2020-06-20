@@ -31,15 +31,6 @@ class RouteServiceProvider extends ServiceProvider
    */
   protected $namespace = 'App\Http\Controllers';
 
-  private UserRepository $userRepository;
-  private PostRepository $postRepository;
-  private RoleRepository $roleRepository;
-  private CommentRepository $commentRepository;
-  private ProductCommandRepository $productCommandRepository;
-  private PaymentRepository $paymentRepository;
-  private NewsRepository $newsRepository;
-  private ProductRepository $productRepository;
-
   /**
    * Define your route model bindings, pattern filters, etc.
    *
@@ -49,15 +40,6 @@ class RouteServiceProvider extends ServiceProvider
   {
     Log::info("Bootstrapping route service.");
 
-    $this->postRepository = resolve(PostRepository::class);
-    $this->userRepository = resolve(UserRepository::class);
-    $this->roleRepository = resolve(RoleRepository::class);
-    $this->commentRepository = resolve(CommentRepository::class);
-    $this->productCommandRepository = resolve(ProductCommandRepository::class);
-    $this->paymentRepository = resolve(PaymentRepository::class);
-    $this->newsRepository = resolve(NewsRepository::class);
-    $this->productRepository = resolve(ProductRepository::class);
-
     $this->bind('email_update', function (string $email_update) {
       return EmailUpdate::query()
         ->where('token', $email_update)
@@ -65,35 +47,59 @@ class RouteServiceProvider extends ServiceProvider
     });
 
     $this->bind('user', function ($user) {
-      return $this->userRepository->findUserById($user);
+      /** @var UserRepository $userRepository */
+      $userRepository = $this->app->make(UserRepository::class);
+
+      return $userRepository->findUserById($user);
     });
 
     $this->bind('post', function ($post) {
-      return $this->postRepository->findPostById($post);
+      /** @var PostRepository $postRepository */
+      $postRepository = $this->app->make(PostRepository::class);
+
+      return $postRepository->findPostById($post);
     });
 
     $this->bind('comment', function ($comment) {
-      return $this->commentRepository->findCommentById($comment);
+      /** @var CommentRepository $commentRepository */
+      $commentRepository = $this->app->make(CommentRepository::class);
+
+      return $commentRepository->findCommentById($comment);
     });
 
     $this->bind('command', function ($command) {
-      return $this->productCommandRepository->findProductCommandById($command);
+      /** @var ProductCommandRepository $productCommandRepository */
+      $productCommandRepository = $this->app->make(ProductCommandRepository::class);
+
+      return $productCommandRepository->findProductCommandById($command);
     });
 
     $this->bind('role', function ($role) {
-      return $this->roleRepository->findRoleById($role);
+      /** @var RoleRepository $roleRepository */
+      $roleRepository = $this->app->make(RoleRepository::class);
+
+      return $roleRepository->findRoleById($role);
     });
 
     $this->bind('payment', function ($payment) {
-      return $this->paymentRepository->findPaymentById($payment);
+      /** @var PaymentRepository $paymentRepository */
+      $paymentRepository = $this->app->make(PaymentRepository::class);
+
+      return $paymentRepository->findPaymentById($payment);
     });
 
     $this->bind('news', function ($news) {
-      return $this->newsRepository->findNewsById($news);
+      /** @var NewsRepository $newsRepository */
+      $newsRepository = $this->app->make(NewsRepository::class);
+
+      return $newsRepository->findNewsById($news);
     });
 
     $this->bind('product', function ($product) {
-      return $this->productRepository->findProductById($product);
+      /** @var ProductRepository $productRepository */
+      $productRepository = $this->app->make(ProductRepository::class);
+
+      return $productRepository->findProductById($product);
     });
 
     parent::boot();
