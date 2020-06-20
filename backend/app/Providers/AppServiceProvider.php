@@ -8,6 +8,7 @@ use App\Observers\CommentObserver;
 use App\Observers\NewsObserver;
 use App\Observers\PaymentObserver;
 use App\Observers\PostObserver;
+use App\Observers\ProductCommandObserver;
 use App\Observers\ProductObserver;
 use App\Observers\RoleObserver;
 use App\Observers\UserObserver;
@@ -18,6 +19,7 @@ use App\Payment\Repositories\MercadoPagoPaymentRepository as MercadoPagoPaymentH
 use App\Payment\Repositories\PaypalPaymentRepository as PaypalPaymentHandler;
 use App\Post;
 use App\Product;
+use App\ProductCommand;
 use App\Role;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -71,6 +73,7 @@ final class AppServiceProvider extends ServiceProvider
     Role::observe(RoleObserver::class);
     Comment::observe(CommentObserver::class);
     News::observe(NewsObserver::class);
+    ProductCommand::observe(ProductCommandObserver::class);
     Product::observe(ProductObserver::class);
     Payment::observe(PaymentObserver::class);
   }
