@@ -5,6 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 
@@ -28,6 +29,7 @@ use Illuminate\Support\Str;
  */
 final class Product extends Model
 {
+  use SoftDeletes;
 
   protected $fillable = [
     'title',
