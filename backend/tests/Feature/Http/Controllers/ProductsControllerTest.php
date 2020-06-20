@@ -10,6 +10,7 @@ use App\Http\Requests\ProductUpdateRequest;
 use App\Product;
 use App\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
@@ -71,6 +72,51 @@ class ProductsControllerTest extends TestCase
           ]
         ]
       ]);
+  }
+
+  /**
+   * Trashed
+   */
+  public function testShouldShowTrashedUsersAndDoNotShowTheUsersEmailsWhenGetUsersTrashed()
+  {
+    $user = factory(User::class)->state('admin')->create();
+
+    factory(Product::class, 5)->create()->map(function (Product $user) {
+      $user->delete();
+
+      return $user;
+    });
+
+    $response = $this->actingAs($user)->getJson(route('trashed.users.index'));
+
+    $response->assertOk()
+      ->assertJson([
+        'data' => Collection::make(User::onlyTrashed()->paginate()->items())->map(function (Product $product) {
+          return [
+            'id' => $product->id,
+            'title' => $product->title,
+            'description' => $product->description,
+            'price' => $product->price,
+            'image' => route('products.image.show', [
+              'product' => $product->id
+            ]),
+            'commands' => route('products.commands.index', [
+              'product' => $product->id
+            ]),
+            'created_at' => $product->created_at->toISOString(),
+            'updated_at' => $product->updated_at->toISOString()
+          ];
+        })->toArray()
+      ]);
+  }
+
+  public function testAssertTrashedUsesMiddleware()
+  {
+    $this->assertActionUsesMiddleware(
+      ActualProductsController::class,
+      'trashed',
+      'can:viewTrashed,App\Product'
+    );
   }
 
   /**
