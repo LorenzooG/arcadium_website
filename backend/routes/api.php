@@ -34,10 +34,10 @@ Route::prefix('user')->middleware('auth:api')->group(function () {
 Route::prefix('roles')->group(function () {
   Route::get('/', 'RolesController@index')->middleware('can:viewAny,App\Role')->name('roles.index');
   Route::delete('{role}', 'RolesController@delete')->middleware('can:delete,role')->name('roles.delete');
-	Route::get('{role}', 'RolesController@show')->middleware('can:view,App\Role')->name('roles.show');
+  Route::get('{role}', 'RolesController@show')->middleware('can:view,App\Role')->name('roles.show');
 
-  Route::post('{role}/attach/{user}')->middleware('can:attach,App\Role')->name('roles.attach');
-  Route::post('{role}/detach/{user}')->middleware('can:detach,App\Role')->name('roles.detach');
+  Route::post('{role}/attach/{user}', 'RolesController@attach')->middleware('can:attach,App\Role')->name('roles.attach');
+  Route::post('{role}/detach/{user}', 'RolesController@detach')->middleware('can:detach,App\Role')->name('roles.detach');
 
   Route::middleware('xss')->group(function () {
     Route::post('/', 'RolesController@store')->middleware('can:create,App\Role')->name('roles.store');
