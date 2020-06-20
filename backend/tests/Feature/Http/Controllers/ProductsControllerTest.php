@@ -205,6 +205,8 @@ class ProductsControllerTest extends TestCase
       'product' => $product->id
     ]));
 
+    $product->refresh();
+
     $this->assertDeleted($product);
 
     $response->assertNoContent();
