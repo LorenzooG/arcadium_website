@@ -303,4 +303,37 @@ class RolesControllerTest extends TestCase
       'can:attach,App\Role'
     );
   }
+
+  /**
+   * Attach
+   */
+  public function testShouldDetachRoleToUserWhenPostRolesDetach()
+  {
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+    /** @var Role $role */
+    $role = factory(Role::class)->create();
+
+    $user->roles()->save($role);
+
+    $response = $this->actingAs($user)->postJson(route('roles.detach', [
+      'role' => $role->id,
+      'user' => $user->id
+    ]));
+
+    $role->refresh();
+
+    $this->assertNull($role->users()->find($user->id));
+
+    $response->assertNoContent();
+  }
+
+  public function testAssertDetachUsesMiddleware()
+  {
+    $this->assertActionUsesMiddleware(
+      ActualRolesController::class,
+      'detach',
+      'can:detach,App\Role'
+    );
+  }
 }
