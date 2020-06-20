@@ -223,11 +223,15 @@ class UsersControllerTest extends TestCase
     $dummyUser = factory(User::class)->create();
     $dummyUser->delete();
 
+    $dummyUser->refresh();
+
     $response = $this->actingAs($user)->postJson(route('users.restore', [
-      'user' => $user->id
+      'user' => $dummyUser->id
     ]));
 
     $dummyUser->refresh();
+
+    User::findOrFail($dummyUser->id);
 
     $this->assertFalse($dummyUser->trashed());
 
