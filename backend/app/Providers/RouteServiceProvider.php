@@ -8,6 +8,7 @@ use App\Repositories\NewsRepository;
 use App\Repositories\PaymentRepository;
 use App\Repositories\PostRepository;
 use App\Repositories\ProductCommandRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -37,6 +38,7 @@ class RouteServiceProvider extends ServiceProvider
   private ProductCommandRepository $productCommandRepository;
   private PaymentRepository $paymentRepository;
   private NewsRepository $newsRepository;
+  private ProductRepository $productRepository;
 
   /**
    * Define your route model bindings, pattern filters, etc.
@@ -54,6 +56,7 @@ class RouteServiceProvider extends ServiceProvider
     $this->productCommandRepository = resolve(ProductCommandRepository::class);
     $this->paymentRepository = resolve(PaymentRepository::class);
     $this->newsRepository = resolve(NewsRepository::class);
+    $this->productRepository = resolve(ProductRepository::class);
 
     $this->bind('email_update', function (string $email_update) {
       return EmailUpdate::query()
@@ -87,6 +90,10 @@ class RouteServiceProvider extends ServiceProvider
 
     $this->bind('news', function ($news) {
       return $this->newsRepository->findNewsById($news);
+    });
+
+    $this->bind('product', function ($product) {
+      return $this->productRepository->findProductById($product);
     });
 
     parent::boot();
