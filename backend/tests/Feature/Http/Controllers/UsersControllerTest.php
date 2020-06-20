@@ -97,6 +97,15 @@ class UsersControllerTest extends TestCase
       ]);
   }
 
+  public function testAssertTrashedUsesMiddleware()
+  {
+    $this->assertActionUsesMiddleware(
+      ActualUsersController::class,
+      'trashed',
+      'can:viewTrashed,App\User'
+    );
+  }
+
   /**
    * Read one
    */
