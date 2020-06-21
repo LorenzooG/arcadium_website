@@ -6,7 +6,6 @@ use App\Http\Controllers\UsersController as ActualUsersController;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\User;
-use App\Utils\Permission;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use JMac\Testing\Traits\AdditionalAssertions;
@@ -21,48 +20,44 @@ class UsersControllerTest extends TestCase
    */
   public function testShouldShowUsersAndDoNotShowTheUsersEmailsWhenGetUsers()
   {
-    $user = factory(User::class)->create();
+    factory(User::class, 5)->create();
 
     $response = $this->getJson(route('users.index'));
 
     $response->assertOk()
       ->assertJson([
-        'data' => [
-          [
+        'data' => Collection::make(User::query()->paginate()->items())->map(function (User $user) {
+          return [
             'id' => $user->id,
             'user_name' => $user->user_name,
             'name' => $user->name,
-            'deleted_at' => null,
+            'deleted_at' => $user->deleted_at,
             'created_at' => $user->created_at->toISOString(),
             'updated_at' => $user->updated_at->toISOString(),
-          ]
-        ]
+          ];
+        })->toArray()
       ]);
   }
 
   public function testShouldShowUsersAndItsEmailsWhenGetUsersAndHavePermission()
   {
-    $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::VIEW_USER_EMAIL
-    ]);
+    $user = factory(User::class)->state('admin')->create();
 
     $response = $this->actingAs($user)->getJson(route('users.index'));
 
     $response->assertOk()
       ->assertJson([
-        'data' => [
-          [
+        'data' => Collection::make(User::query()->paginate()->items())->map(function (User $user) {
+          return [
             'id' => $user->id,
             'user_name' => $user->user_name,
-            'name' => $user->name,
             'email' => $user->email,
-            'deleted_at' => null,
+            'name' => $user->name,
+            'deleted_at' => $user->deleted_at,
             'created_at' => $user->created_at->toISOString(),
             'updated_at' => $user->updated_at->toISOString(),
-          ]
-        ]
+          ];
+        })->toArray()
       ]);
   }
 
@@ -111,6 +106,7 @@ class UsersControllerTest extends TestCase
    */
   public function testShouldShowAnUserAndDoNotShowItsEmailWhenGetUsers()
   {
+    /** @var User $user */
     $user = factory(User::class)->create();
 
     $response = $this->getJson(route('users.show', [
@@ -124,7 +120,9 @@ class UsersControllerTest extends TestCase
         'name' => $user->name,
         'created_at' => $user->created_at->toISOString(),
         'updated_at' => $user->updated_at->toISOString(),
-        'deleted_at' => null
+        'deleted_at' => $user->deleted_at ?
+          $user->deleted_at->toISOString()
+          : null
       ])
       ->assertJsonMissing([
         'password',
@@ -134,11 +132,8 @@ class UsersControllerTest extends TestCase
 
   public function testShouldShowAnUserAndItsEmailWhenGetUserAndHavePermission()
   {
-    $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::VIEW_USER_EMAIL
-    ]);
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
 
     $response = $this->actingAs($user)->getJson(route('users.show', [
       'user' => $user->id
@@ -148,11 +143,13 @@ class UsersControllerTest extends TestCase
       ->assertJson([
         'id' => $user->id,
         'user_name' => $user->user_name,
+        'email' => $user->email,
         'name' => $user->name,
         'created_at' => $user->created_at->toISOString(),
         'updated_at' => $user->updated_at->toISOString(),
-        'email' => $user->email,
-        'deleted_at' => null
+        'deleted_at' => $user->deleted_at ?
+          $user->deleted_at->toISOString()
+          : null
       ])
       ->assertJsonMissing([
         'password'
@@ -183,6 +180,7 @@ class UsersControllerTest extends TestCase
       ->where('user_name', $user_name)
       ->get();
 
+    /** @var User $user */
     $user = $users->first();
 
     $userPassword = $user->password;
@@ -228,11 +226,8 @@ class UsersControllerTest extends TestCase
    */
   public function testShouldDeleteUserWhenDeleteUsersAndHavePermission()
   {
-    $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::DELETE_ANY_USER
-    ]);
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
 
     $response = $this->actingAs($user)->deleteJson(route('users.delete', [
       "user" => $user->id
@@ -272,8 +267,6 @@ class UsersControllerTest extends TestCase
 
     $dummyUser->refresh();
 
-    User::findOrFail($dummyUser->id);
-
     $this->assertFalse($dummyUser->trashed());
 
     $response->assertNoContent();
@@ -293,11 +286,8 @@ class UsersControllerTest extends TestCase
    */
   public function testShouldUpdateUserWhenPutUsersAndHavePermission()
   {
-    $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::UPDATE_ANY_USER
-    ]);
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
 
     $name = $this->faker->name;
     $user_name = $this->faker->name;
