@@ -23,14 +23,14 @@ class ProductsControllerTest extends TestCase
    */
   public function testShouldShowProductsAndDoNotShowItsCommandsWhenGetProducts()
   {
-    $product = factory(Product::class)->create();
+    factory(Product::class, 5)->create();
 
     $response = $this->getJson(route('products.index'));
 
     $response->assertOk()
       ->assertJson([
-        'data' => [
-          [
+        'data' => Collection::make(Product::query()->paginate()->items())->map(function (Product $product) {
+          return [
             'id' => $product->id,
             'title' => $product->title,
             'price' => $product->price,
@@ -40,23 +40,24 @@ class ProductsControllerTest extends TestCase
             ]),
             'created_at' => $product->created_at->toISOString(),
             'updated_at' => $product->updated_at->toISOString(),
-          ]
-        ]
+          ];
+        })->toArray()
       ]);
   }
 
   public function testShouldShowProductsAndShowItsCommandsWhenGetProductsAndHavePermission()
   {
+    /** @var User $user */
     $user = factory(User::class)->state('admin')->create();
 
-    $product = factory(Product::class)->create();
+    factory(Product::class, 5)->create();
 
     $response = $this->actingAs($user)->getJson(route('products.index'));
 
     $response->assertOk()
       ->assertJson([
-        'data' => [
-          [
+        'data' => Collection::make(Product::query()->paginate()->items())->map(function (Product $product) {
+          return [
             'id' => $product->id,
             'title' => $product->title,
             'price' => $product->price,
@@ -69,8 +70,8 @@ class ProductsControllerTest extends TestCase
             ]),
             'created_at' => $product->created_at->toISOString(),
             'updated_at' => $product->updated_at->toISOString(),
-          ]
-        ]
+          ];
+        })->toArray()
       ]);
   }
 
@@ -81,17 +82,17 @@ class ProductsControllerTest extends TestCase
   {
     $user = factory(User::class)->state('admin')->create();
 
-    factory(Product::class, 5)->create()->map(function (Product $user) {
-      $user->delete();
+    factory(Product::class, 5)->create()->map(function (Product $product) {
+      $product->delete();
 
-      return $user;
+      return $product;
     });
 
     $response = $this->actingAs($user)->getJson(route('trashed.products.index'));
 
     $response->assertOk()
       ->assertJson([
-        'data' => Collection::make(User::onlyTrashed()->paginate()->items())->map(function (Product $product) {
+        'data' => Collection::make(Product::onlyTrashed()->paginate()->items())->map(function (Product $product) {
           return [
             'id' => $product->id,
             'title' => $product->title,
@@ -124,6 +125,7 @@ class ProductsControllerTest extends TestCase
    */
   public function testShouldShowAnProductAndDoNotShowItsCommandsWhenGetProducts()
   {
+    /** @var Product $product */
     $product = factory(Product::class)->create();
 
     $response = $this->getJson(route('products.show', [
@@ -151,6 +153,7 @@ class ProductsControllerTest extends TestCase
   {
     $user = factory(User::class)->state('admin')->create();
 
+    /** @var Product $product */
     $product = factory(Product::class)->create();
 
     $response = $this->actingAs($user)->getJson(route('products.show', [
@@ -200,6 +203,7 @@ class ProductsControllerTest extends TestCase
       ->where('price', $price)
       ->get();
 
+    /** @var Product $product */
     $product = $products->first();
 
     $this->assertCount(1, $products);
@@ -245,6 +249,7 @@ class ProductsControllerTest extends TestCase
   public function testShouldDeleteProductWhenDeleteProductsAndHavePermission()
   {
     $user = factory(User::class)->state('admin')->create();
+    /** @var Product $product */
     $product = factory(Product::class)->create();
 
     $response = $this->actingAs($user)->deleteJson(route('products.delete', [
@@ -307,6 +312,7 @@ class ProductsControllerTest extends TestCase
   public function testShouldUpdateProductWhenPutProductsAndHavePermission()
   {
     $user = factory(User::class)->state('admin')->create();
+    /** @var Product $product */
     $product = factory(Product::class)->create();
 
     $title = $this->faker->text(72);
@@ -336,6 +342,7 @@ class ProductsControllerTest extends TestCase
   public function testShouldUpdateProductImageWhenPostProductsImageAndHavePermission()
   {
     $user = factory(User::class)->state('admin')->create();
+    /** @var Product $product */
     $product = factory(Product::class)->create();
 
     $file = UploadedFile::fake()->image('profile.png', 100, 100);
