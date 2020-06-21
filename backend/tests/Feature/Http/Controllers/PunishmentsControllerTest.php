@@ -195,7 +195,7 @@ class PunishmentsControllerTest extends TestCase
     $punishmentDuration = Carbon::createFromTimestampMs($punishedAt)
       ->diffInMilliseconds(Carbon::createFromTimestampMs($punishedUntil));
 
-    $response = $this->actingAs($user)->putJson(route('comments.update', [
+    $response = $this->actingAs($user)->putJson(route('punishments.update', [
       'punishment' => $punishment->id
     ]), [
       'punished_user_name' => $punishedUserName,
