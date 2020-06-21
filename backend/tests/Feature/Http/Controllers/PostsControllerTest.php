@@ -9,7 +9,7 @@ use App\Http\Requests\PostUnlikeRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Post;
 use App\User;
-use App\Utils\Permission;
+use Illuminate\Support\Collection;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
@@ -23,71 +23,56 @@ class PostsControllerTest extends TestCase
   public function testShouldShowPostsOrderedByDescLikesWhenGetPosts()
   {
     /* @var User $user */
-    $title = $this->faker->title;
-    $description = $this->faker->text;
-
     $user = factory(User::class)->create();
-    /* @var Post $firstPost */
-    $firstPost = $user->posts()->create([
-      'title' => $title,
-      'description' => $description,
-    ]);
-    $firstPost->likes()->saveMany([$user, $user]);
 
-    /* @var Post $secondPost */
-    $secondPost = $user->posts()->create([
-      'title' => $title,
-      'description' => $description,
-    ]);
-    $secondPost->likes()->saveMany([$user, $user, $user, $user]);
+    factory(Post::class, 15)->create([
+      'user_id' => $user->id
+    ])->each(function (Post $post) use ($user) {
+      $likes = [];
+
+      for ($index = 0; $index < rand(1, 15); $index++) {
+        $likes[] = $user;
+      }
+
+      $post->likes()->save($user);
+    });
 
     $response = $this->getJson(route('posts.index'));
 
     $response->assertOk()
       ->assertJson([
-        'data' => [
-          [
-            'id' => $secondPost->id,
-            'title' => $secondPost->title,
-            'likes' => $secondPost->likes->count(),
+        'data' => Collection::make(Post::byLikes()->paginate()->items())->map(function (Post $post) {
+          return [
+            'id' => $post->id,
+            'title' => $post->title,
+            'description' => $post->description,
+            'likes' => $post->likes->count(),
             'created_by' => route('users.show', [
-              'user' => $user->id
+              'user' => $post->user->id
             ]),
-            'updated_at' => $secondPost->updated_at->toISOString(),
-            'created_at' => $secondPost->updated_at->toISOString(),
-          ],
-          [
-            'id' => $firstPost->id,
-            'title' => $firstPost->title,
-            'likes' => $firstPost->likes->count(),
-            'created_by' => route('users.show', [
-              'user' => $user->id
-            ]),
-            'updated_at' => $firstPost->updated_at->toISOString(),
-            'created_at' => $firstPost->updated_at->toISOString(),
-          ]
-        ],
+            'updated_at' => $post->updated_at->toISOString(),
+            'created_at' => $post->updated_at->toISOString(),
+          ];
+        })->toArray(),
       ]);
   }
 
   public function testShouldShowPostsOrderedByDescIdWhenGetUsersPosts()
   {
     /* @var User $user */
-    $title = $this->faker->title;
-    $description = $this->faker->text;
-
     $user = factory(User::class)->create();
-    /* @var Post $firstPost */
-    $firstPost = $user->posts()->create([
-      'title' => $title,
-      'description' => $description,
-    ]);
 
-    /* @var Post $secondPost */
-    $secondPost = $user->posts()->create([
-      'title' => $title,
-      'description' => $description,
-    ]);
+    factory(Post::class, 15)->create([
+      'user_id' => $user->id
+    ])->each(function (Post $post) use ($user) {
+      $likes = [];
+
+      for ($index = 0; $index < rand(1, 15); $index++) {
+        $likes[] = $user;
+      }
+
+      $post->likes()->save($user);
+    });
 
     $response = $this->getJson(route('users.posts.index', [
       'user' => $user->id
@@ -95,28 +80,19 @@ class PostsControllerTest extends TestCase
 
     $response->assertOk()
       ->assertJson([
-        'data' => [
-          [
-            'id' => $secondPost->id,
-            'title' => $secondPost->title,
-            'likes' => $secondPost->likes->count(),
+        'data' => Collection::make($user->posts()->orderByDesc('id')->paginate()->items())->map(function (Post $post) {
+          return [
+            'id' => $post->id,
+            'title' => $post->title,
+            'description' => $post->description,
+            'likes' => $post->likes->count(),
             'created_by' => route('users.show', [
-              'user' => $user->id
+              'user' => $post->user->id
             ]),
-            'updated_at' => $secondPost->updated_at->toISOString(),
-            'created_at' => $secondPost->updated_at->toISOString(),
-          ],
-          [
-            'id' => $firstPost->id,
-            'title' => $firstPost->title,
-            'likes' => $firstPost->likes->count(),
-            'created_by' => route('users.show', [
-              'user' => $user->id
-            ]),
-            'updated_at' => $firstPost->updated_at->toISOString(),
-            'created_at' => $firstPost->updated_at->toISOString(),
-          ]
-        ]
+            'updated_at' => $post->updated_at->toISOString(),
+            'created_at' => $post->updated_at->toISOString(),
+          ];
+        })->toArray()
       ]);
   }
 
@@ -126,14 +102,10 @@ class PostsControllerTest extends TestCase
   public function testShouldShowAnPostWhenGetUsersPosts()
   {
     /* @var User $user */
-    $title = $this->faker->title;
-    $description = $this->faker->text;
-
     $user = factory(User::class)->create();
     /* @var Post $post */
-    $post = $user->posts()->create([
-      'title' => $title,
-      'description' => $description
+    $post = factory(Post::class)->create([
+      'user_id' => $user->id
     ]);
 
     $response = $this->getJson(route('posts.show', [
@@ -144,6 +116,7 @@ class PostsControllerTest extends TestCase
       ->assertJson([
         'id' => $post->id,
         'title' => $post->title,
+        'description' => $post->description,
         'likes' => $post->likes->count(),
         'created_by' => route('users.show', [
           'user' => $user->id
@@ -162,11 +135,7 @@ class PostsControllerTest extends TestCase
     $description = $this->faker->text;
 
     /* @var User $user */
-    $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Permission',
-      'permission_level' => Permission::STORE_POST
-    ]);
+    $user = factory(User::class)->state('admin')->create();
 
     $response = $this->actingAs($user)->postJson(route('posts.store'), [
       'title' => $title,
@@ -188,6 +157,7 @@ class PostsControllerTest extends TestCase
       ->assertJson([
         'id' => $post->id,
         'title' => $post->title,
+        'description' => $post->description,
         'likes' => $post->likes->count(),
         'created_by' => route('users.show', [
           'user' => $user->id
@@ -226,14 +196,11 @@ class PostsControllerTest extends TestCase
    */
   public function testShouldDeletePostWhenDeletePosts()
   {
-    $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::DELETE_ANY_POST
-    ]);
-    $post = $user->posts()->create([
-      'title' => $this->faker->title,
-      'description' => $this->faker->text,
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+    /** @var Post $post */
+    $post = factory(Post::class)->create([
+      'user_id' => $user->id
     ]);
 
     $response = $this->actingAs($user)->deleteJson(route('posts.delete', [
@@ -247,14 +214,11 @@ class PostsControllerTest extends TestCase
 
   public function testShouldDeletePostWhenDeleteUserPosts()
   {
-    $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::DELETE_POST
-    ]);
-    $post = $user->posts()->create([
-      'title' => $this->faker->title,
-      'description' => $this->faker->text,
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+    /** @var Post $post */
+    $post = factory(Post::class)->create([
+      'user_id' => $user->id
     ]);
 
     $response = $this->actingAs($user)->deleteJson(route('user.posts.delete', [
@@ -281,14 +245,11 @@ class PostsControllerTest extends TestCase
    */
   public function testShouldUpdatePostWhenPutPosts()
   {
-    $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::UPDATE_POST
-    ]);
-    $post = $user->posts()->create([
-      'title' => $this->faker->title,
-      'description' => $this->faker->text,
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+    /** @var Post $post */
+    $post = factory(Post::class)->create([
+      'user_id' => $user->id
     ]);
 
     $title = $this->faker->title;
@@ -339,15 +300,10 @@ class PostsControllerTest extends TestCase
   public function testShouldLikePostWhenPostPostsLike()
   {
     /** @var User $user */
-    $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::LIKE_POST
-    ]);
+    $user = factory(User::class)->state('admin')->create();
     /** @var Post $post */
-    $post = $user->posts()->create([
-      'title' => $this->faker->title,
-      'description' => $this->faker->text,
+    $post = factory(Post::class)->create([
+      'user_id' => $user->id
     ]);
 
     $response = $this->actingAs($user)->postJson(route('posts.like', [
@@ -399,9 +355,8 @@ class PostsControllerTest extends TestCase
     /** @var User $user */
     $user = factory(User::class)->state('admin')->create();
     /** @var Post $post */
-    $post = $user->posts()->create([
-      'title' => $this->faker->title,
-      'description' => $this->faker->text,
+    $post = factory(Post::class)->create([
+      'user_id' => $user->id
     ]);
 
     $post->likes()->save($user);
