@@ -8,11 +8,13 @@ use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateEmailRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Notifications\UpdateEmailRequestNotification;
 use App\Post;
 use App\Role;
 use App\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
@@ -86,6 +88,22 @@ class SelfUserControllerTest extends TestCase
     $response->assertNoContent();
 
     $this->assertCount(1, $users);
+  }
+
+  public function testShouldSendUpdateEmailEmailWhenPostUserUpdateEmail()
+  {
+    Notification::fake();
+
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+
+    $response = $this->actingAs($user)->putJson(route('user.request.update.email'), [
+      'email' => $user->email,
+    ]);
+
+    Notification::assertSentTo($user, UpdateEmailRequestNotification::class);
+
+    $response->assertNoContent();
   }
 
   public function testAssertUpdateUsesFormRequest()
