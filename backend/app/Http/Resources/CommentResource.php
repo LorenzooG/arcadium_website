@@ -27,7 +27,7 @@ final class CommentResource extends JsonResource
       'id' => $this->resource->id,
       'content' => $this->resource->content,
       'created_by' => route('users.show', [
-        'user' => $this->resource->id
+        'user' => $this->resource->user_id
       ]),
       'created_at' => $this->resource->created_at,
       'updated_at' => $this->resource->updated_at
