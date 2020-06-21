@@ -81,7 +81,7 @@ final class PunishmentRepository
     $punishedUntil = Carbon::createFromTimestampMs($data['punished_until']);
     $punishedAt = Carbon::createFromTimestampMs($data['punished_at']);
 
-    $data['punishment_duration'] = $punishedUntil->diffInMilliseconds($punishedAt);
+    $data['punished_duration'] = $punishedUntil->diffInMilliseconds($punishedAt);
 
     return Punishment::create($data);
   }

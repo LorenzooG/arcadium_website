@@ -29,7 +29,7 @@ final class PunishmentResource extends JsonResource
       'punished_user_name' => $this->resource->punished_user_name,
       'reason' => $this->resource->reason,
       'proof' => $this->resource->proof,
-      'punishment_duration' => Carbon::createFromTimestampMs($this->resource->punishment_duration),
+      'punished_duration' => Carbon::createFromTimestampMs($this->resource->punished_duration),
       'punished_until' => Carbon::createFromTimestampMs($this->resource->punished_until),
       'punished_at' => Carbon::createFromTimestampMs($this->resource->punished_at),
       'created_at' => $this->resource->created_at,

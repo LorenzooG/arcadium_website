@@ -22,7 +22,7 @@ $factory->define(Punishment::class, function (Faker $faker) {
     'punished_user_name' => $punishedUserName,
     'punished_at' => $punishedAt,
     'punished_until' => $punishedUntil,
-    'punishment_duration' => $punishmentDuration,
+    'punished_duration' => $punishmentDuration,
     'punished_by' => $punishedBy,
     'reason' => $reason,
     'proof' => $proof,
