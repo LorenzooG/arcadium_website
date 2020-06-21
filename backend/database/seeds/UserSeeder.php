@@ -25,5 +25,7 @@ class UserSeeder extends Seeder
         'user_id' => $user->id
       ]);
     });
+
+    factory(User::class, 10000)->create();
   }
 }
