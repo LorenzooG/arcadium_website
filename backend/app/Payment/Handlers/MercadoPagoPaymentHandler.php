@@ -57,7 +57,7 @@ final class MercadoPagoPaymentHandler implements PaymentHandlerContract
 
   public final function setupCredentials(): void
   {
-    $this->notificationUrl = route('payments.notification', [
+    $this->notificationUrl = route('payments.notifications', [
       'paymentHandler' => self::KEY
     ]);
 

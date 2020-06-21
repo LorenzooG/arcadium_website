@@ -10,6 +10,7 @@ use App\Observers\PaymentObserver;
 use App\Observers\PostObserver;
 use App\Observers\ProductCommandObserver;
 use App\Observers\ProductObserver;
+use App\Observers\PunishmentObserver;
 use App\Observers\RoleObserver;
 use App\Observers\UserObserver;
 use App\Payment;
@@ -20,6 +21,7 @@ use App\Payment\Repositories\PaypalPaymentRepository as PaypalPaymentHandler;
 use App\Post;
 use App\Product;
 use App\ProductCommand;
+use App\Punishment;
 use App\Role;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -74,6 +76,7 @@ final class AppServiceProvider extends ServiceProvider
     Comment::observe(CommentObserver::class);
     News::observe(NewsObserver::class);
     ProductCommand::observe(ProductCommandObserver::class);
+    Punishment::observe(PunishmentObserver::class);
     Product::observe(ProductObserver::class);
     Payment::observe(PaymentObserver::class);
   }

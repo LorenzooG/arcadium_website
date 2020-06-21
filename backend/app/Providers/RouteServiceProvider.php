@@ -9,6 +9,7 @@ use App\Repositories\PaymentRepository;
 use App\Repositories\PostRepository;
 use App\Repositories\ProductCommandRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\PunishmentRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -100,6 +101,13 @@ class RouteServiceProvider extends ServiceProvider
       $productRepository = $this->app->make(ProductRepository::class);
 
       return $productRepository->findProductById($product);
+    });
+
+    $this->bind('punishment', function ($punishment) {
+      /** @var PunishmentRepository $punishmentRepository */
+      $punishmentRepository = $this->app->make(PunishmentRepository::class);
+
+      return $punishmentRepository->findPunishmentById($punishment);
     });
 
     parent::boot();
