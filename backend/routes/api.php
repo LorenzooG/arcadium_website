@@ -98,8 +98,6 @@ Route::prefix('comments')->group(function () {
   Route::delete('{comment}', 'CommentController@delete')->middleware('can:delete,comment')->name('comments.delete');
 });
 
-Route::get("_FUCK_FUCK", "PaymentsController@show")->name('payments.notification');
-
 Route::prefix("/payments")->name('payments.')->group(function () {
   Route::get("/", "PaymentsController@index")->middleware('can:view,App\Payment')->name('index');
   Route::get("{payment}", "PaymentsController@show")->middleware('can:view,App\Payment')->name('show');
