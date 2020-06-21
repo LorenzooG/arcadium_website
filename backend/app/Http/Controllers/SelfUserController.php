@@ -19,7 +19,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Str;
 
 final class SelfUserController extends Controller
 {
@@ -66,7 +65,10 @@ final class SelfUserController extends Controller
     /** @var EmailUpdate $emailUpdate */
     $emailUpdate = $user->emailUpdates()->create([
       'origin_address' => $request->ip(),
-      'token' => Str::random(64)
+      'token' => hash('sha256', json_encode([
+        'user_id' => $user->id,
+        'time' => microtime(true)
+      ]))
     ]);
 
     $user->notify(new UpdateEmailRequestNotification($emailUpdate));
