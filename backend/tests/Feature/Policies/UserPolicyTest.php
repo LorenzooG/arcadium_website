@@ -21,17 +21,6 @@ final class UserPolicyTest extends TestCase
     $this->assertTrue($user->can('update', User::class));
   }
 
-  public function testShouldCanCreateUserWhenHavePermissionUpdateStoreUser()
-  {
-    /** @var User $user */
-    $user = factory(User::class)->create();
-    $user->roles()->save(factory(Role::class)->create([
-      'permission_level' => Permission::STORE_USER
-    ]));
-
-    $this->assertTrue($user->can('create', User::class));
-  }
-
   public function testShouldCanDeleteUserWhenHavePermissionDeleteAnyUser()
   {
     /** @var User $user */
