@@ -22,9 +22,9 @@ class CreatePunishmentsTable extends Migration
       $table->string('reason', 240);
       $table->string('proof', 240);
 
-      $table->float('punished_until');
-      $table->float('punished_at');
-      $table->float('punishment_duration');
+      $table->bigInteger('punished_until');
+      $table->bigInteger('punished_at');
+      $table->bigInteger('punishment_duration');
 
       $table->timestamps();
     });
