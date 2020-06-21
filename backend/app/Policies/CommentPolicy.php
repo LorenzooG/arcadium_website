@@ -34,11 +34,11 @@ final class CommentPolicy
    * @param Comment $comment
    * @return mixed
    */
-  public final function update(User $user, Comment $comment)
+  public final function update(User $user, ?Comment $comment = null)
   {
     return $user->hasPermission(Permission::UPDATE_ANY_COMMENT)
       || ($user->hasPermission(Permission::UPDATE_COMMENT)
-        && $comment->user_id === $user->id);
+        && optional($comment)->user_id === $user->id);
   }
 
   /**
@@ -48,11 +48,11 @@ final class CommentPolicy
    * @param Comment $comment
    * @return mixed
    */
-  public final function delete(User $user, Comment $comment)
+  public final function delete(User $user, ?Comment $comment = null)
   {
     return $user->hasPermission(Permission::DELETE_ANY_COMMENT)
       || ($user->hasPermission(Permission::DELETE_COMMENT)
-        && $comment->user_id === $user->id);
+        && optional($comment)->user_id === $user->id);
   }
 
 }
