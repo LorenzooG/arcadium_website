@@ -19,7 +19,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 final class ProductCommand extends Model
 {
   protected $fillable = [
-    'command'
+    'command',
+    'product_id'
   ];
 
   /**

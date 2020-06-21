@@ -10,6 +10,7 @@ use App\Http\Requests\CommandUpdateRequest;
 use App\Product;
 use App\ProductCommand;
 use App\User;
+use Illuminate\Support\Collection;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
@@ -24,8 +25,12 @@ class ProductCommandsControllerTest extends TestCase
   {
     $user = factory(User::class)->state('admin')->create();
 
+    /** @var Product $product */
     $product = factory(Product::class)->create();
-    $command = $product->commands()->first();
+
+    factory(ProductCommand::class, 3)->create([
+      'product_id' => $product->id
+    ]);
 
     $response = $this->actingAs($user)->getJson(route('products.commands.index', [
       'product' => $product->id
@@ -33,14 +38,14 @@ class ProductCommandsControllerTest extends TestCase
 
     $response->assertOk()
       ->assertJson([
-        'data' => [
-          [
+        'data' => Collection::make($product->commands()->paginate()->items())->map(function (ProductCommand $command) {
+          return [
             'id' => $command->id,
             'command' => $command->command,
             'created_at' => $command->created_at->toISOString(),
             'updated_at' => $command->updated_at->toISOString(),
-          ]
-        ]
+          ];
+        })->toArray()
       ]);
   }
 
@@ -60,6 +65,7 @@ class ProductCommandsControllerTest extends TestCase
   public function testShouldStoreProductsWhenPostProducts()
   {
     $user = factory(User::class)->state('admin')->create();
+    /** @var Product $product */
     $product = factory(Product::class)->create();
 
     $command = $this->faker->text(72);
@@ -75,6 +81,7 @@ class ProductCommandsControllerTest extends TestCase
       ->where('command', $command)
       ->get();
 
+    /** @var ProductCommand $command */
     $command = $commands->first();
 
     $this->assertCount(1, $commands);
@@ -112,8 +119,12 @@ class ProductCommandsControllerTest extends TestCase
   public function testShouldDeleteProductWhenDeleteProductsAndHavePermission()
   {
     $user = factory(User::class)->state('admin')->create();
+    /** @var Product $product */
     $product = factory(Product::class)->create();
-    $productCommand = $product->commands()->first();
+    /** @var ProductCommand $productCommand */
+    $productCommand = factory(ProductCommand::class)->create([
+      'product_id' => $product->id
+    ]);
 
     $response = $this->actingAs($user)->deleteJson(route('product_commands.delete', [
       'command' => $productCommand->id
@@ -139,8 +150,12 @@ class ProductCommandsControllerTest extends TestCase
   public function testShouldUpdateProductWhenPutProductsAndHavePermission()
   {
     $user = factory(User::class)->state('admin')->create();
+    /** @var Product $product */
     $product = factory(Product::class)->create();
-    $productCommand = $product->commands()->first();
+    /** @var ProductCommand $productCommand */
+    $productCommand = factory(ProductCommand::class)->create([
+      'product_id' => $product->id
+    ]);
 
     $command = $this->faker->text(72);
 
