@@ -207,6 +207,7 @@ class PunishmentsControllerTest extends TestCase
     ]);
 
     $punishments = Punishment::query()
+      ->where('id', $punishment->id)
       ->where('punished_user_name', $punishedUserName)
       ->where('punished_until', $punishedUntil)
       ->where('punished_duration', $punishmentDuration)

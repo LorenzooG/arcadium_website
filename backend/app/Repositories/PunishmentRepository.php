@@ -4,7 +4,6 @@
 namespace App\Repositories;
 
 use App\Punishment;
-use Carbon\Carbon;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Log\Logger;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -77,11 +76,6 @@ final class PunishmentRepository
   public final function createPunishment(array $data)
   {
     $this->logger->info("Creating punishment for punished user name: {$data['punished_user_name']}.");
-
-    $punishedUntil = Carbon::createFromTimestampMs($data['punished_until']);
-    $punishedAt = Carbon::createFromTimestampMs($data['punished_at']);
-
-    $data['punished_duration'] = $punishedUntil->diffInMilliseconds($punishedAt);
 
     return Punishment::create($data);
   }
