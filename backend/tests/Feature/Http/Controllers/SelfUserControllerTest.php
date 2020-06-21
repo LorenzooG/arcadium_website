@@ -2,14 +2,16 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\EmailUpdate;
 use App\Http\Controllers\SelfUserController as ActualUserController;
 use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateEmailRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Post;
+use App\Role;
 use App\User;
-use App\Utils\Permission;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use JMac\Testing\Traits\AdditionalAssertions;
@@ -20,16 +22,11 @@ class SelfUserControllerTest extends TestCase
   use AdditionalAssertions;
 
   public function testShouldDeleteUserWhenDeleteUserAndHavePermission()
-	{
+  {
     $password = $this->faker->password(8, 16);
 
-    $user = factory(User::class)->create([
+    $user = factory(User::class)->state('admin')->create([
       'password' => $password
-    ]);
-
-    $user->roles()->create([
-      'title' => 'Permission',
-      'permission_level' => Permission::DELETE_USER
     ]);
 
     $response = $this->actingAs($user)->deleteJson(route('user.delete'), [
@@ -67,11 +64,8 @@ class SelfUserControllerTest extends TestCase
 
   public function testShouldUpdateUserWhenPutUserAndHavePermission()
   {
-    $user = factory(User::class)->create();
-    $user->roles()->create([
-      'title' => 'Permission',
-      'permission_level' => Permission::UPDATE_USER
-    ]);
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
 
     $name = $this->faker->name;
     $user_name = $this->faker->name;
@@ -129,12 +123,9 @@ class SelfUserControllerTest extends TestCase
     $password = $this->faker->password(8, 16);
     $newPassword = $this->faker->password(8, 16);
 
-    $user = factory(User::class)->create([
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create([
       'password' => $password,
-    ]);
-    $user->roles()->create([
-      'title' => 'Permission',
-      'permission_level' => Permission::UPDATE_USER
     ]);
 
     $response = $this->actingAs($user)->putJson(route('user.update.password'), [
@@ -179,15 +170,14 @@ class SelfUserControllerTest extends TestCase
 
   public function testShouldUpdateEmailUserWhenPutUserEmail()
   {
-    $user = factory(User::class)->create();
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+
     $token = Str::random(64);
-    $user->emailUpdates()->create([
+
+    factory(EmailUpdate::class)->create([
+      'user_id' => $user->id,
       'token' => $token,
-      'origin_address' => '127.0.0.1'
-    ]);
-    $user->roles()->create([
-      'title' => 'Permission',
-      'permission_level' => Permission::UPDATE_USER
     ]);
 
     $email = $this->faker->unique()->safeEmail;
@@ -244,80 +234,53 @@ class SelfUserControllerTest extends TestCase
   public function testShouldShowPostsOrderedByDescIdWhenGetUserPosts()
   {
     /* @var User $user */
-    $title = $this->faker->title;
-    $description = $this->faker->text;
-
     $user = factory(User::class)->create();
-    /* @var Post $firstPost */
-    $firstPost = $user->posts()->create([
-      'title' => $title,
-      'description' => $description,
-    ]);
 
-    /* @var Post $secondPost */
-    $secondPost = $user->posts()->create([
-      'title' => $title,
-      'description' => $description,
+    factory(Post::class, 5)->create([
+      'user_id' => $user->id
     ]);
 
     $response = $this->actingAs($user)->getJson(route('user.posts.index'));
 
     $response->assertOk()
       ->assertJson([
-        'data' => [
-          [
-            'id' => $secondPost->id,
-            'title' => $secondPost->title,
-            'likes' => $secondPost->likes->count(),
+        'data' => Collection::make($user->posts()->orderByDesc('id')->paginate()->items())->map(function (Post $post) {
+          return [
+            'id' => $post->id,
+            'title' => $post->title,
+            'description' => $post->description,
+            'likes' => $post->likes->count(),
             'created_by' => route('users.show', [
-              'user' => $user->id
+              'user' => $post->user->id
             ]),
-            'updated_at' => $secondPost->updated_at->toISOString(),
-            'created_at' => $secondPost->updated_at->toISOString(),
-          ],
-          [
-            'id' => $firstPost->id,
-            'title' => $firstPost->title,
-            'likes' => $firstPost->likes->count(),
-            'created_by' => route('users.show', [
-              'user' => $user->id
-            ]),
-            'updated_at' => $firstPost->updated_at->toISOString(),
-            'created_at' => $firstPost->updated_at->toISOString(),
-          ]
-        ]
+            'updated_at' => $post->updated_at->toISOString(),
+            'created_at' => $post->updated_at->toISOString(),
+          ];
+        })->toArray()
       ]);
   }
 
   public function testShouldShowRolesWhenGetUserRoles()
   {
-    $title = $this->faker->title;
-    $permissionLevel = Permission::VIEW_SELF_ROLES | Permission::VIEW_ROLES_PERMISSIONS;
-    $color = $this->faker->word;
-
-    $user = factory(User::class)->create();
-		$role = $user->roles()->create([
-			'title' => $title,
-			'permission_level' => $permissionLevel,
-			'color' => $color
-		]);
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
 
     $response = $this->actingAs($user)->getJson(route('user.roles.index', [
       'user' => $user->id
-		]));
+    ]));
 
     $response->assertOk()
       ->assertJson([
-        'data' => [
-          [
+        'data' => Collection::make($user->roles()->paginate()->items())->map(function (Role $role) {
+          return [
             'id' => $role->id,
-            'title' => $title,
-            'permission_level' => $permissionLevel,
-            'color' => $color,
+            'title' => $role->title,
+            'permission_level' => $role->permission_level,
+            'color' => $role->color,
             'created_at' => $role->created_at->toISOString(),
             'updated_at' => $role->updated_at->toISOString()
-          ]
-        ]
+          ];
+        })->toArray()
       ]);
   }
 
