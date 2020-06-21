@@ -106,6 +106,14 @@ Route::prefix("/payments")->name('payments.')->group(function () {
   Route::post("/{paymentHandler}/", "PaymentsController@payment")->name('checkout');
 });
 
+Route::prefix('punishments')->name('punishments.')->group(function () {
+  Route::get('/', 'PunishmentsController@index')->name('index');
+  Route::get('{punishment}', 'PunishmentsController@show')->name('show');
+  Route::put('{punishment}', 'PunishmentsController@update')->name('update');
+  Route::delete('/{punishment}', 'PunishmentsController@delete')->name('delete');
+  Route::post('/', 'PunishmentsController@store')->name('store');
+});
+
 Route::prefix('checkout')->group(function () {
   Route::middleware("xss")->post("/", "PaymentsController@checkout")->name('checkout');
   Route::post("ipn/mp", "PaymentsController@ipn")->name("ipn");

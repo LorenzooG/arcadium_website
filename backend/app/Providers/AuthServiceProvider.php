@@ -12,11 +12,13 @@ use App\Policies\PaymentPolicy;
 use App\Policies\PostPolicy;
 use App\Policies\ProductCommandPolicy;
 use App\Policies\ProductPolicy;
+use App\Policies\PunishmentPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use App\Post;
 use App\Product;
 use App\ProductCommand;
+use App\Punishment;
 use App\Role;
 use App\User;
 use App\Utils\Permission;
@@ -45,7 +47,8 @@ class AuthServiceProvider extends ServiceProvider
     Product::class => ProductPolicy::class,
     ProductCommand::class => ProductCommandPolicy::class,
     News::class => NewsPolicy::class,
-    Payment::class => PaymentPolicy::class
+    Payment::class => PaymentPolicy::class,
+    Punishment::class => PunishmentPolicy::class
     // 'App\Model' => 'App\Policies\ModelPolicy',
   ];
 
