@@ -47,7 +47,7 @@ final class PunishmentRepository
     return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () use ($page) {
       $this->logger->info("Caching punishments in page {$page}.");
 
-      return Punishment::query()->orderByDesc('id')->get();
+      return Punishment::query()->orderByDesc('id')->paginate();
     });
   }
 
