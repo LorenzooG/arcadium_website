@@ -65,7 +65,7 @@ final class ProductRepository
     return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () use ($page) {
       $this->logger->info("Caching trashed products in page {$page}.");
 
-      return Product::withTrashed()->paginate();
+      return Product::onlyTrashed()->paginate();
     });
   }
 
