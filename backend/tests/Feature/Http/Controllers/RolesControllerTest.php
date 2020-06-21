@@ -10,6 +10,7 @@ use App\Http\Requests\RoleUpdateRequest;
 use App\Role;
 use App\User;
 use App\Utils\Permission;
+use Illuminate\Support\Collection;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
@@ -24,46 +25,33 @@ class RolesControllerTest extends TestCase
   public function testShouldShowRolesWhenGetRoles()
 	{
     /* @var User $user */
-    $title = $this->faker->title;
-    $permissionLevel = Permission::VIEW_ANY_ROLE | Permission::VIEW_ROLES_PERMISSIONS;
-    $color = $this->faker->hexColor;
+    $user = factory(User::class)->state('admin')->create();
 
-		$user = factory(User::class)->create();
-		$role = $user->roles()->create([
-      'title' => $title,
-      'color' => $color,
-      'permission_level' => $permissionLevel
-		]);
+    factory(Role::class, 5)->create();
 
     $response = $this->actingAs($user)->getJson(route('roles.index'));
 
     $response->assertOk()
       ->assertJson([
-				'data' => [
-          [
+        'data' => Collection::make(Role::query()->paginate()->items())->map(function (Role $role) {
+          return [
             'id' => $role->id,
-            'title' => $title,
-            'color' => $color,
-            'permission_level' => $permissionLevel,
+            'title' => $role->title,
+            'color' => $role->color,
+            'permission_level' => $role->permission_level,
             'created_at' => $role->created_at->toISOString(),
             'updated_at' => $role->updated_at->toISOString()
-          ]
-				]
+          ];
+        })->toArray()
       ]);
   }
 
   public function testShouldShowRolesWhenGetUsersRoles()
   {
-    $title = $this->faker->title;
-    $permissionLevel = Permission::VIEW_ANY_ROLE | Permission::VIEW_ROLES_PERMISSIONS;
-    $color = $this->faker->hexColor;
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
 
-    $user = factory(User::class)->create();
-		$role = $user->roles()->create([
-			'title' => $title,
-			'permission_level' => $permissionLevel,
-			'color' => $color,
-		]);
+    factory(Role::class, 5)->create();
 
     $response = $this->actingAs($user)->getJson(route('users.roles.index', [
       'user' => $user->id
@@ -71,16 +59,16 @@ class RolesControllerTest extends TestCase
 
     $response->assertOk()
       ->assertJson([
-        'data' => [
-          [
+        'data' => Collection::make($user->roles()->paginate()->items())->map(function (Role $role) {
+          return [
             'id' => $role->id,
-            'title' => $title,
-            'permission_level' => $permissionLevel,
-            'color' => $color,
+            'title' => $role->title,
+            'color' => $role->color,
+            'permission_level' => $role->permission_level,
             'created_at' => $role->created_at->toISOString(),
             'updated_at' => $role->updated_at->toISOString()
-          ]
-        ]
+          ];
+        })->toArray()
       ]);
   }
 
@@ -90,28 +78,21 @@ class RolesControllerTest extends TestCase
   public function testShouldShowAnRoleWhenGetRoles()
   {
     /* @var User $user */
-    $title = $this->faker->title;
-		$color = '#fff';
-		$permissionLevel = Permission::VIEW_ROLE | Permission::VIEW_ROLES_PERMISSIONS;
+    $user = factory(User::class)->state('admin')->create();
+    /** @var Role $role */
+    $role = factory(Role::class)->create();
 
-    $user = factory(User::class)->create();
-		$role = $user->roles()->create([
-			'title' => $title,
-			'color' => $color,
-			'permission_level' => $permissionLevel
-		]);
-
-		$response = $this->actingAs($user)->getJson(route('roles.show', [
+    $response = $this->actingAs($user)->getJson(route('roles.show', [
       'role' => $role->id
-		]));
+    ]));
 
     $response->assertOk()
       ->assertJson([
-				'id' => $role->id,
-				'title' => $role->title,
-				'color' => $color,
-				'permission_level' => $permissionLevel,
-				'updated_at' => $role->updated_at->toISOString(),
+        'id' => $role->id,
+        'title' => $role->title,
+        'color' => $role->color,
+        'permission_level' => $role->permission_level,
+        'updated_at' => $role->updated_at->toISOString(),
         'created_at' => $role->updated_at->toISOString(),
       ]);
   }
@@ -123,28 +104,24 @@ class RolesControllerTest extends TestCase
   {
     $title = $this->faker->text(32);
     $color = $this->faker->hexColor;
-		$permissionLevel = Permission::STORE_ROLE | Permission::VIEW_ROLES_PERMISSIONS;
+    $permissionLevel = Permission::ALL;
 
-    $user = factory(User::class)->create();
-    $role = $user->roles()->create([
-			'title' => $title,
-			'color' => $color,
+    $user = factory(User::class)->state('admin')->create();
+
+    $response = $this->actingAs($user)->postJson(route('roles.store'), [
+      'title' => $title,
+      'color' => $color,
       'permission_level' => $permissionLevel
     ]);
 
-    $response = $this->actingAs($user)->postJson(route('roles.store'), [
-			'title' => $title,
-			'color' => $color,
-			'permission_level' => $permissionLevel
-		]);
-
     $roles = Role::query()
       ->where('id', $response->json('id'))
-			->where('title', $title)
-			->where('permission_level', $permissionLevel)
+      ->where('title', $title)
+      ->where('permission_level', $permissionLevel)
       ->where('color', $color)
       ->get();
 
+    /** @var Role $role */
     $role = $roles->first();
 
     $this->assertCount(1, $roles);
@@ -153,9 +130,9 @@ class RolesControllerTest extends TestCase
       ->assertJson([
         'id' => $role->id,
         'title' => $role->title,
-				'color' => $color,
-				'permission_level' => $permissionLevel,
-				'updated_at' => $role->updated_at->toISOString(),
+        'color' => $role->color,
+        'permission_level' => $role->permission_level,
+        'updated_at' => $role->updated_at->toISOString(),
         'created_at' => $role->updated_at->toISOString(),
       ]);
   }
@@ -189,11 +166,10 @@ class RolesControllerTest extends TestCase
    */
   public function testShouldDeleteRoleWhenDeleteRoles()
   {
-    $user = factory(User::class)->create();
-    $role = $user->roles()->create([
-      'title' => 'Administrator',
-      'permission_level' => Permission::DELETE_ROLE
-    ]);
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+    /** @var Role $role */
+    $role = factory(Role::class)->create();
 
     $response = $this->actingAs($user)->deleteJson(route('roles.delete', [
       'role' => $role->id
@@ -218,16 +194,14 @@ class RolesControllerTest extends TestCase
    */
   public function testShouldUpdateRoleWhenPutRoles()
   {
-    $user = factory(User::class)->create();
-    $role = $user->roles()->create([
-      'title' => $this->faker->title,
-      'permission_level' => Permission::UPDATE_ROLE,
-      'color' => $this->faker->hexColor
-    ]);
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+    /** @var Role $role */
+    $role = factory(Role::class)->create();
 
     $title = $this->faker->title;
     $color = $this->faker->hexColor;
-    $permissionLevel = Permission::NONE;
+    $permissionLevel = Permission::ALL;
 
     $response = $this->actingAs($user)->putJson(route('roles.update', [
       'role' => $role->id
