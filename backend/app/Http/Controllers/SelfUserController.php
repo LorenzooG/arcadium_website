@@ -130,10 +130,11 @@ final class SelfUserController extends Controller
    * @param EmailUpdate $email_update
    * @param UserUpdateEmailRequest $request
    * @return Response
+   * @throws Exception
    */
   public final function updateEmail(EmailUpdate $email_update, UserUpdateEmailRequest $request)
   {
-    $email_update->already_used = true;
+    $email_update->delete();
 
     $request->user()
       ->fill([

@@ -13,7 +13,7 @@ final class UserUpdateEmailRequest extends FormRequest
    */
   public final function authorize()
   {
-    return !$this->email_update->already_used;
+    return true;
   }
 
   /**

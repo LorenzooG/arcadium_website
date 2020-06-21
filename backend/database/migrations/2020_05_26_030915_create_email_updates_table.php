@@ -22,7 +22,6 @@ class CreateEmailUpdatesTable extends Migration
 
       $table->string('origin_address', 16);
 
-      $table->boolean('already_used')->default(false);
       $table->string('token', 64);
 
       $table->timestamps();
