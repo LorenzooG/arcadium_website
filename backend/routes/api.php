@@ -109,9 +109,9 @@ Route::prefix("/payments")->name('payments.')->group(function () {
 Route::prefix('punishments')->name('punishments.')->group(function () {
   Route::get('/', 'PunishmentsController@index')->name('index');
   Route::get('{punishment}', 'PunishmentsController@show')->name('show');
-  Route::put('{punishment}', 'PunishmentsController@update')->name('update');
-  Route::delete('/{punishment}', 'PunishmentsController@delete')->name('delete');
-  Route::post('/', 'PunishmentsController@store')->name('store');
+  Route::put('{punishment}', 'PunishmentsController@update')->middleware(['xss', 'can:update,App\Punishment'])->name('update');
+  Route::delete('/{punishment}', 'PunishmentsController@delete')->middleware('can:delete,App\Punishment')->name('delete');
+  Route::post('/', 'PunishmentsController@store')->middleware(['xss', 'can:create,App\Punishment'])->name('store');
 });
 
 Route::prefix('checkout')->group(function () {
