@@ -97,7 +97,7 @@ class SelfUserControllerTest extends TestCase
     /** @var User $user */
     $user = factory(User::class)->state('admin')->create();
 
-    $response = $this->actingAs($user)->putJson(route('user.request.update.email'), [
+    $response = $this->actingAs($user)->postJson(route('user.request.update.email'), [
       'email' => $user->email,
     ]);
 
