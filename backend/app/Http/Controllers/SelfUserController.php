@@ -54,10 +54,10 @@ final class SelfUserController extends Controller
   /**
    * Create email update request
    *
-   * @param UserUpdateEmailRequestRequest $request
+   * @param Request $request
    * @return Response
    */
-  public final function requestEmailUpdate(UserUpdateEmailRequestRequest $request)
+  public final function requestEmailUpdate(Request $request)
   {
     /** @var User $user */
     $user = $request->user();
