@@ -193,7 +193,7 @@ class SelfUserControllerTest extends TestCase
 
     $token = Str::random(64);
 
-    factory(EmailUpdate::class)->create([
+    $request = factory(EmailUpdate::class)->create([
       'user_id' => $user->id,
       'token' => $token,
     ]);
@@ -213,6 +213,8 @@ class SelfUserControllerTest extends TestCase
       ->where('email', $email)
       ->where('password', $user->password)
       ->get();
+
+    $this->assertDeleted($request);
 
     $this->assertCount(1, $users);
 

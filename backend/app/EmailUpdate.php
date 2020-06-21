@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string token
  * @property string origin_address
  * @property int user_id
- * @property bool already_used
  * @property User user
  *
  * @method static EmailUpdate create(array $data)
@@ -23,7 +22,6 @@ final class EmailUpdate extends Model
 {
   protected $fillable = [
     'token',
-    'already_used',
     'user_id',
     'origin_address'
   ];
