@@ -7,6 +7,7 @@ use App\Http\Requests\PunishmentUpdateRequest;
 use App\Http\Resources\PunishmentResource;
 use App\Punishment;
 use App\Repositories\PunishmentRepository;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
@@ -47,14 +48,16 @@ final class PunishmentsController extends Controller
    */
   public final function store(PunishmentStoreRequest $request)
   {
-    $punishment = $this->punishmentRepository->createPunishment($request->only([
+    $data = $request->only([
       'punished_user_name',
       'punished_at',
       'punished_until',
       'proof',
       'reason',
       'punished_by',
-    ]));
+    ]);
+
+    $punishment = $this->punishmentRepository->createPunishment($data);
 
     return new PunishmentResource($punishment);
   }
@@ -68,14 +71,16 @@ final class PunishmentsController extends Controller
    */
   public final function update(PunishmentUpdateRequest $request, Punishment $punishment)
   {
-    $punishment->update($request->only([
+    $data = $request->only([
       'punished_user_name',
       'punished_at',
       'punished_until',
       'proof',
       'reason',
       'punished_by',
-    ]));
+    ]);
+
+    $punishment->update($data);
 
     return response()->noContent();
   }
