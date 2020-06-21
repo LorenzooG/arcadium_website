@@ -63,9 +63,9 @@ final class SelfUserController extends Controller
     $user = $request->user();
 
     /** @var EmailUpdate $emailUpdate */
-    $emailUpdate = $user->emailUpdates()->create($request->only([
-      'origin_address' => $request->ip(),
-    ]));
+    $emailUpdate = $user->emailUpdates()->create([
+      'origin_address' => $request->ip()
+    ]);
 
     $user->notify(new UpdateEmailRequestNotification($emailUpdate));
 
