@@ -36,7 +36,7 @@ final class PostPolicy
    */
   public final function update(User $user, ?Post $post = null)
   {
-    return $user->hasPermission(Permission::DELETE_ANY_POST)
+    return $user->hasPermission(Permission::UPDATE_ANY_POST)
       || ($user->hasPermission(Permission::UPDATE_POST)
         && $user->is($post->user));
   }
