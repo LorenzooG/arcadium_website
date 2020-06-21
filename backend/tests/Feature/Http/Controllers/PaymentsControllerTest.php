@@ -6,7 +6,6 @@ namespace Tests\Feature\Http\Controllers;
 use App\Payment;
 use App\Payment\Contracts\PaymentServiceContract;
 use App\Product;
-use App\PurchasedProduct;
 use App\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Notification;
@@ -109,12 +108,12 @@ class PaymentsControllerTest extends TestCase
 
     $response->assertOk()
       ->assertJson([
-        'data' => Collection::make(PurchasedProduct::query()->paginate()->items())->map(function (PurchasedProduct $item) use ($product) {
+        'data' => Collection::make($payment->products()->withPivot('amount')->paginate()->items())->map(function (Product $product) {
           return [
             'product' => route('products.show', [
               'product' => $product->id
             ]),
-            'amount' => $item->amount,
+            'amount' => $product->pivot->amount,
           ];
         })->toArray()
       ]);
