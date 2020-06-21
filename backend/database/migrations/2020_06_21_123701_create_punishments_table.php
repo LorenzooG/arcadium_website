@@ -24,7 +24,7 @@ class CreatePunishmentsTable extends Migration
 
       $table->bigInteger('punished_until');
       $table->bigInteger('punished_at');
-      $table->bigInteger('punishment_duration');
+      $table->bigInteger('punished_duration');
 
       $table->timestamps();
     });

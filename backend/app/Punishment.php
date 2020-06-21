@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string proof
  * @property string punished_by
  * @property float punished_at
- * @property float punishment_duration
+ * @property float punished_duration
  * @property float punished_until
  * @property Carbon created_at
  * @property Carbon updated_at
@@ -32,7 +32,7 @@ final class Punishment extends Model
    * @var array
    */
   protected $fillable = [
-    'punishment_duration',
+    'punished_duration',
     'punished_user_name',
     'reason',
     'proof',
