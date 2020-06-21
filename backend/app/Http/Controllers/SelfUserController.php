@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\EmailUpdate;
 use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateEmailRequest;
+use App\Http\Requests\UserUpdateEmailRequestRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\RoleResource;
+use App\Notifications\UpdateEmailRequestNotification;
 use App\Repositories\PostRepository;
 use App\Repositories\RoleRepository;
+use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -46,6 +49,27 @@ final class SelfUserController extends Controller
     $page = Paginator::resolveCurrentPage();
 
     return RoleResource::collection($this->roleRepository->findPaginatedRolesForUser($request->user(), $page));
+  }
+
+  /**
+   * Create email update request
+   *
+   * @param UserUpdateEmailRequestRequest $request
+   * @return Response
+   */
+  public final function requestEmailUpdate(UserUpdateEmailRequestRequest $request)
+  {
+    /** @var User $user */
+    $user = $request->user();
+
+    /** @var EmailUpdate $emailUpdate */
+    $emailUpdate = $user->emailUpdates()->create($request->only([
+      'origin_address' => $request->ip(),
+    ]));
+
+    $user->notify(new UpdateEmailRequestNotification($emailUpdate));
+
+    return response()->noContent();
   }
 
   /**
