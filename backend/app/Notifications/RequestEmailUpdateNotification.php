@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class UpdateEmailRequestNotification extends Notification
+class RequestEmailUpdateNotification extends Notification
 {
   use Queueable;
 

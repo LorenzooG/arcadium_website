@@ -8,7 +8,7 @@ use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateEmailRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Notifications\UpdateEmailRequestNotification;
+use App\Notifications\RequestEmailUpdateNotification;
 use App\Post;
 use App\Role;
 use App\User;
@@ -101,7 +101,7 @@ class SelfUserControllerTest extends TestCase
       'email' => $user->email,
     ]);
 
-    Notification::assertSentTo($user, UpdateEmailRequestNotification::class);
+    Notification::assertSentTo($user, RequestEmailUpdateNotification::class);
 
     $response->assertNoContent();
   }
