@@ -30,4 +30,13 @@ Route::prefix('notifications')->group(function () {
       'user' => $user
     ])->toHtml();
   });
+
+  Route::get('password.reseted', function (Application $app) {
+    /** @var Markdown $markdown */
+    $markdown = $app->make(Markdown::class);
+
+    return $markdown->render('notifications.user.password_reseted', [
+      'user' => factory(User::class)->make()
+    ])->toHtml();
+  });
 });
