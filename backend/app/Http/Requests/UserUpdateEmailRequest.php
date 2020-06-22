@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * Class UserUpdateEmailRequest
  *
- * @property EmailUpdate email_update
+ * @property EmailUpdate $emailUpdate
  *
  * @package App\Http\Requests
  */
@@ -21,7 +21,7 @@ final class UserUpdateEmailRequest extends FormRequest
    */
   public final function authorize()
   {
-    return $this->email_update->isValid();
+    return $this->emailUpdate->isValid();
   }
 
   /**

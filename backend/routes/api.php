@@ -27,7 +27,7 @@ Route::prefix('user')->middleware('auth:api')->group(function () {
       Route::post('/request/update_email', 'SelfUserController@requestEmailUpdate')->name('user.request.update.email');
       Route::put('/', 'SelfUserController@update')->name('user.update');
       Route::put('/password', 'SelfUserController@updatePassword')->name('user.update.password');
-      Route::put('/email/{email_update}', 'SelfUserController@updateEmail')->name('user.update.email');
+      Route::put('/email/{emailUpdate}', 'SelfUserController@updateEmail')->name('user.update.email');
     });
   });
 });
