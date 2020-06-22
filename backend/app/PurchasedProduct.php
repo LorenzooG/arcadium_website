@@ -2,29 +2,60 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * @package App
  *
  * @property int id
  * @property int amount
+ * @property int payment_id
+ * @property int product_id
+ * @property Payment payment
  * @property Product product
  *
  * @method static PurchasedProduct create(array $array)
  * @method static PurchasedProduct findOrFail(int $int)
  *
  */
-class PurchasedProduct extends Model
+final class PurchasedProduct extends Pivot
 {
 
+  /**
+   * The table associated with the model.
+   *
+   * @var string
+   */
+  protected $table = 'purchased_products';
+
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array
+   */
   protected $fillable = [
-    "product_id",
-    "amount",
+    'amount',
+    'product_id'
   ];
 
-  public function product()
+  /**
+   * Retrieve the product owner of this purchased product
+   *
+   * @return BelongsTo
+   */
+  public final function product()
   {
     return $this->belongsTo(Product::class);
+  }
+
+  /**
+   * Retrieve the payment owner of this purchased product
+   *
+   * @return BelongsTo
+   */
+  public final function payment()
+  {
+    return $this->belongsTo(Payment::class);
   }
 }

@@ -2,19 +2,26 @@
 
 namespace App\Http\Requests;
 
+use App\EmailUpdate;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UserUpdateEmailRequest extends FormRequest
+/**
+ * Class UserUpdateEmailRequest
+ *
+ * @property EmailUpdate $emailUpdate
+ *
+ * @package App\Http\Requests
+ */
+final class UserUpdateEmailRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
    *
    * @return bool
    */
-  public function authorize()
+  public final function authorize()
   {
-    return true;
+    return $this->emailUpdate->isValid();
   }
 
   /**
@@ -22,16 +29,10 @@ class UserUpdateEmailRequest extends FormRequest
    *
    * @return array
    */
-  public function rules()
+  public final function rules()
   {
     return [
-      'email' => [
-        'required',
-        'string',
-        'min:8',
-        'max:32',
-        Rule::unique('users')->ignore($this->changeEmailRequest->user_id)
-      ]
+      'new_email' => 'required|string|min:8|max:48'
     ];
   }
 }

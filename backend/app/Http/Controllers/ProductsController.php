@@ -2,122 +2,158 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Product;
+use App\Repositories\ProductRepository;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class ProductsController extends Controller
+final class ProductsController extends Controller
 {
+  private ProductRepository $productRepository;
 
-  public function index()
+  /**
+   * ProductsController constructor
+   *
+   * @param ProductRepository $productRepository
+   */
+  public final function __construct(ProductRepository $productRepository)
   {
-    return ProductResource::collection(Product::all());
+    $this->productRepository = $productRepository;
   }
 
-  public function show(Product $product)
+  /**
+   * Find and show all products in a page
+   *
+   * @return AnonymousResourceCollection
+   */
+  public final function index()
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return ProductResource::collection($this->productRepository->findPaginatedProducts($page));
+  }
+
+  /**
+   * Find and show a product
+   *
+   * @param Product $product
+   * @return ProductResource
+   */
+  public final function show(Product $product)
   {
     return new ProductResource($product);
   }
 
-  public function store(Request $request)
+  /**
+   * Store product in database
+   *
+   * @param ProductStoreRequest $request
+   * @return ProductResource
+   */
+  public final function store(ProductStoreRequest $request)
   {
-    $content = $request->validate([
-      "name" => "required|string|max:255",
-      "price" => "required|numeric",
-      "image" => "required|image",
-      "description" => "required|string|max:6000",
-      "commands" => "required|string",
+    $data = $request->only([
+      'title',
+      'price',
+      'description'
     ]);
 
-    if ($content["price"] > 10000) {
-      $content["price"] = 10000;
-    }
+    $data['image'] = $request->file('image');
 
-    $commands = explode(",", $content["commands"]);
+    $product = $this->productRepository->createProduct($data);
 
-    $commands = Validator::make($commands, [
-      "*" => "string|max:255"
-    ])->validate();
-
-    unset($content["commands"]);
-
-    $product = Product::create($content);
-
-    $commands = new Collection($commands);
-
-    $commands = $commands->map(fn($command) => [
-      "command" => $command
-    ]);
-
-    $product->commands()->createMany($commands);
-
-    return (new ProductResource($product))->response($request)->setStatusCode(201);
+    return new ProductResource($product);
   }
 
   /**
+   * Find and update product
+   *
    * @param Product $product
-   * @param Request $request
+   * @param ProductUpdateRequest $request
    * @return Response
-   * @throws Exception
    */
-  public function update(Product $product, Request $request)
+  public final function update(Product $product, ProductUpdateRequest $request)
   {
-    $content = $request->validate([
-      "name" => "string|max:255",
-      "image" => "image",
-      "price" => "numeric",
-      "description" => "string|max:6000",
-      "commands" => "string",
-    ]);
-
-    if (isset($content["price"]) && $content["price"] > 10000) {
-      $content["price"] = 10000;
-    }
-
-    if (isset($content["commands"])) {
-      $commands = explode(",", $content["commands"]);
-
-      $commands = Validator::make($commands, [
-        "*" => "string|max:255"
-      ])->validate();
-
-      $commands = new Collection($commands);
-
-      $commands = $commands->map(fn($command) => [
-        "command" => $command
-      ]);
-
-      $commands = $commands->toArray();
-
-      $product->commands()->delete();
-      $product->commands()->createMany($commands);
-    }
-
-    unset($content["commands"]);
-
-    $product->update($content);
+    $product->update($request->only([
+      'title',
+      'price',
+      'description'
+    ]));
 
     return response()->noContent();
   }
 
-  public function image(Product $product)
+  /**
+   * Find and show product's image
+   *
+   * @param Product $product
+   * @return BinaryFileResponse
+   */
+  public final function image(Product $product)
   {
-    return response()->file(storage_path("app/images/{$product->image}"));
+    return Storage::download('products.images/' . $product->image);
   }
 
   /**
+   * Find and update product's image
+   *
+   * @param Product $product
+   * @param Request $request
+   * @return Response
+   */
+  public final function updateImage(Product $product, Request $request)
+  {
+    $product->update([
+      'image' => $request->file('image')
+    ]);
+
+    return response()->noContent();
+  }
+
+  /**
+   * Find and delete product
+   *
    * @param Product $product
    * @return Response
    * @throws Exception
    */
-  public function delete(Product $product)
+  public final function delete(Product $product)
   {
     $product->delete();
 
     return response()->noContent();
+  }
+
+  /**
+   * Find and restore product
+   *
+   * @param Product $product
+   * @return Response
+   */
+  public final function restore(Product $product)
+  {
+    $product->restore();
+
+    return response()->noContent();
+  }
+
+  /**
+   * Find and show all trashed products
+   *
+   * @return AnonymousResourceCollection
+   */
+  public final function trashed()
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return ProductResource::collection($this->productRepository->findPaginatedTrashedProducts($page));
   }
 }

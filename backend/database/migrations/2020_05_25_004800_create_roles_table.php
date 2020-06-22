@@ -18,8 +18,9 @@ class CreateRolesTable extends Migration
       $table->id();
 
       $table->string('title', 32);
-      $table->string('color', 12)->default('#fff');
-      $table->integer('permission_level')->default(Permission::NONE);
+      $table->string('color', 32)->default('#fff');
+      $table->boolean('is_staff')->default(false);
+      $table->double('permission_level', 16)->default(Permission::NONE);
 
       $table->timestamps();
     });

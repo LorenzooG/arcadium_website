@@ -10,9 +10,6 @@
     <testsuite name="Feature">
       <directory suffix="Test.php">./tests/Feature</directory>
     </testsuite>
-    <testsuite name="Controllers">
-      <directory suffix="Test.php">./tests/Feature/Http/Controllers</directory>
-    </testsuite>
   </testsuites>
   <filter>
     <whitelist processUncoveredFilesFromWhitelist="true">
@@ -29,7 +26,7 @@
     <server name="QUEUE_CONNECTION" value="sync"/>
     <server name="SESSION_DRIVER" value="array"/>
   </php>
-<!--  <logging>-->
-<!--    <log type="coverage-html" target="./report" lowUpperBound="50" highLowerBound="80"/>-->
-<!--  </logging>-->
+  <logging>
+    <log type="coverage-html" target="./report" lowUpperBound="50" highLowerBound="80"/>
+  </logging>
 </phpunit>
