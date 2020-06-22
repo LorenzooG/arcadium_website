@@ -10,7 +10,7 @@ use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\RoleResource;
-use App\Notifications\UpdateEmailRequestNotification;
+use App\Notifications\RequestEmailUpdateNotification;
 use App\Repositories\PostRepository;
 use App\Repositories\RoleRepository;
 use App\User;
@@ -71,7 +71,7 @@ final class SelfUserController extends Controller
       ]))
     ]);
 
-    $user->notify(new UpdateEmailRequestNotification($emailUpdate));
+    $user->notify(new RequestEmailUpdateNotification($emailUpdate));
 
     return response()->noContent();
   }
