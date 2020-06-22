@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('forgot_password', 'Auth\ForgotPasswordController')->name('user.forgot.password');
-Route::post('reset_password/{token}', 'Auth\ResetPasswordController')->name('user.reset.password');
+Route::post('reset_password', 'Auth\ResetPasswordController')->name('user.reset.password');
 
 Route::prefix('user')->middleware('auth:api')->group(function () {
   Route::delete('/', 'SelfUserController@delete')->middleware('can:delete_self')->name('user.delete');

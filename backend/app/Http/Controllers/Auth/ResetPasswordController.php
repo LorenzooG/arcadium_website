@@ -19,13 +19,17 @@ class ResetPasswordController extends Controller
    * Handle send password reset notification
    *
    * @param PasswordResetRequest $request
-   * @param mixed $token
    * @return array
    */
-  public function __invoke(PasswordResetRequest $request, $token)
+  public function __invoke(PasswordResetRequest $request)
   {
-    $data = array_merge($request->only(['email', 'password']), [
-      'token' => $token
+    $data = $request->only([
+      'password'
+    ]);
+
+    $data = array_merge($data, [
+      'token' => $request->query('token', ''),
+      'email' => $request->query('email', '')
     ]);
 
     $result = $this->broker()->reset($data, function (User $user, $newPassword) {

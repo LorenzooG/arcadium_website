@@ -26,11 +26,10 @@ class ResetPasswordControllerTest extends TestCase
 
     $newPassword = $this->faker->password(8, 16);
 
-    $response = $this->postJson(route('user.reset.password', [
-      'token' => $token
-    ]), [
+    $url = route('user.reset.password') . "?token={$token}&email={$user->email}";
+
+    $response = $this->postJson($url, [
       'password' => $newPassword,
-      'email' => $user->email
     ]);
 
     $user = User::findOrFail($user->id);
@@ -55,11 +54,13 @@ class ResetPasswordControllerTest extends TestCase
 
     $broker->createToken($user);
 
+    $token = Str::random(120);
+
     $newPassword = $this->faker->password(8, 16);
 
-    $response = $this->postJson(route('user.reset.password', [
-      'token' => Str::random(120)
-    ]), [
+    $url = route('user.reset.password') . "?token={$token}&email={$user->email}";
+
+    $response = $this->postJson($url, [
       'password' => $newPassword,
       'email' => $user->email
     ]);
