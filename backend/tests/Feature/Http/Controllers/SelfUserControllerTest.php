@@ -8,6 +8,7 @@ use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateEmailRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Notifications\EmailChangedNotification;
 use App\Notifications\RequestEmailUpdateNotification;
 use App\Post;
 use App\Role;
@@ -188,6 +189,8 @@ class SelfUserControllerTest extends TestCase
 
   public function testShouldUpdateEmailUserWhenPutUserEmail()
   {
+    Notification::fake();
+
     /** @var User $user */
     $user = factory(User::class)->state('admin')->create();
 
@@ -216,6 +219,8 @@ class SelfUserControllerTest extends TestCase
       ->get();
 
     $request = EmailUpdate::findOrFail($request->id);
+
+    Notification::assertSentTo($user, EmailChangedNotification::class);
 
     $this->assertFalse($request->isValid());
     $this->assertEquals(1, $request->already_used);
