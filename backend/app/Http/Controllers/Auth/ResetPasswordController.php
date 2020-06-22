@@ -9,8 +9,6 @@ use App\Notifications\PasswordResetedNotification;
 use App\User;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 
@@ -22,11 +20,11 @@ class ResetPasswordController extends Controller
    *
    * @param PasswordResetRequest $request
    * @param mixed $token
-   * @return Response|JsonResponse
+   * @return array
    */
   public function __invoke(PasswordResetRequest $request, $token)
   {
-    $data = array_merge($request->only(['email']), [
+    $data = array_merge($request->only(['email', 'password']), [
       'token' => $token
     ]);
 
@@ -38,13 +36,9 @@ class ResetPasswordController extends Controller
       $user->notify(new PasswordResetedNotification());
     });
 
-    if (!($result instanceof User)) {
-      return response()->json([
-        'message' => $result
-      ], 400);
-    }
-
-    return response()->noContent();
+    return [
+      'message' => $result
+    ];
   }
 
   /**
@@ -61,6 +55,7 @@ class ResetPasswordController extends Controller
    * Get the broker to be used during password reset.
    *
    * @return PasswordBroker
+   * @noinspection PhpUndefinedMethodInspection
    */
   public final function broker()
   {
