@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Notifications\PasswordResetNotification;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -139,6 +140,16 @@ final class User extends Authenticatable
   public final function emailUpdates()
   {
     return $this->hasMany(EmailUpdate::class);
+  }
+
+  /**
+   * Send the password reset notification
+   *
+   * @param string $token
+   */
+  public function sendPasswordResetNotification($token)
+  {
+    $this->notify(new PasswordResetNotification($token));
   }
 
   /**
