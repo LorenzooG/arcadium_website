@@ -124,6 +124,15 @@ class RouteServiceProvider extends ServiceProvider
   {
     $this->mapApiRoutes();
     $this->mapWebRoutes();
+    $this->mapTestRoutes();
+  }
+
+  public function mapTestRoutes()
+  {
+    if (strtolower(config('app.env')) === 'production') return;
+
+    Route::prefix('test')
+      ->group(base_path('routes/testing.php'));
   }
 
   /**
