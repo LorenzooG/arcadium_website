@@ -31,6 +31,9 @@ return [
   'product' => [
     'purchased' => [
       'subject' => 'Products purchased',
+    ],
+    'paid' => [
+      'subject' => 'Products paid',
     ]
   ]
 ];
