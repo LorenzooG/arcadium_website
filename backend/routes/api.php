@@ -13,14 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('forgot_password', 'Auth\ForgotPasswordController')->name('user.forgot.password');
+Route::post('reset_password/{token}', 'Auth\ResetPasswordController')->name('user.reset.password');
+
 Route::prefix('user')->middleware('auth:api')->group(function () {
   Route::delete('/', 'SelfUserController@delete')->middleware('can:delete_self')->name('user.delete');
 
   Route::get('posts', 'SelfUserController@posts')->name('user.posts.index');
   Route::get('roles', 'SelfUserController@roles')->middleware('can:viewSelf,App\Role')->name('user.roles.index');
-
-  Route::post('forgot_password', 'Auth\ForgotPasswordController')->name('user.forgot.password');
-  Route::post('reset_password/{token}', 'Auth\ResetPasswordController')->name('user.reset.password');
 
   Route::middleware('xss')->group(function () {
     Route::post('posts', 'PostsController@store')->middleware('can:create,App\Post')->name('posts.store');
