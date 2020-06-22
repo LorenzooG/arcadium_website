@@ -6,9 +6,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ForgotPasswordRequest;
 use Illuminate\Auth\Passwords\PasswordBroker;
-use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 
 class ForgotPasswordController extends Controller
@@ -30,19 +28,10 @@ class ForgotPasswordController extends Controller
   }
 
   /**
-   * Get the guard to be used during password rest
-   *
-   * @return StatefulGuard
-   */
-  public final function guard()
-  {
-    return Auth::guard('api');
-  }
-
-  /**
    * Get the broker to be used during password reset.
    *
    * @return PasswordBroker
+   * @noinspection PhpUndefinedMethodInspection
    */
   public final function broker()
   {
