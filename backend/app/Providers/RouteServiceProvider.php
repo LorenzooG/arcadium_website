@@ -41,9 +41,9 @@ class RouteServiceProvider extends ServiceProvider
   {
     Log::info("Bootstrapping route service.");
 
-    $this->bind('email_update', function (string $email_update) {
+    $this->bind('emailUpdate', function ($emailUpdate) {
       return EmailUpdate::query()
-        ->where('token', $email_update)
+        ->where('token', $emailUpdate)
         ->firstOrFail();
     });
 

@@ -205,7 +205,7 @@ class SelfUserControllerTest extends TestCase
     $email = $this->faker->unique()->safeEmail;
 
     $response = $this->actingAs($user)->putJson(route('user.update.email', [
-      'email_update' => $token
+      'emailUpdate' => $token
     ]), [
       'new_email' => $email
     ]);
