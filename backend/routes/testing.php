@@ -1,6 +1,10 @@
 <?php
 
+use App\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Mail\Markdown;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,3 +16,18 @@ use Illuminate\Support\Facades\Route;
 | Enjoy testing your app!
 |
 */
+
+Route::prefix('notifications')->group(function () {
+  Route::get('password.reset', function (Application $app) {
+    $token = Str::random(72);
+    $user = factory(User::class)->make();
+
+    /** @var Markdown $markdown */
+    $markdown = $app->make(Markdown::class);
+
+    return $markdown->render('notifications.user.password_reset', [
+      'token' => $token,
+      'user' => $user
+    ])->toHtml();
+  });
+});
