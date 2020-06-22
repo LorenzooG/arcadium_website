@@ -25,5 +25,12 @@ return [
       'subject' => 'Password was reset',
       'message' => "You've updated your password now at :now."
     ]
+  ],
+
+
+  'product' => [
+    'purchased' => [
+      'subject' => 'Products purchased',
+    ]
   ]
 ];
