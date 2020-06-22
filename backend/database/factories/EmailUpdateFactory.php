@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 $factory->define(EmailUpdate::class, function (Faker $faker) {
   return [
     'origin_address' => $faker->ipv4,
-    'token' => Str::random(64)
+    'token' => Str::random(64),
+    'already_used' => false
   ];
 });

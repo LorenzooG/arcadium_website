@@ -20,6 +20,8 @@ class CreateEmailUpdatesTable extends Migration
 
       $table->foreign('user_id')->references('id')->on('users');
 
+      $table->boolean('already_used')->default(false);
+
       $table->string('origin_address', 16);
 
       $table->string('token', 64);

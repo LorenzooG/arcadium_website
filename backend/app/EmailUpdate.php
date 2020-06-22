@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int id
  * @property string token
  * @property string origin_address
+ * @property bool already_used
  * @property int user_id
  * @property User user
  * @property Carbon created_at
@@ -26,6 +27,7 @@ final class EmailUpdate extends Model
   protected $fillable = [
     'token',
     'user_id',
+    'already_used',
     'origin_address'
   ];
 
@@ -40,7 +42,8 @@ final class EmailUpdate extends Model
    */
   public final function isValid()
   {
-    return $this->created_at->addDays(3)->gte(now());
+    return !$this->already_used
+      && $this->created_at->addDays(3)->gte(now());
   }
 
   /**
