@@ -134,7 +134,9 @@ final class SelfUserController extends Controller
    */
   public final function updateEmail(EmailUpdate $email_update, UserUpdateEmailRequest $request)
   {
-    $email_update->delete();
+    $email_update->update([
+      'already_used' => true
+    ]);
 
     $request->user()
       ->fill([

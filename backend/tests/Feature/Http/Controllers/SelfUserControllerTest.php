@@ -193,6 +193,7 @@ class SelfUserControllerTest extends TestCase
 
     $token = Str::random(64);
 
+    /** @var EmailUpdate $request */
     $request = factory(EmailUpdate::class)->create([
       'user_id' => $user->id,
       'token' => $token,
@@ -214,7 +215,10 @@ class SelfUserControllerTest extends TestCase
       ->where('password', $user->password)
       ->get();
 
-    $this->assertDeleted($request);
+    $request = EmailUpdate::findOrFail($request->id);
+
+    $this->assertFalse($request->isValid());
+    $this->assertEquals(1, $request->already_used);
 
     $this->assertCount(1, $users);
 
