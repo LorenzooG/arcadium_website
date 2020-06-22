@@ -139,8 +139,6 @@ final class SelfUserController extends Controller
       'already_used' => true
     ]);
 
-    $request->user()->notify(new EmailChangedNotification($emailUpdate));
-
     $request->user()
       ->fill([
         'email' => $request->get('new_email')
