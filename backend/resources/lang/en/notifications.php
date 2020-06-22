@@ -22,6 +22,7 @@ return [
       'button' => 'Reset password'
     ],
     'reseted' => [
+      'subject' => 'Password was reset',
       'message' => "You've updated your password now at :now."
     ]
   ]
