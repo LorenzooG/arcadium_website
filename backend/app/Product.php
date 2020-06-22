@@ -2,7 +2,10 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 
@@ -10,48 +13,71 @@ use Illuminate\Support\Str;
  * @package App
  *
  * @property int id
- * @property string name
+ * @property string title
  * @property string image
  * @property double price
  * @property string command
  * @property string description
+ * @property Carbon created_at
+ * @property Carbon updated_at
+ *
+ * @property PurchasedProduct pivot
  *
  * @method static Product create(array $array)
  * @method static Product findOrFail(int $int)
  *
  */
-class Product extends Model
+final class Product extends Model
 {
+  use SoftDeletes;
 
   protected $fillable = [
-    "name",
-    "image",
-    "price",
-    "description",
-    "commands"
+    'title',
+    'image',
+    'price',
+    'description',
   ];
 
   protected $hidden = [
     "commands"
   ];
 
-  public function commands()
+  /**
+   * Retrieve the commands of this product
+   *
+   * @return HasMany
+   */
+  public final function commands()
   {
     return $this->hasMany(ProductCommand::class);
   }
 
-  /** @noinspection PhpUnused */
-  public function setImageAttribute(UploadedFile $image)
+  /**
+   * Gets image attribute
+   *
+   * @return string
+   */
+  public final function getImageAttribute()
   {
-    $imageDirectory = Str::random();
+    return $this->attributes['image_url'];
+  }
 
-    if (isset($this->attributes["image"])) {
-      $imageDirectory = $this->attributes["image"];
+  /**
+   * Sets image attribute
+   *
+   * @param UploadedFile $image
+   */
+  public final function setImageAttribute(UploadedFile $image)
+  {
+    $imageDirectory = Str::random(32);
+
+    if (isset($this->attributes['image_url'])) {
+      $imageDirectory = $this->attributes['image_url'];
     }
 
-    $image->storeAs("images", $imageDirectory);
+    $image->storeAs('products.images', $imageDirectory);
 
-    $this->attributes["image"] = $imageDirectory;
+    $this->attributes['image_url'] = $imageDirectory;
   }
 
 }

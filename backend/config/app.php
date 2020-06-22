@@ -174,7 +174,6 @@ return [
     // App\Providers\BroadcastServiceProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\RouteServiceProvider::class,
-    App\Providers\PaymentServiceProvider::class
 
   ],
 
@@ -234,6 +233,8 @@ return [
   'mp_client_secret' => env("MERCADOPAGO_CLIENT_SECRET", ""),
   'mp_access_token' => env("MERCADOPAGO_ACCESS_TOKEN", ""),
 
+  'paypal_client_id' => env('PAYPAL_CLIENT_ID', ''),
+  'paypal_client_secret' => env('PAYPAL_CLIENT_SECRET', ''),
 
   'payment_currency' => env("PAYMENT_CURRENCY", "BRL"),
 

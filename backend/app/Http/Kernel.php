@@ -6,7 +6,6 @@ use App\Http\Middleware\AdminOnly;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\ClearXss;
-use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
 use Fruitcake\Cors\HandleCors;
@@ -22,7 +21,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Middleware\ValidateSignature;
 
-class Kernel extends HttpKernel
+final class Kernel extends HttpKernel
 {
   /**
    * The application's global HTTP middleware stack.

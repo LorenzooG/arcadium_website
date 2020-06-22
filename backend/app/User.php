@@ -2,6 +2,9 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,12 +21,15 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
  * @property string email
  * @property string password
  * @property Collection<Role> roles
- * @property boolean isAdmin
+ * @property Collection<Post> posts
+ * @property Carbon created_at
+ * @property Carbon updated_at
+ * @property Carbon deleted_at
  *
  * @method static User create(array $array)
  * @method static User findOrFail(int $int)
  */
-class User extends Authenticatable
+final class User extends Authenticatable
 {
   use Notifiable, SoftDeletes;
 
@@ -62,44 +68,96 @@ class User extends Authenticatable
     'is_admin' => 'boolean'
   ];
 
-  public function payments()
+  /**
+   * Retrieve the payments that this user have
+   *
+   * @return HasMany
+   */
+  public final function payments()
   {
     return $this->hasMany(Payment::class);
   }
 
-  public function roles()
+  /**
+   * Retrieve the roles that this user have
+   *
+   * @return BelongsToMany
+   */
+  public final function roles()
   {
     return $this->belongsToMany(Role::class);
   }
 
-  public function hasPermission(int $permission)
+  /**
+   * Retrieve the comments that this user made
+   *
+   * @return HasMany
+   */
+  public final function comments()
+  {
+    return $this->hasMany(Comment::class);
+  }
+
+  /**
+   * Retrieve the posts that this user post
+   *
+   * @return HasMany
+   */
+  public final function posts()
+  {
+    return $this->hasMany(Post::class);
+  }
+
+  /**
+   * Checks user permission
+   *
+   * @param int $permission
+   * @return bool
+   */
+  public final function hasPermission(int $permission)
   {
     return ($this->permissions() & $permission) !== 0;
   }
 
-  public function permissions(): int
+  /**
+   * Retrieve user's all permissions
+   *
+   * @return int
+   */
+  public final function permissions(): int
   {
     return $this->roles
       ->map(fn($role) => $role->permission_level)
-      ->reduce(fn($role, $otherRole) => $role | $otherRole, 0);
+      ->reduce(fn($role, $otherRole) => $role | $otherRole, 1);
   }
-
-  public function getIsAdminAttribute()
-  {
-    return isset($this->attributes["is_admin"]) ? $this->attributes["is_admin"] : false;
-  }
-
 
   /**
+   * Retrieve the email updates that this user have
+   *
+   * @return HasMany
+   */
+  public final function emailUpdates()
+  {
+    return $this->hasMany(EmailUpdate::class);
+  }
+
+  /**
+   * Sets username attribute
+   *
    * @param string $value
    * @throws ConflictHttpException
    */
-  public function setUserNameAttribute(string $value)
+  public final function setUserNameAttribute(string $value)
   {
     $this->attributes["user_name"] = $value;
   }
 
-  public function setPasswordAttribute(string $value)
+  /**
+   * Sets password attribute
+   *
+   * @param string $value
+   */
+  public final function setPasswordAttribute(string $value)
   {
     $this->attributes["password"] = Hash::make(htmlspecialchars_decode($value));
   }

@@ -5,14 +5,14 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 
-class UserDeleteRequest extends FormRequest
+final class UserDeleteRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
    *
    * @return bool
    */
-  public function authorize()
+  public final function authorize()
   {
     return Hash::check($this->get('password'), $this->user()->password);
   }
@@ -22,7 +22,7 @@ class UserDeleteRequest extends FormRequest
    *
    * @return array
    */
-  public function rules()
+  public final function rules()
   {
     return [
       'password' => 'required|string|min:8|max:16'

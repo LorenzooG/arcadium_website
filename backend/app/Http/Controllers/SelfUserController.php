@@ -1,0 +1,166 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\EmailUpdate;
+use App\Http\Requests\UserDeleteRequest;
+use App\Http\Requests\UserUpdateEmailRequest;
+use App\Http\Requests\UserUpdateEmailRequestRequest;
+use App\Http\Requests\UserUpdatePasswordRequest;
+use App\Http\Requests\UserUpdateRequest;
+use App\Http\Resources\PostResource;
+use App\Http\Resources\RoleResource;
+use App\Notifications\EmailChangedNotification;
+use App\Notifications\RequestEmailUpdateNotification;
+use App\Repositories\PostRepository;
+use App\Repositories\RoleRepository;
+use App\User;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
+use Illuminate\Pagination\Paginator;
+
+final class SelfUserController extends Controller
+{
+
+  private PostRepository $postRepository;
+  private RoleRepository $roleRepository;
+
+  /**
+   * SelfUserController constructor
+   *
+   * @param PostRepository $postRepository
+   * @param RoleRepository $roleRepository
+   */
+  public final function __construct(PostRepository $postRepository, RoleRepository $roleRepository)
+  {
+    $this->postRepository = $postRepository;
+    $this->roleRepository = $roleRepository;
+  }
+
+  /**
+   * Show the current user's posts
+   *
+   * @param Request $request
+   * @return AnonymousResourceCollection
+   */
+  public final function roles(Request $request)
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return RoleResource::collection($this->roleRepository->findPaginatedRolesForUser($request->user(), $page));
+  }
+
+  /**
+   * Create email update request
+   *
+   * @param Request $request
+   * @return Response
+   */
+  public final function requestEmailUpdate(Request $request)
+  {
+    /** @var User $user */
+    $user = $request->user();
+
+    /** @var EmailUpdate $emailUpdate */
+    $emailUpdate = $user->emailUpdates()->create([
+      'origin_address' => $request->ip(),
+      'token' => hash('sha256', json_encode([
+        'user_id' => $user->id,
+        'time' => microtime(true)
+      ]))
+    ]);
+
+    $user->notify(new RequestEmailUpdateNotification($emailUpdate));
+
+    return response()->noContent();
+  }
+
+  /**
+   * Show the current user's roles
+   *
+   * @param Request $request
+   * @return AnonymousResourceCollection
+   */
+  public final function posts(Request $request)
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return PostResource::collection($this->postRepository->findPaginatedPostsForUser($request->user(), $page));
+  }
+
+  /**
+   * Update current user's name and user name
+   *
+   * @param UserUpdateRequest $request
+   * @return Response
+   */
+  public final function update(UserUpdateRequest $request)
+  {
+    $request->user()
+      ->fill($request->only([
+        'name',
+        'user_name'
+      ]))
+      ->save();
+
+    return response()->noContent();
+  }
+
+  /**
+   * Update current user's password
+   *
+   * @param UserUpdatePasswordRequest $request
+   * @return Response
+   */
+  public final function updatePassword(UserUpdatePasswordRequest $request)
+  {
+    $request->user()
+      ->fill([
+        'password' => $request->get('new_password')
+      ])
+      ->save();
+
+    return response()->noContent();
+  }
+
+  /**
+   * Update current user's email
+   *
+   * @param EmailUpdate $emailUpdate
+   * @param UserUpdateEmailRequest $request
+   * @return Response
+   * @throws Exception
+   */
+  public final function updateEmail(EmailUpdate $emailUpdate, UserUpdateEmailRequest $request)
+  {
+    $emailUpdate->update([
+      'already_used' => true
+    ]);
+
+    $request->user()->notify(new EmailChangedNotification($emailUpdate));
+
+    $request->user()
+      ->fill([
+        'email' => $request->get('new_email')
+      ])
+      ->save();
+
+    return response()->noContent();
+  }
+
+  /**
+   * Delete current user
+   *
+   * @param UserDeleteRequest $request
+   * @return Response
+   * @throws Exception
+   */
+  public final function delete(UserDeleteRequest $request)
+  {
+    $request->user()->delete();
+
+    return response()->noContent();
+  }
+}

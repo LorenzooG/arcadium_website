@@ -1,0 +1,142 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\RoleStoreRequest;
+use App\Http\Requests\RoleUpdateRequest;
+use App\Http\Resources\RoleResource;
+use App\Repositories\RoleRepository;
+use App\Role;
+use App\User;
+use Exception;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
+use Illuminate\Pagination\Paginator;
+
+final class RolesController extends Controller
+{
+  private RoleRepository $roleRepository;
+
+  /**
+   * RolesController constructor
+   *
+   * @param RoleRepository $roleRepository
+   */
+  public final function __construct(RoleRepository $roleRepository)
+  {
+    $this->roleRepository = $roleRepository;
+  }
+
+  /**
+   * Find and show all roles in a page
+   *
+   * @return ResourceCollection
+   */
+  public final function index()
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return RoleResource::collection($this->roleRepository->findPaginatedRoles($page));
+  }
+
+  /**
+   * Find and show role
+   *
+   * @param Role $role
+   * @return RoleResource
+   */
+  public final function show(Role $role)
+  {
+    return new RoleResource($role);
+  }
+
+  /**
+   * Find and show all user's roles in a page
+   *
+   * @param User $user
+   * @return ResourceCollection
+   */
+  public final function user(User $user)
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return RoleResource::collection($this->roleRepository->findPaginatedRolesForUser($user, $page));
+  }
+
+  /**
+   * Store role in database
+   *
+   * @param RoleStoreRequest $request
+   * @return RoleResource
+   */
+  public final function store(RoleStoreRequest $request)
+  {
+    $role = $this->roleRepository->createRole($request->only([
+      'title',
+      'color',
+      'permission_level'
+    ]));
+
+    return new RoleResource($role);
+  }
+
+  /**
+   * Find and delete role
+   *
+   * @param Role $role
+   * @return Response
+   * @throws Exception
+   */
+  public final function delete(Role $role)
+  {
+    $role->delete();
+
+    return response()->noContent();
+  }
+
+  /**
+   * Find and update role
+   *
+   * @param Role $role
+   * @param RoleUpdateRequest $request
+   * @return Response
+   */
+  public final function update(Role $role, RoleUpdateRequest $request)
+  {
+    $role->update($request->only([
+      'title',
+      'color',
+      'permission_level'
+    ]));
+
+    return response()->noContent();
+  }
+
+  /**
+   * Find and attach role to user
+   *
+   * @param Role $role
+   * @param User $user
+   * @return Response
+   */
+  public final function attach(Role $role, User $user)
+  {
+    $user->roles()->attach($role->id);
+
+    return response()->noContent();
+  }
+
+  /**
+   * Find and detach role from user
+   *
+   * @param Role $role
+   * @param User $user
+   * @return Response
+   */
+  public final function detach(Role $role, User $user)
+  {
+    $user->roles()->detach($role->id);
+
+    return response()->noContent();
+  }
+}

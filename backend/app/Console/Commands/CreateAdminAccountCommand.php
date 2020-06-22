@@ -6,7 +6,7 @@ use App\User;
 use Illuminate\Console\Command;
 use Throwable;
 
-class CreateAdminAccountCommand extends Command
+final class CreateAdminAccountCommand extends Command
 {
   /**
    * The name and signature of the console command.
@@ -27,7 +27,7 @@ class CreateAdminAccountCommand extends Command
    *
    * @return void
    */
-  public function __construct()
+  public final function __construct()
   {
     parent::__construct();
   }
@@ -37,7 +37,7 @@ class CreateAdminAccountCommand extends Command
    *
    * @return mixed
    */
-  public function handle()
+  public final function handle()
   {
     $email = $this->ask("What is your email?");
     $name = $this->ask("What is your name?");

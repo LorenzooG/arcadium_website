@@ -22,7 +22,7 @@ class CreatePaymentsTable extends Migration
 
       $table->boolean('is_delivered')->default(false);
       $table->string('user_name');
-      $table->integer('payment_method')->default(0);
+      $table->string('payment_method', 24);
       $table->string('origin_address', 16);
       $table->double('total_price');
       $table->double('total_paid')->default(0);

@@ -18,7 +18,8 @@
         "jasonmccreary/laravel-test-assertions": "^1.0",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
-        "mercadopago/dx-php": "^2.0"
+        "mercadopago/dx-php": "^2.0",
+        "paypal/paypal-checkout-sdk": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

@@ -5,35 +5,58 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
+use App\Repositories\UserRepository;
 use App\User;
 use Exception;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\Paginator;
 
-class UsersController extends Controller
+final class UsersController extends Controller
 {
+
+  private UserRepository $userRepository;
+
   /**
-   * @return AnonymousResourceCollection
+   * UsersController constructor
+   *
+   * @param UserRepository $userRepository
    */
-  public function index()
+  public final function __construct(UserRepository $userRepository)
   {
-    return UserResource::collection(User::all());
+    $this->userRepository = $userRepository;
   }
 
   /**
+   * Find and show all users in a page
+   *
+   * @return ResourceCollection
+   */
+  public final function index()
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return UserResource::collection($this->userRepository->findPaginatedUsers($page));
+  }
+
+  /**
+   * Find and show an user by it's id
+   *
    * @param User $user
    * @return UserResource
    */
-  public function show(User $user)
+  public final function show(User $user)
   {
     return new UserResource($user);
   }
 
   /**
+   * Store user in database
+   *
    * @param UserStoreRequest $request
    * @return UserResource
    */
-  public function store(UserStoreRequest $request)
+  public final function store(UserStoreRequest $request)
   {
     $data = $request->only([
       'email',
@@ -44,17 +67,19 @@ class UsersController extends Controller
 
     $data['avatar_url'] = '';
 
-    $user = User::create($data);
+    $user = $this->userRepository->createUser($data);
 
     return new UserResource($user);
   }
 
   /**
+   * Find and update user
+   *
    * @param User $user
    * @param UserUpdateRequest $request
    * @return Response
    */
-  public function update(User $user, UserUpdateRequest $request)
+  public final function update(User $user, UserUpdateRequest $request)
   {
     $user->update($request->only([
       'email',
@@ -67,15 +92,43 @@ class UsersController extends Controller
   }
 
   /**
+   * Find and delete user
+   *
    * @param User $user
    * @return Response
    * @throws Exception
    */
-  public function delete(User $user)
+  public final function delete(User $user)
   {
     $user->delete();
 
     return response()->noContent();
+  }
+
+  /**
+   * Find and restore deleted user
+   *
+   * @param User $user
+   * @return Response
+   * @throws Exception
+   */
+  public final function restore(User $user)
+  {
+    $user->restore();
+
+    return response()->noContent();
+  }
+
+  /**
+   * Find and show all trashed users
+   *
+   * @return ResourceCollection
+   */
+  public final function trashed()
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return UserResource::collection($this->userRepository->findPaginatedTrashedUsers($page));
   }
 
 }

@@ -12,12 +12,12 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Throwable;
 
-class JwtGuard implements StatefulGuard
+final class JwtGuard implements StatefulGuard
 {
   private ?Authenticatable $user;
   private bool $isLogged;
 
-  public function __construct()
+  public final function __construct()
   {
     $this->isLogged = false;
     $this->user = null;
@@ -26,7 +26,7 @@ class JwtGuard implements StatefulGuard
   /**
    * @inheritDoc
    */
-  public function check()
+  public final function check()
   {
     return $this->isLogged;
   }
@@ -34,7 +34,7 @@ class JwtGuard implements StatefulGuard
   /**
    * @inheritDoc
    */
-  public function guest()
+  public final function guest()
   {
     return !$this->isLogged;
   }
@@ -42,7 +42,7 @@ class JwtGuard implements StatefulGuard
   /**
    * @inheritDoc
    */
-  public function user()
+  public final function user()
   {
     if ($this->isLogged) {
       return $this->user;
@@ -68,7 +68,7 @@ class JwtGuard implements StatefulGuard
   /**
    * @inheritDoc
    */
-  public function id(): int
+  public final function id(): int
   {
     return $this->user->id;
   }
@@ -76,7 +76,7 @@ class JwtGuard implements StatefulGuard
   /**
    * @inheritDoc
    */
-  public function validate(array $credentials = [])
+  public final function validate(array $credentials = [])
   {
     $query = User::query()
       ->where("email", "=", $credentials["email"]);
@@ -95,7 +95,7 @@ class JwtGuard implements StatefulGuard
   /**
    * @inheritDoc
    */
-  public function setUser(Authenticatable $user)
+  public final function setUser(Authenticatable $user)
   {
     $this->isLogged = true;
 
@@ -106,7 +106,7 @@ class JwtGuard implements StatefulGuard
    * @inheritDoc
    * @throws Exception
    */
-  public function once(array $credentials = [])
+  public final function once(array $credentials = [])
   {
     throw new Exception("Not implemented");
   }
@@ -114,7 +114,7 @@ class JwtGuard implements StatefulGuard
   /**
    * @inheritDoc
    */
-  public function loginUsingId($id, $remember = false)
+  public final function loginUsingId($id, $remember = false)
   {
     return $this->login(User::findOrFail($id), $remember);
   }
@@ -123,7 +123,7 @@ class JwtGuard implements StatefulGuard
    * @inheritDoc
    * @throws Exception
    */
-  public function onceUsingId($id)
+  public final function onceUsingId($id)
   {
     throw new Exception("Not implemented");
   }
@@ -132,7 +132,7 @@ class JwtGuard implements StatefulGuard
    * @inheritDoc
    * @throws Exception
    */
-  public function viaRemember()
+  public final function viaRemember()
   {
     throw new Exception("Not implemented");
   }
@@ -141,7 +141,7 @@ class JwtGuard implements StatefulGuard
    * @inheritDoc
    * @throws Exception
    */
-  public function logout()
+  public final function logout()
   {
     throw new Exception("Not implemented");
   }
@@ -149,7 +149,7 @@ class JwtGuard implements StatefulGuard
   /**
    * @inheritDoc
    */
-  public function login(Authenticatable $user, $remember = false)
+  public final function login(Authenticatable $user, $remember = false)
   {
     $this->setUser($user);
 
@@ -159,7 +159,7 @@ class JwtGuard implements StatefulGuard
   /**
    * @inheritDoc
    */
-  public function attempt(array $credentials = [], $remember = false)
+  public final function attempt(array $credentials = [], $remember = false)
   {
 
     if ($this->validate($credentials)) {

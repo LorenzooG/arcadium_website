@@ -2,57 +2,134 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostLikeRequest;
+use App\Http\Requests\PostStoreRequest;
+use App\Http\Requests\PostUnlikeRequest;
+use App\Http\Requests\PostUpdateRequest;
+use App\Http\Resources\PostResource;
 use App\Post;
+use App\Repositories\PostRepository;
+use App\User;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\Paginator;
 
-class PostsController extends Controller
+final class PostsController extends Controller
 {
 
-  public function index()
+  private PostRepository $postRepository;
+
+  /**
+   * PostsController constructor
+   *
+   * @param PostRepository $postRepository
+   */
+  public final function __construct(PostRepository $postRepository)
   {
-    return Post::all();
+    $this->postRepository = $postRepository;
   }
 
-  public function show(Post $post)
-  {
-    return $post;
-  }
 
-  public function store(Request $request)
+  /**
+   * Find and show all posts in a page
+   *
+   * @return ResourceCollection
+   */
+  public final function index()
   {
-    $content = $request->validate([
-      "name" => "required|string|max:255",
-      "description" => "required|string|max:6000"
-    ]);
+    $page = Paginator::resolveCurrentPage();
 
-    return Post::create($content);
+    return PostResource::collection($this->postRepository->findPaginatedPosts($page));
   }
 
   /**
+   * Find and show all user's posts in a page
+   *
+   * @param User $user
+   * @return ResourceCollection
+   */
+  public final function user(User $user)
+  {
+    $page = Paginator::resolveCurrentPage();
+
+    return PostResource::collection($this->postRepository->findPaginatedPostsForUser($user, $page));
+  }
+
+  public final function show(Post $post)
+  {
+    return new PostResource($post);
+  }
+
+  /**
+   * Store post in database
+   *
+   * @param PostStoreRequest $request
+   * @return PostResource
+   */
+  public final function store(PostStoreRequest $request)
+  {
+    $post = $this->postRepository->createPost($request->user(), $request->only([
+      'title',
+      'description'
+    ]));
+
+    return new PostResource($post);
+  }
+
+  /**
+   * Find and like post
+   *
+   * @param PostLikeRequest $request
    * @param Post $post
-   * @param Request $request
    * @return Response
    */
-  public function update(Post $post, Request $request)
+  public final function like(PostLikeRequest $request, Post $post)
   {
-    $content = $request->validate([
-      "name" => "string|max:255",
-      "description" => "string|max:6000"
-    ]);
-
-    $post->update($content);
+    $post->likes()->save($request->user());
 
     return response()->noContent();
   }
 
   /**
+   * Find and unlike post
+   *
+   * @param PostUnlikeRequest $request
+   * @param Post $post
+   * @return Response
+   */
+  public final function unlike(PostUnlikeRequest $request, Post $post)
+  {
+    $post->likes()->detach($request->user()->id);
+
+    return response()->noContent();
+  }
+
+  /**
+   * Find and update post
+   *
+   * @param Post $post
+   * @param PostUpdateRequest $request
+   * @return Response
+   */
+  public final function update(Post $post, PostUpdateRequest $request)
+  {
+    $post->update($request->only([
+      'title',
+      'description'
+    ]));
+
+    return response()->noContent();
+  }
+
+  /**
+   * Find and delete post
+   *
    * @param Post $post
    * @return Response
    * @throws Exception
    */
-  public function delete(Post $post)
+  public final function delete(Post $post)
   {
     $post->delete();
 

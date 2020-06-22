@@ -34,16 +34,26 @@ return [
   */
 
   'connections' => [
-
+		'mongodb' => [
+			'driver' => 'mongodb',
+			'host' => env('MONGO_HOST', '127.0.0.1'),
+			'database' => env('MONGO_DATABSE', 'database'),
+			'username' => env('MONGO_USERNAME', 'root'),
+			'password' => env('MONGO_PASSWORD', ''),
+			'options' => [
+				'database' => env('MONGO_AUTHENTICATION_DATABASE', 'admin')
+			]
+		],
+		
     'sqlite' => [
       'driver' => 'sqlite',
       'url' => env('DATABASE_URL'),
-      'database' => env('DB_DATABASE', database_path('database.sqlite')),
+      'database' => database_path(env('DB_DATABASE', 'database.sqlite')),
       'prefix' => '',
       'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
     ],
 
-    'mysql' => [
+		'mysql' => [
       'driver' => 'mysql',
       'url' => env('DATABASE_URL'),
       'host' => env('DB_HOST', '127.0.0.1'),

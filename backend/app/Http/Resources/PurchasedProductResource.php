@@ -5,9 +5,15 @@ namespace App\Http\Resources;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Throwable;
 
-class PurchasedProductResource extends JsonResource
+/**
+ * Class PurchasedProductResource
+ *
+ * @property Product $resource
+ *
+ * @package App\Http\Resources
+ */
+final class PurchasedProductResource extends JsonResource
 {
   /**
    * Transform the resource into an array.
@@ -15,18 +21,13 @@ class PurchasedProductResource extends JsonResource
    * @param Request $request
    * @return array
    */
-  public function toArray($request)
+  public final function toArray($request)
   {
-    $product = $this->product_id;
-
-    try {
-      $product = new ProductResource(Product::findOrFail($product));
-    } catch (Throwable $exception) {
-    }
-
     return [
-      "product" => $product,
-      "amount" => $this->amount
+      'product' => route('products.show', [
+        'product' => $this->resource->pivot->product_id
+      ]),
+      'amount' => $this->resource->pivot->amount,
     ];
   }
 }

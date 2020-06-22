@@ -7,13 +7,12 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Throwable;
 
-class Handler extends ExceptionHandler
+final class Handler extends ExceptionHandler
 {
   /**
    * A list of the exception types that are not reported.
@@ -21,7 +20,9 @@ class Handler extends ExceptionHandler
    * @var array
    */
   protected $dontReport = [
-    //
+    BadRequestHttpException::class,
+    ModelNotFoundException::class,
+    NotFoundHttpException::class
   ];
 
   /**
@@ -42,7 +43,7 @@ class Handler extends ExceptionHandler
    *
    * @throws Exception
    */
-  public function report(Throwable $exception)
+  public final function report(Throwable $exception)
   {
     parent::report($exception);
   }
@@ -56,24 +57,23 @@ class Handler extends ExceptionHandler
    *
    * @throws Throwable
    */
-  public function render($request, Throwable $exception)
+  public final function render($request, Throwable $exception)
   {
-    if($exception instanceof ModelNotFoundException) {
-      return response()->json([
-        "message" => "{$exception->getModel()} not found!"
-      ], 404);
-    } else if($exception instanceof BadRequestHttpException) {
-      return response()->json([
-        "message" => empty($exception->getMessage()) ? "Bad request!" : $exception->getMessage()
-      ], 400);
-    } else if($exception instanceof UnauthorizedHttpException) {
-      return response()->json([
-        "message" => "Unauthorized!"
-      ], 401);
-    } else if($exception instanceof NotFoundHttpException && $request->acceptsJson()) {
-      return response()->json([
-        "message" => "Page not found!"
-      ],404);
+    if ($request->acceptsJson()) {
+      if ($exception instanceof ModelNotFoundException) {
+        return response()->json([
+          'message' => 'Model not found!',
+          'model' => $exception->getModel(),
+        ], 404);
+      } else if ($exception instanceof AccessDeniedHttpException) {
+        return response()->json([
+          'message' => "You do not have permission to make this!",
+        ], 403);
+      } else if ($exception instanceof NotFoundHttpException) {
+        return response()->json([
+          'message' => 'Page not found!'
+        ], 404);
+      }
     }
     return parent::render($request, $exception);
   }
