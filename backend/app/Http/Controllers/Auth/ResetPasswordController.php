@@ -46,16 +46,6 @@ class ResetPasswordController extends Controller
   }
 
   /**
-   * Get the guard to be used during password rest
-   *
-   * @return StatefulGuard
-   */
-  public final function guard()
-  {
-    return Auth::guard('api');
-  }
-
-  /**
    * Get the broker to be used during password reset.
    *
    * @return PasswordBroker
