@@ -64,7 +64,7 @@ final class JwtGuard implements StatefulGuard
     $user = $this->userRepository->findUserById($id);
     $result = $this->jwtRepository->exists($user, $token);
 
-    $this->setUser($user);
+    if ($result) $this->setUser($user);
 
     return $result;
   }
@@ -92,8 +92,6 @@ final class JwtGuard implements StatefulGuard
    */
   public final function setUser(Authenticatable $user)
   {
-    $this->isLogged = true;
-
     $this->user = $user;
   }
 
