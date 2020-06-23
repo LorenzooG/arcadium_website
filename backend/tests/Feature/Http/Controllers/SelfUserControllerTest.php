@@ -90,22 +90,6 @@ class SelfUserControllerTest extends TestCase
     $this->assertCount(1, $users);
   }
 
-  public function testShouldSendUpdateEmailEmailWhenPostUserUpdateEmail()
-  {
-    Notification::fake();
-
-    /** @var User $user */
-    $user = factory(User::class)->state('admin')->create();
-
-    $response = $this->actingAs($user)->postJson(route('user.request.update.email'), [
-      'email' => $user->email,
-    ]);
-
-    Notification::assertSentTo($user, EmailResetNotification::class);
-
-    $response->assertNoContent();
-  }
-
   public function testAssertUpdateUsesFormRequest()
   {
     $this->assertActionUsesFormRequest(
