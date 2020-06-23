@@ -11,7 +11,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 /**
  * @package App
@@ -153,20 +152,10 @@ final class User extends Authenticatable
   }
 
   /**
-   * Sets username attribute
-   *
-   * @param string $value
-   * @throws ConflictHttpException
-   */
-  public final function setUserNameAttribute(string $value)
-  {
-    $this->attributes["user_name"] = $value;
-  }
-
-  /**
    * Sets password attribute
    *
    * @param string $value
+   * @noinspection PhpUnused
    */
   public final function setPasswordAttribute(string $value)
   {
