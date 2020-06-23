@@ -102,6 +102,31 @@ final class JwtGuardTest extends TestCase
     $this->assertFalse($jwt->guest());
   }
 
+  public function testShouldLoginUsingId()
+  {
+    /** @var JwtRepository $repository */
+    $repository = app(JwtRepository::class);
+
+    /** @var User $user */
+    $user = factory(User::class)->create();
+
+    /** @var StatefulGuard $jwt */
+    $jwt = app(JwtGuard::class, [
+      'secret' => config('auth.jwt.secret'),
+      'algos' => config('auth.jwt.algos'),
+      'jwtRepository' => $repository,
+    ]);
+
+    /** @var User $dummy */
+    $dummy = $jwt->loginUsingId($user->id);
+
+    $this->assertEquals($dummy->id, $user->id);
+
+    $dummy = $jwt->user();
+
+    $this->assertEquals($dummy->id, $user->id);
+  }
+
   public function testShouldReturnUserIdWhenUserIsNotNull()
   {
     /** @var JwtRepository $repository */
