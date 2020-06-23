@@ -6,6 +6,8 @@ namespace App\Repositories;
 
 use App\User;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Log\Logger;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -66,6 +68,17 @@ final class UserRepository
 
       return User::onlyTrashed()->paginate();
     });
+  }
+
+  /**
+   * Find user by email
+   *
+   * @param $email
+   * @return Builder|Model|object|User
+   */
+  public final function findUserByEmail($email)
+  {
+    return User::query()->where('email', $email)->firstOrFail();
   }
 
   /**

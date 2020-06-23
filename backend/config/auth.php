@@ -16,7 +16,7 @@ return [
   */
 
   'defaults' => [
-    'guard' => 'web',
+    'guard' => 'api',
     'passwords' => 'users',
   ],
 
@@ -39,11 +39,6 @@ return [
 
   'guards' => [
     'api' => [
-      'driver' => 'jwt',
-      'provider' => 'users',
-      'hash' => false,
-    ],
-    'web' => [
       'driver' => 'jwt',
       'provider' => 'users',
       'hash' => false,
@@ -115,5 +110,24 @@ return [
   */
 
   'password_timeout' => 10800,
+
+  /*
+  |--------------------------------------------------------------------------
+  | JWT Configuration
+  |--------------------------------------------------------------------------
+  |
+  | Here you may define the amount of days the jwt token is valid and the
+  | secret of your jwt setting, and the algorithm that will be used.
+  |
+  */
+
+  'jwt' => [
+
+    'secret' => env('JWT_KEY', ''),
+    'algos' => 'HS256',
+    'hash_algos' => 'sha256',
+    'expires' => 30
+
+  ]
 
 ];

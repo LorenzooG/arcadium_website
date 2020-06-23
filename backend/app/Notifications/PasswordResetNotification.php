@@ -42,9 +42,11 @@ class PasswordResetNotification extends Notification
   public function toMail($notifiable)
   {
     return (new MailMessage)
-      ->line('The introduction to the notification.')
-      ->action('Notification Action', url('/'))
-      ->line('Thank you for using our application!');
+      ->subject(trans('notifications.password.reset.subject'))
+      ->markdown('notifications.user.password_reset', [
+        'user' => $notifiable,
+        'token' => $this->token
+      ]);
   }
 
   /**
@@ -56,7 +58,8 @@ class PasswordResetNotification extends Notification
   public function toArray($notifiable)
   {
     return [
-      //
+      'user' => $notifiable,
+      'token' => $this->token
     ];
   }
 }

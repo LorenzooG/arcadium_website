@@ -27,10 +27,10 @@ Route::prefix('user')->middleware('auth:api')->group(function () {
     Route::delete('posts/{post}', 'PostsController@delete')->middleware('can:delete,post')->name('user.posts.delete');
 
     Route::middleware('can:update_self')->group(function () {
-      Route::post('/request/update_email', 'SelfUserController@requestEmailUpdate')->name('user.request.update.email');
       Route::put('/', 'SelfUserController@update')->name('user.update');
-      Route::put('/password', 'SelfUserController@updatePassword')->name('user.update.password');
-      Route::put('/email/{emailUpdate}', 'SelfUserController@updateEmail')->name('user.update.email');
+      Route::post('/request/update_email', 'Auth\ResetEmailController')->name('user.request.update.email');
+      Route::put('/password', 'Auth\ChangePasswordController')->name('user.update.password');
+      Route::put('/email/{emailUpdate}', 'Auth\ChangeEmailController')->name('user.update.email');
     });
   });
 });

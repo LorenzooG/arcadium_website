@@ -55,6 +55,7 @@ final class Punishment extends Model
    * Sets punished_until attribute
    *
    * @param $value
+   * @noinspection PhpUnused
    */
   public final function setPunishedUntilAttribute($value)
   {
@@ -68,6 +69,7 @@ final class Punishment extends Model
    * Sets punished_at attribute
    *
    * @param $value
+   * @noinspection PhpUnused
    */
   public final function setPunishedAtAttribute($value)
   {
