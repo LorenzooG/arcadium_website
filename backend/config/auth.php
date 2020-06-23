@@ -130,6 +130,7 @@ return [
 
     'secret' => env('JWT_KEY', ''),
     'algos' => 'HS256',
+    'hash_algos' => 'sha256',
     'throttle' => 30
 
   ]
