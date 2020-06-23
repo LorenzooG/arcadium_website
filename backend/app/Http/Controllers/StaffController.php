@@ -6,7 +6,6 @@ use App\Http\Resources\RoleResource;
 use App\Http\Resources\UserResource;
 use App\Repositories\RoleRepository;
 use App\Role;
-use Illuminate\Pagination\Paginator;
 
 final class StaffController extends Controller
 {
@@ -18,7 +17,7 @@ final class StaffController extends Controller
    *
    * @param RoleRepository $roleRepository
    */
-  public final function __construct(RoleRepository $roleRepository)
+  public function __construct(RoleRepository $roleRepository)
   {
     $this->roleRepository = $roleRepository;
   }
@@ -26,7 +25,7 @@ final class StaffController extends Controller
   /**
    * Find and show paginated staff members
    */
-  public final function index()
+  public function index()
   {
     return $this->roleRepository->findAllRolesThatAreStaff()->map(function (Role $role) {
       return [

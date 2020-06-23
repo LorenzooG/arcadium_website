@@ -22,7 +22,7 @@ final class UsersController extends Controller
    *
    * @param UserRepository $userRepository
    */
-  public final function __construct(UserRepository $userRepository)
+  public function __construct(UserRepository $userRepository)
   {
     $this->userRepository = $userRepository;
   }
@@ -32,7 +32,7 @@ final class UsersController extends Controller
    *
    * @return ResourceCollection
    */
-  public final function index()
+  public function index()
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -45,7 +45,7 @@ final class UsersController extends Controller
    * @param User $user
    * @return UserResource
    */
-  public final function show(User $user)
+  public function show(User $user)
   {
     return new UserResource($user);
   }
@@ -56,7 +56,7 @@ final class UsersController extends Controller
    * @param UserStoreRequest $request
    * @return UserResource
    */
-  public final function store(UserStoreRequest $request)
+  public function store(UserStoreRequest $request)
   {
     $data = $request->only([
       'email',
@@ -79,7 +79,7 @@ final class UsersController extends Controller
    * @param UserUpdateRequest $request
    * @return Response
    */
-  public final function update(User $user, UserUpdateRequest $request)
+  public function update(User $user, UserUpdateRequest $request)
   {
     $user->update($request->only([
       'email',
@@ -98,7 +98,7 @@ final class UsersController extends Controller
    * @return Response
    * @throws Exception
    */
-  public final function delete(User $user)
+  public function delete(User $user)
   {
     $user->delete();
 
@@ -112,7 +112,7 @@ final class UsersController extends Controller
    * @return Response
    * @throws Exception
    */
-  public final function restore(User $user)
+  public function restore(User $user)
   {
     $user->restore();
 
@@ -124,7 +124,7 @@ final class UsersController extends Controller
    *
    * @return ResourceCollection
    */
-  public final function trashed()
+  public function trashed()
   {
     $page = Paginator::resolveCurrentPage();
 
