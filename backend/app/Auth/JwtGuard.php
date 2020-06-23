@@ -122,7 +122,7 @@ final class JwtGuard implements StatefulGuard
    */
   public final function id(): int
   {
-    return $this->user->id;
+    return $this->user()->id ?: -1;
   }
 
   /**

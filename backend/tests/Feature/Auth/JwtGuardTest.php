@@ -100,4 +100,54 @@ final class JwtGuardTest extends TestCase
     $this->assertTrue($jwt->check());
     $this->assertFalse($jwt->guest());
   }
+
+  public function testShouldReturnUserIdWhenUserIsNotNull()
+  {
+    /** @var JwtRepository $repository */
+    $repository = app(JwtRepository::class);
+
+    /** @var User $user */
+    $user = factory(User::class)->create();
+
+    $request = Request::capture();
+    $request->headers->set('Authorization', 'Bearer ' . $repository->create($user));
+
+    /** @var StatefulGuard $jwt */
+    $jwt = app(JwtGuard::class, [
+      'secret' => config('auth.jwt.secret'),
+      'algos' => config('auth.jwt.algos'),
+      'jwtRepository' => $repository,
+      'request' => $request
+    ]);
+
+    $id = $jwt->id();
+
+    $this->assertEquals($user->id, $id);
+
+    $this->assertTrue($jwt->check());
+    $this->assertFalse($jwt->guest());
+  }
+
+  public function testShouldNotReturnUserIdWhenUserNotNull()
+  {
+    /** @var JwtRepository $repository */
+    $repository = app(JwtRepository::class);
+
+    /** @var User $user */
+    $user = factory(User::class)->create();
+
+    /** @var StatefulGuard $jwt */
+    $jwt = app(JwtGuard::class, [
+      'secret' => config('auth.jwt.secret'),
+      'algos' => config('auth.jwt.algos'),
+      'jwtRepository' => $repository,
+    ]);
+
+    $id = $jwt->id();
+
+    $this->assertNotEquals($user->id, $id);
+
+    $this->assertFalse($jwt->check());
+    $this->assertTrue($jwt->guest());
+  }
 }
