@@ -3,13 +3,17 @@
 
 namespace Tests\Feature\Http\Controllers\Auth;
 
+use App\Http\Controllers\Auth\ChangeEmailController;
 use App\Notifications\EmailResetNotification;
 use App\User;
 use Illuminate\Support\Facades\Notification;
+use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
 final class ResetEmailControllerTest extends TestCase
 {
+  use AdditionalAssertions;
+
   public function testShouldSendEmailChangeNotification()
   {
     Notification::fake();
@@ -24,5 +28,14 @@ final class ResetEmailControllerTest extends TestCase
     Notification::assertSentTo($user, EmailResetNotification::class);
 
     $response->assertNoContent();
+  }
+
+  public function testAssertUsesMiddleware()
+  {
+    $this->assertActionUsesMiddleware(
+      ChangeEmailController::class,
+      '__invoke',
+      'can:update_self'
+    );
   }
 }
