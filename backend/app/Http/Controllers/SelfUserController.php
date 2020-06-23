@@ -10,7 +10,7 @@ use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\RoleResource;
-use App\Notifications\EmailChangedNotification;
+use App\Notifications\EmailResetNotification;
 use App\Notifications\RequestEmailUpdateNotification;
 use App\Repositories\PostRepository;
 use App\Repositories\RoleRepository;

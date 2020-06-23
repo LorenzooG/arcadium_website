@@ -8,7 +8,7 @@ use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateEmailRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Notifications\EmailChangedNotification;
+use App\Notifications\EmailResetNotification;
 use App\Notifications\RequestEmailUpdateNotification;
 use App\Post;
 use App\Role;
