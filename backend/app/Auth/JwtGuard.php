@@ -24,6 +24,13 @@ final class JwtGuard implements StatefulGuard
   private UserRepository $userRepository;
   private Hasher $hasher;
 
+  /**
+   * JwtGuard constructor
+   *
+   * @param UserRepository $userRepository
+   * @param JwtRepository $jwtRepository
+   * @param Hasher $hasher
+   */
   public final function __construct(UserRepository $userRepository, JwtRepository $jwtRepository, Hasher $hasher)
   {
     $this->jwtRepository = $jwtRepository;
@@ -31,6 +38,11 @@ final class JwtGuard implements StatefulGuard
     $this->hasher = $hasher;
   }
 
+  /**
+   * Returns the session user or a default instance
+   *
+   * @return User|Authenticatable|null
+   */
   public final function user()
   {
     if ($this->check() || $this->validate()) return $this->user;
@@ -38,6 +50,12 @@ final class JwtGuard implements StatefulGuard
     return new User();
   }
 
+  /**
+   * Checks if user is logged and if is logged set the current user
+   *
+   * @param array $credentials
+   * @return bool
+   */
   public final function validate(array $credentials = [])
   {
     $id = $credentials['id'];
@@ -51,38 +69,13 @@ final class JwtGuard implements StatefulGuard
     return $result;
   }
 
-  public final function setUser(Authenticatable $user)
-  {
-    $this->isLogged = true;
-
-    $this->user = $user;
-  }
-
-  public final function id(): int
-  {
-    return $this->user->id;
-  }
-
-  public final function check()
-  {
-    return $this->user != null;
-  }
-
-  public final function guest()
-  {
-    return $this->user == null;
-  }
-
-  public final function once(array $credentials = [])
-  {
-    throw new Exception("Not implemented");
-  }
-
-  public final function loginUsingId($id, $remember = false)
-  {
-    return $this->login(User::findOrFail($id), $remember);
-  }
-
+  /**
+   * Tries to login with credentials
+   *
+   * @param array $credentials
+   * @param bool $remember
+   * @return bool|string
+   */
   public final function attempt(array $credentials = [], $remember = false)
   {
     $user = $this->userRepository->findUserByEmail($credentials['email']);
@@ -92,6 +85,67 @@ final class JwtGuard implements StatefulGuard
     return $this->jwtRepository->create($user);
   }
 
+  /**
+   * Sets the current user
+   *
+   * @param Authenticatable $user
+   */
+  public final function setUser(Authenticatable $user)
+  {
+    $this->isLogged = true;
+
+    $this->user = $user;
+  }
+
+  /**
+   * Returns the session user id
+   *
+   * @return int
+   */
+  public final function id(): int
+  {
+    return $this->user->id;
+  }
+
+  /**
+   * Returns if user is logged
+   *
+   * @return bool
+   */
+  public final function check()
+  {
+    return $this->user != null;
+  }
+
+  /**
+   * Returns if user is guest
+   *
+   * @return bool
+   */
+  public final function guest()
+  {
+    return $this->user == null;
+  }
+
+  /**
+   * Logins user by its id
+   *
+   * @param mixed $id
+   * @param bool $remember
+   * @return Authenticatable|void
+   */
+  public final function loginUsingId($id, $remember = false)
+  {
+    return $this->login(User::findOrFail($id), $remember);
+  }
+
+  /**
+   * Logins user with the instance
+   *
+   * @param Authenticatable $user
+   * @param bool $remember
+   * @return Authenticatable|void
+   */
   public final function login(Authenticatable $user, $remember = false)
   {
     $this->setUser($user);
@@ -99,16 +153,46 @@ final class JwtGuard implements StatefulGuard
     return $user;
   }
 
+  /**
+   * Not implemented
+   *
+   * @param array $credentials
+   * @return bool|void
+   * @throws Exception
+   */
+  public final function once(array $credentials = [])
+  {
+    throw new Exception("Not implemented");
+  }
+
+  /**
+   * Not implement
+   *
+   * @return bool|void
+   * @throws Exception
+   */
   public final function viaRemember()
   {
     throw new Exception("Not implemented");
   }
 
+  /**
+   * Not implemented
+   *
+   * @param mixed $id
+   * @return bool|Authenticatable|void
+   * @throws Exception
+   */
   public final function onceUsingId($id)
   {
     throw new Exception("Not implemented");
   }
 
+  /**
+   * Not implemented
+   *
+   * @throws Exception
+   */
   public final function logout()
   {
     throw new Exception("Not implemented");
