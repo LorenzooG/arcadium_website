@@ -31,25 +31,6 @@ final class JwtGuard implements StatefulGuard
     $this->hasher = $hasher;
   }
 
-  /**
-   * @inheritDoc
-   */
-  public final function check()
-  {
-    return $this->user != null;
-  }
-
-  /**
-   * @inheritDoc
-   */
-  public final function guest()
-  {
-    return $this->user == null;
-  }
-
-  /**
-   * @inheritDoc
-   */
   public final function user()
   {
     if ($this->check() || $this->validate()) return $this->user;
@@ -57,17 +38,6 @@ final class JwtGuard implements StatefulGuard
     return new User();
   }
 
-  /**
-   * @inheritDoc
-   */
-  public final function id(): int
-  {
-    return $this->user->id;
-  }
-
-  /**
-   * @inheritDoc
-   */
   public final function validate(array $credentials = [])
   {
     $id = $credentials['id'];
@@ -81,9 +51,6 @@ final class JwtGuard implements StatefulGuard
     return $result;
   }
 
-  /**
-   * @inheritDoc
-   */
   public final function setUser(Authenticatable $user)
   {
     $this->isLogged = true;
@@ -91,63 +58,31 @@ final class JwtGuard implements StatefulGuard
     $this->user = $user;
   }
 
-  /**
-   * @inheritDoc
-   * @throws Exception
-   */
+  public final function id(): int
+  {
+    return $this->user->id;
+  }
+
+  public final function check()
+  {
+    return $this->user != null;
+  }
+
+  public final function guest()
+  {
+    return $this->user == null;
+  }
+
   public final function once(array $credentials = [])
   {
     throw new Exception("Not implemented");
   }
 
-  /**
-   * @inheritDoc
-   */
   public final function loginUsingId($id, $remember = false)
   {
     return $this->login(User::findOrFail($id), $remember);
   }
 
-  /**
-   * @inheritDoc
-   * @throws Exception
-   */
-  public final function onceUsingId($id)
-  {
-    throw new Exception("Not implemented");
-  }
-
-  /**
-   * @inheritDoc
-   * @throws Exception
-   */
-  public final function viaRemember()
-  {
-    throw new Exception("Not implemented");
-  }
-
-  /**
-   * @inheritDoc
-   * @throws Exception
-   */
-  public final function logout()
-  {
-    throw new Exception("Not implemented");
-  }
-
-  /**
-   * @inheritDoc
-   */
-  public final function login(Authenticatable $user, $remember = false)
-  {
-    $this->setUser($user);
-
-    return $user;
-  }
-
-  /**
-   * @inheritDoc
-   */
   public final function attempt(array $credentials = [], $remember = false)
   {
     $user = $this->userRepository->findUserByEmail($credentials['email']);
@@ -155,6 +90,28 @@ final class JwtGuard implements StatefulGuard
     if (!$this->hasher->check($credentials['password'], $user->password)) return false;
 
     return $this->jwtRepository->create($user);
+  }
+
+  public final function login(Authenticatable $user, $remember = false)
+  {
+    $this->setUser($user);
+
+    return $user;
+  }
+
+  public final function viaRemember()
+  {
+    throw new Exception("Not implemented");
+  }
+
+  public final function onceUsingId($id)
+  {
+    throw new Exception("Not implemented");
+  }
+
+  public final function logout()
+  {
+    throw new Exception("Not implemented");
   }
 
 }
