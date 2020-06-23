@@ -11,7 +11,7 @@ use Illuminate\Auth\Passwords\TokenRepositoryInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 final class JwtGuard implements StatefulGuard
@@ -26,6 +26,7 @@ final class JwtGuard implements StatefulGuard
   private TokenRepositoryInterface $jwtRepository;
   private UserRepository $userRepository;
   private Hasher $hasher;
+  private Request $request;
   private string $secret;
   private string $algos;
 
@@ -38,11 +39,12 @@ final class JwtGuard implements StatefulGuard
    * @param string $secret
    * @param string $algos
    */
-  public final function __construct(UserRepository $userRepository, JwtRepository $jwtRepository, Hasher $hasher, $secret, $algos)
+  public final function __construct(UserRepository $userRepository, JwtRepository $jwtRepository, Hasher $hasher, Request $request, $secret, $algos)
   {
     $this->jwtRepository = $jwtRepository;
     $this->userRepository = $userRepository;
     $this->hasher = $hasher;
+    $this->request = $request;
     $this->secret = $secret;
     $this->algos = $algos;
   }
@@ -56,7 +58,7 @@ final class JwtGuard implements StatefulGuard
   {
     if ($this->check()) return $this->user;
 
-    $bearerToken = Request::bearerToken();
+    $bearerToken = $this->request->bearerToken();
     $payload = $this->decodePayload($bearerToken);
     $payload = $this->validatePayload($payload);
 
