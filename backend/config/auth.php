@@ -116,4 +116,22 @@ return [
 
   'password_timeout' => 10800,
 
+  /*
+  |--------------------------------------------------------------------------
+  | JWT Configuration
+  |--------------------------------------------------------------------------
+  |
+  | Here you may define the amount of days the jwt token is valid and the
+  | secret of your jwt setting, and the algorithm that will be used.
+  |
+  */
+
+  'jwt' => [
+
+    'secret' => env('JWT_KEY', ''),
+    'algos' => 'HS256',
+    'throttle' => 30
+
+  ]
+
 ];
