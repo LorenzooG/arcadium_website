@@ -60,10 +60,13 @@ final class JwtGuard implements StatefulGuard
     if ($this->check()) return $this->user;
 
     $bearerToken = $this->request->bearerToken();
-    $payload = $this->decodePayload($bearerToken);
-    $payload = $this->validatePayload($payload);
 
-    if ($this->validate($payload)) return $this->user;
+    if (filled($bearerToken)) {
+      $payload = $this->decodePayload($bearerToken);
+      $payload = $this->validatePayload($payload);
+
+      if ($this->validate($payload)) return $this->user;
+    }
 
     return new User();
   }
