@@ -19,9 +19,11 @@ use App\Post;
 use App\Product;
 use App\ProductCommand;
 use App\Punishment;
+use App\Repositories\Tokens\JwtRepository;
 use App\Role;
 use App\User;
 use App\Utils\Permission;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -63,7 +65,13 @@ class AuthServiceProvider extends ServiceProvider
 
     $this->registerPolicies();
 
-    $jwtAuth = new JwtGuard();
+    $this->app->singleton(JwtRepository::class, function (Application $app) {
+      return $app->make(JwtRepository::class, [
+        'throttle' => config('auth.jwt.throttle'),
+        'secret' => config('auth.jwt.secret'),
+        'algos' => config('auth.jwt.algos')
+      ]);
+    });
 
     Gate::define('update_self', function (User $user) {
       return $user->hasPermission(Permission::UPDATE_USER);
@@ -73,8 +81,11 @@ class AuthServiceProvider extends ServiceProvider
       return $user->hasPermission(Permission::DELETE_USER);
     });
 
-    Auth::extend("jwt", function () use ($jwtAuth) {
-      return $jwtAuth;
+    Auth::extend('jwt', function (Application $app) {
+      return $app->make(JwtGuard::class, [
+        'secret' => config('auth.jwt.secret'),
+        'algos' => config('auth.jwt.algos')
+      ]);
     });
 
     Log::info("Bootstrapped authentication service.");
