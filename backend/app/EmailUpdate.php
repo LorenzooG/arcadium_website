@@ -24,15 +24,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 final class EmailUpdate extends Model
 {
+
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array
+   */
   protected $fillable = [
     'token',
     'user_id',
     'already_used',
     'origin_address'
-  ];
-
-  protected $hidden = [
-    'token'
   ];
 
   /**
