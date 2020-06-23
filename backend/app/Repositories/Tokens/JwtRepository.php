@@ -31,10 +31,11 @@ final class JwtRepository implements TokenRepositoryInterface
    * @param string $algos
    * @param string $hashAlgos
    * @param int $expires
+   * @param string $tableName
    */
-  public function __construct(ConnectionInterface $connection, $secret, $algos, $hashAlgos, $expires)
+  public function __construct(ConnectionInterface $connection, $secret, $algos, $hashAlgos, $expires, $tableName = 'jwt_tokens')
   {
-    $this->table = $connection->table('jwt_tokens');
+    $this->table = $connection->table($tableName);
     $this->secret = $secret;
     $this->algos = $algos;
     $this->hashAlgos = $hashAlgos;
@@ -121,6 +122,8 @@ final class JwtRepository implements TokenRepositoryInterface
    */
   public function deleteExpired()
   {
+    // TODO: fix this method's test
+
     return $this->table
       ->where('created_at', '<', now()->subDays($this->expires))
       ->delete();
