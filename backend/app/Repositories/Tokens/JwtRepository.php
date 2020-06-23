@@ -4,7 +4,6 @@
 namespace App\Repositories\Tokens;
 
 use App\User;
-use Carbon\Carbon;
 use Firebase\JWT\JWT;
 use Illuminate\Auth\Passwords\TokenRepositoryInterface;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
@@ -22,7 +21,7 @@ final class JwtRepository implements TokenRepositoryInterface
   private string $secret;
   private string $algos;
   private string $hashAlgos;
-  private int $throttle;
+  private int $expires;
 
   /**
    * JwtRepository constructor
@@ -31,15 +30,15 @@ final class JwtRepository implements TokenRepositoryInterface
    * @param string $secret
    * @param string $algos
    * @param string $hashAlgos
-   * @param int $throttle
+   * @param int $expires
    */
-  public function __construct(ConnectionInterface $connection, $secret, $algos, $hashAlgos, $throttle)
+  public function __construct(ConnectionInterface $connection, $secret, $algos, $hashAlgos, $expires)
   {
     $this->table = $connection->table('jwt_tokens');
     $this->secret = $secret;
     $this->algos = $algos;
     $this->hashAlgos = $hashAlgos;
-    $this->throttle = $throttle;
+    $this->expires = $expires;
   }
 
   /**
@@ -85,6 +84,7 @@ final class JwtRepository implements TokenRepositoryInterface
     return $this->table
       ->where('user_id', $user->id)
       ->where('token', $token)
+      ->where('created_at', '>', now()->subDays($this->expires))
       ->exists();
   }
 
@@ -96,15 +96,9 @@ final class JwtRepository implements TokenRepositoryInterface
    */
   public function recentlyCreatedToken(CanResetPasswordContract $user)
   {
-    $row = $this->table->where('user_id', $user->id)->first();
+    // Always return false to do not block user to login.
 
-    if ($row->doesntExist()) return false;
-
-    $createdAt = $row->getAttribute($row->getCreatedAtColumn());
-
-    return Carbon::parse($createdAt)
-      ->addDays($this->throttle)
-      ->isFuture();
+    return false;
   }
 
   /**
@@ -123,10 +117,12 @@ final class JwtRepository implements TokenRepositoryInterface
   /**
    * Deletes expired tokens
    *
-   * @return bool|void
+   * @return bool
    */
   public function deleteExpired()
   {
-    // TODO: Implement deleteExpired() method.
+    return $this->table
+      ->where('created_at', '<', now()->subDays($this->expires))
+      ->delete();
   }
 }

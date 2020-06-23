@@ -75,18 +75,7 @@ class AuthServiceProvider extends ServiceProvider
         config('auth.jwt.secret'),
         config('auth.jwt.algos'),
         config('auth.jwt.hash_algos'),
-        config('auth.jwt.throttle'),
-      );
-    });
-
-    $this->app->singleton(JwtGuard::class, function (Application $app) {
-      return new JwtGuard(
-        $app->make(UserRepository::class),
-        $app->make(JwtRepository::class),
-        $app->make(Hasher::class),
-        $app->make(Request::class),
-        config('auth.jwt.secret'),
-        config('auth.jwt.algos')
+        config('auth.jwt.expires'),
       );
     });
 
@@ -99,7 +88,14 @@ class AuthServiceProvider extends ServiceProvider
     });
 
     Auth::extend('jwt', function (Application $app) {
-      return $app->make(JwtGuard::class);
+      return new JwtGuard(
+        $app->make(UserRepository::class),
+        $app->make(JwtRepository::class),
+        $app->make(Hasher::class),
+        $app->make(Request::class),
+        config('auth.jwt.secret'),
+        config('auth.jwt.algos')
+      );
     });
 
     Log::info("Bootstrapped authentication service.");

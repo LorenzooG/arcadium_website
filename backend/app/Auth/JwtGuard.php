@@ -59,9 +59,7 @@ final class JwtGuard implements StatefulGuard
   {
     if ($this->check()) return $this->user;
 
-    $bearerToken = $this->request->bearerToken();
-
-    if (filled($bearerToken)) {
+    if (filled($bearerToken = $this->request->bearerToken())) {
       $payload = $this->decodePayload($bearerToken);
       $payload = $this->validatePayload($payload);
 
@@ -83,6 +81,7 @@ final class JwtGuard implements StatefulGuard
     $token = $credentials['token'];
 
     $user = $this->userRepository->findUserById($id);
+
     $result = $this->jwtRepository->exists($user, $token);
 
     if ($result) $this->setUser($user);
