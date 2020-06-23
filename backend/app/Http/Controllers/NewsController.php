@@ -24,7 +24,7 @@ final class NewsController extends Controller
    *
    * @param NewsRepository $newsRepository
    */
-  public final function __construct(NewsRepository $newsRepository)
+  public function __construct(NewsRepository $newsRepository)
   {
     $this->newsRepository = $newsRepository;
   }
@@ -34,7 +34,7 @@ final class NewsController extends Controller
    *
    * @return ResourceCollection
    */
-  public final function index()
+  public function index()
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -47,7 +47,7 @@ final class NewsController extends Controller
    * @param News $news
    * @return NewsResource
    */
-  public final function show(News $news)
+  public function show(News $news)
   {
     return new NewsResource($news);
   }
@@ -58,7 +58,7 @@ final class NewsController extends Controller
    * @param NewsStoreRequest $request
    * @return NewsResource
    */
-  public final function store(NewsStoreRequest $request)
+  public function store(NewsStoreRequest $request)
   {
     $news = $this->newsRepository->createNews($request->only([
       'title',
@@ -75,7 +75,7 @@ final class NewsController extends Controller
    * @param NewsUpdateRequest $request
    * @return Response
    */
-  public final function update(News $news, NewsUpdateRequest $request)
+  public function update(News $news, NewsUpdateRequest $request)
   {
     $news->update($request->only([
       'title',
@@ -92,7 +92,8 @@ final class NewsController extends Controller
    * @return Response
    * @throws Exception
    */
-  public final function delete(News $news) {
+  public function delete(News $news)
+  {
     $news->delete();
 
     return response()->noContent();

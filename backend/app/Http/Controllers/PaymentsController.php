@@ -33,7 +33,7 @@ final class PaymentsController extends Controller
    *
    * @return ResourceCollection
    */
-  public final function index()
+  public function index()
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -46,7 +46,7 @@ final class PaymentsController extends Controller
    * @param Payment $payment
    * @return mixed
    */
-  public final function products(Payment $payment)
+  public function products(Payment $payment)
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -59,7 +59,7 @@ final class PaymentsController extends Controller
    * @param Payment $payment
    * @return PaymentResource
    */
-  public final function show(Payment $payment)
+  public function show(Payment $payment)
   {
     return new PaymentResource($payment);
   }
@@ -72,7 +72,7 @@ final class PaymentsController extends Controller
    * @param PaymentService $paymentService
    * @return Response
    */
-  public final function payment(PaymentCheckoutRequest $request, string $paymentHandler, PaymentService $paymentService)
+  public function payment(PaymentCheckoutRequest $request, string $paymentHandler, PaymentService $paymentService)
   {
     $user = $request->user();
 
@@ -89,7 +89,7 @@ final class PaymentsController extends Controller
    * @param PaymentService $paymentService
    * @return Response
    */
-  public final function notification(Request $request, string $paymentHandler, PaymentService $paymentService)
+  public function notification(Request $request, string $paymentHandler, PaymentService $paymentService)
   {
     $paymentHandler = $paymentService->findPaymentHandlerByPaymentMethodString($paymentHandler);
 

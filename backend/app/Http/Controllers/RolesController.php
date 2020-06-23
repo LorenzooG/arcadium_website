@@ -22,7 +22,7 @@ final class RolesController extends Controller
    *
    * @param RoleRepository $roleRepository
    */
-  public final function __construct(RoleRepository $roleRepository)
+  public function __construct(RoleRepository $roleRepository)
   {
     $this->roleRepository = $roleRepository;
   }
@@ -32,7 +32,7 @@ final class RolesController extends Controller
    *
    * @return ResourceCollection
    */
-  public final function index()
+  public function index()
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -45,7 +45,7 @@ final class RolesController extends Controller
    * @param Role $role
    * @return RoleResource
    */
-  public final function show(Role $role)
+  public function show(Role $role)
   {
     return new RoleResource($role);
   }
@@ -56,7 +56,7 @@ final class RolesController extends Controller
    * @param User $user
    * @return ResourceCollection
    */
-  public final function user(User $user)
+  public function user(User $user)
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -69,7 +69,7 @@ final class RolesController extends Controller
    * @param RoleStoreRequest $request
    * @return RoleResource
    */
-  public final function store(RoleStoreRequest $request)
+  public function store(RoleStoreRequest $request)
   {
     $role = $this->roleRepository->createRole($request->only([
       'title',
@@ -87,7 +87,7 @@ final class RolesController extends Controller
    * @return Response
    * @throws Exception
    */
-  public final function delete(Role $role)
+  public function delete(Role $role)
   {
     $role->delete();
 
@@ -101,7 +101,7 @@ final class RolesController extends Controller
    * @param RoleUpdateRequest $request
    * @return Response
    */
-  public final function update(Role $role, RoleUpdateRequest $request)
+  public function update(Role $role, RoleUpdateRequest $request)
   {
     $role->update($request->only([
       'title',
@@ -119,7 +119,7 @@ final class RolesController extends Controller
    * @param User $user
    * @return Response
    */
-  public final function attach(Role $role, User $user)
+  public function attach(Role $role, User $user)
   {
     $user->roles()->attach($role->id);
 
@@ -133,7 +133,7 @@ final class RolesController extends Controller
    * @param User $user
    * @return Response
    */
-  public final function detach(Role $role, User $user)
+  public function detach(Role $role, User $user)
   {
     $user->roles()->detach($role->id);
 

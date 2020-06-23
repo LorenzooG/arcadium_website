@@ -22,7 +22,7 @@ final class CommandsController extends Controller
    *
    * @param ProductCommandRepository $productCommandRepository
    */
-  public final function __construct(ProductCommandRepository $productCommandRepository)
+  public function __construct(ProductCommandRepository $productCommandRepository)
   {
     $this->productCommandRepository = $productCommandRepository;
   }
@@ -33,7 +33,7 @@ final class CommandsController extends Controller
    * @param Product $product
    * @return mixed
    */
-  public final function product(Product $product)
+  public function product(Product $product)
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -47,7 +47,7 @@ final class CommandsController extends Controller
    * @param CommandStoreRequest $request
    * @return ProductCommandResource
    */
-  public final function store(Product $product, CommandStoreRequest $request)
+  public function store(Product $product, CommandStoreRequest $request)
   {
     $productCommand = $this->productCommandRepository->createProductCommand($product, [
       'command' => $request->get('command')
@@ -63,7 +63,7 @@ final class CommandsController extends Controller
    * @param CommandUpdateRequest $request
    * @return Response
    */
-  public final function update(ProductCommand $command, CommandUpdateRequest $request)
+  public function update(ProductCommand $command, CommandUpdateRequest $request)
   {
     $command->update($request->only(['command']));
 
@@ -77,7 +77,7 @@ final class CommandsController extends Controller
    * @return Response
    * @throws Exception
    */
-  public final function delete(ProductCommand $command)
+  public function delete(ProductCommand $command)
   {
     $command->delete();
 

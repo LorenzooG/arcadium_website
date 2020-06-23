@@ -26,7 +26,7 @@ final class SelfUserController extends Controller
    * @param PostRepository $postRepository
    * @param RoleRepository $roleRepository
    */
-  public final function __construct(PostRepository $postRepository, RoleRepository $roleRepository)
+  public function __construct(PostRepository $postRepository, RoleRepository $roleRepository)
   {
     $this->postRepository = $postRepository;
     $this->roleRepository = $roleRepository;
@@ -38,7 +38,7 @@ final class SelfUserController extends Controller
    * @param Request $request
    * @return AnonymousResourceCollection
    */
-  public final function roles(Request $request)
+  public function roles(Request $request)
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -51,7 +51,7 @@ final class SelfUserController extends Controller
    * @param Request $request
    * @return AnonymousResourceCollection
    */
-  public final function posts(Request $request)
+  public function posts(Request $request)
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -64,7 +64,7 @@ final class SelfUserController extends Controller
    * @param UserUpdateRequest $request
    * @return Response
    */
-  public final function update(UserUpdateRequest $request)
+  public function update(UserUpdateRequest $request)
   {
     $request->user()
       ->fill($request->only([
@@ -83,7 +83,7 @@ final class SelfUserController extends Controller
    * @return Response
    * @throws Exception
    */
-  public final function delete(UserDeleteRequest $request)
+  public function delete(UserDeleteRequest $request)
   {
     $request->user()->delete();
 
