@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\EmailUpdate;
 use App\Http\Requests\UserDeleteRequest;
-use App\Http\Requests\UserUpdateEmailRequest;
-use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\RoleResource;
-use App\Notifications\EmailResetNotification;
 use App\Repositories\PostRepository;
 use App\Repositories\RoleRepository;
-use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -51,31 +46,6 @@ final class SelfUserController extends Controller
   }
 
   /**
-   * Create email update request
-   *
-   * @param Request $request
-   * @return Response
-   */
-  public final function requestEmailUpdate(Request $request)
-  {
-    /** @var User $user */
-    $user = $request->user();
-
-    /** @var EmailUpdate $emailUpdate */
-    $emailUpdate = $user->emailUpdates()->create([
-      'origin_address' => $request->ip(),
-      'token' => hash('sha256', json_encode([
-        'user_id' => $user->id,
-        'time' => microtime(true)
-      ]))
-    ]);
-
-    $user->notify(new EmailResetNotification($emailUpdate));
-
-    return response()->noContent();
-  }
-
-  /**
    * Show the current user's roles
    *
    * @param Request $request
@@ -101,46 +71,6 @@ final class SelfUserController extends Controller
         'name',
         'user_name'
       ]))
-      ->save();
-
-    return response()->noContent();
-  }
-
-  /**
-   * Update current user's password
-   *
-   * @param UserUpdatePasswordRequest $request
-   * @return Response
-   */
-  public final function updatePassword(UserUpdatePasswordRequest $request)
-  {
-    $request->user()
-      ->fill([
-        'password' => $request->get('new_password')
-      ])
-      ->save();
-
-    return response()->noContent();
-  }
-
-  /**
-   * Update current user's email
-   *
-   * @param EmailUpdate $emailUpdate
-   * @param UserUpdateEmailRequest $request
-   * @return Response
-   * @throws Exception
-   */
-  public final function updateEmail(EmailUpdate $emailUpdate, UserUpdateEmailRequest $request)
-  {
-    $emailUpdate->update([
-      'already_used' => true
-    ]);
-
-    $request->user()
-      ->fill([
-        'email' => $request->get('new_email')
-      ])
       ->save();
 
     return response()->noContent();

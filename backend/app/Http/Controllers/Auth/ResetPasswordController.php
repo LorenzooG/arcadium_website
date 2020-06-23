@@ -12,6 +12,12 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 
+/**
+ * Class ResetEmailController
+ *
+ * @package App\Http\Controllers\Auth
+ * @noinspection PhpUnused
+ */
 class ResetPasswordController extends Controller
 {
 
