@@ -47,10 +47,12 @@ final class ProductPaidNotification extends Notification
    */
   public final function toMail(User $notifiable)
   {
-    return (new MailMessage)->subject("Vip")->markdown('mail.vip.paid', [
-      "user" => $notifiable,
-      "products" => $this->products,
-    ]);
+    return (new MailMessage)
+      ->subject(trans('notifications.product.paid.subject'))
+      ->markdown('notifications.product.purchased', [
+        'user' => $notifiable,
+        'products' => $this->products,
+      ]);
   }
 
   /**
@@ -62,8 +64,8 @@ final class ProductPaidNotification extends Notification
   public final function toArray(User $notifiable)
   {
     return [
-      "products" => $this->products,
-      "user" => $notifiable
+      'products' => $this->products,
+      'user' => $notifiable
     ];
   }
 }
