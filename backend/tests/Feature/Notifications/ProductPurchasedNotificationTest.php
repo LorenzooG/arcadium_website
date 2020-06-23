@@ -14,7 +14,13 @@ final class ProductPurchasedNotificationTest extends TestCase
   {
     /** @var User $user */
     $user = factory(User::class)->make();
-    $products = factory(Product::class, 15)->make();
+    $products = factory(Product::class, 15)->make()->map(function (Product $product) {
+      $product->pivot = (object) [
+        'amount' => 1
+      ];
+
+      return $product;
+    });
 
     $notification = new ProductPurchasedNotification($products);
 
