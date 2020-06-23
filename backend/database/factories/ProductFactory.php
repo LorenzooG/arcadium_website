@@ -9,7 +9,7 @@ use Illuminate\Http\UploadedFile;
 
 $factory->define(Product::class, function (Faker $faker) {
   return [
-    'title' => $faker->text(72),
+    'title' => $faker->word,
     'description' => $faker->text(6000),
     'image' => UploadedFile::fake()->image($faker->text(8) . '.png', 100, 100),
     'price' => $faker->numberBetween(5, 15)
