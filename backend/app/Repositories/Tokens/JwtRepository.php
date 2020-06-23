@@ -97,7 +97,7 @@ final class JwtRepository implements TokenRepositoryInterface
     $createdAt = $row->getAttribute($row->getCreatedAtColumn());
 
     return Carbon::parse($createdAt)
-      ->addSeconds($this->throttle)
+      ->addDays($this->throttle)
       ->isFuture();
   }
 
