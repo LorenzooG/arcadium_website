@@ -49,7 +49,7 @@ final class ProductPaidNotification extends Notification
   {
     return (new MailMessage)
       ->subject(trans('notifications.product.paid.subject'))
-      ->markdown('notifications.paid.purchased', [
+      ->markdown('notifications.product.purchased', [
         'user' => $notifiable,
         'products' => $this->products,
       ]);
