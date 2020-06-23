@@ -24,6 +24,7 @@ use App\Role;
 use App\User;
 use App\Utils\Permission;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -66,11 +67,13 @@ class AuthServiceProvider extends ServiceProvider
     $this->registerPolicies();
 
     $this->app->singleton(JwtRepository::class, function (Application $app) {
-      return $app->make(JwtRepository::class, [
-        'throttle' => config('auth.jwt.throttle'),
-        'secret' => config('auth.jwt.secret'),
-        'algos' => config('auth.jwt.algos')
-      ]);
+      return new JwtRepository(
+        $app->make(ConnectionInterface::class),
+        config('auth.jwt.secret'),
+        config('auth.jwt.algos'),
+        config('auth.jwt.hash_algos'),
+        config('auth.jwt.throttle'),
+      );
     });
 
     Gate::define('update_self', function (User $user) {

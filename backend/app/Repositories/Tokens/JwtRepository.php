@@ -21,6 +21,7 @@ final class JwtRepository implements TokenRepositoryInterface
   private Builder $table;
   private string $secret;
   private string $algos;
+  private string $hashAlgos;
   private int $throttle;
 
   /**
@@ -29,13 +30,15 @@ final class JwtRepository implements TokenRepositoryInterface
    * @param ConnectionInterface $connection
    * @param string $secret
    * @param string $algos
+   * @param string $hashAlgos
    * @param int $throttle
    */
-  public function __construct(ConnectionInterface $connection, $secret, $algos, $throttle)
+  public function __construct(ConnectionInterface $connection, $secret, $algos, $hashAlgos, $throttle)
   {
     $this->table = $connection->table('jwt_tokens');
     $this->secret = $secret;
     $this->algos = $algos;
+    $this->hashAlgos = $hashAlgos;
     $this->throttle = $throttle;
   }
 
@@ -49,19 +52,22 @@ final class JwtRepository implements TokenRepositoryInterface
   {
     $userId = $user->id;
 
+    $databaseToken = hash_hmac($this->hashAlgos, json_encode([
+      'id' => $userId,
+      'time' => now()->unix()
+    ]), $this->secret);
+
     $payload = [
       'id' => $userId,
-      'token' => hash_hmac($this->algos, json_encode([
-        'id' => $userId,
-        'time' => now()->unix()
-      ]), $this->secret)
+      'token' => $databaseToken
     ];
 
-    $token = JWT::encode($payload, $this->secret);
+    $token = JWT::encode($payload, $this->secret, $this->algos);
 
     $this->table->insert([
       'user_id' => $userId,
-      'token' => $token
+      'token' => $databaseToken,
+      'created_at' => now()
     ]);
 
     return $token;
