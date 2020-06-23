@@ -8,6 +8,7 @@ use App\Repositories\Tokens\JwtRepository;
 use App\User;
 use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Http\Request;
 use Tests\TestCase;
 
 final class JwtGuardTest extends TestCase
@@ -65,6 +66,36 @@ final class JwtGuardTest extends TestCase
     ];
 
     $this->assertTrue($jwt->validate($payload));
+
+    $this->assertTrue($jwt->check());
+    $this->assertFalse($jwt->guest());
+  }
+
+  public function testShouldValidateSessionWhenTheBearerTokenIsAvailable()
+  {
+    /** @var JwtRepository $repository */
+    $repository = app(JwtRepository::class);
+
+    /** @var User $user */
+    $user = factory(User::class)->create();
+
+    $request = Request::capture();
+    $request->headers->set('Authorization', 'Bearer ' . $repository->create($user));
+
+    /** @var StatefulGuard $jwt */
+    $jwt = app(JwtGuard::class, [
+      'secret' => config('auth.jwt.secret'),
+      'algos' => config('auth.jwt.algos'),
+      'jwtRepository' => $repository,
+      'request' => $request
+    ]);
+
+    /** @var User $dummyUser */
+    $dummyUser = $jwt->user();
+
+    $dummyUser->refresh();
+
+    $this->assertEquals($user->id, $dummyUser->id);
 
     $this->assertTrue($jwt->check());
     $this->assertFalse($jwt->guest());
