@@ -43,7 +43,7 @@ class EmailResetNotification extends Notification
   public function toMail($notifiable)
   {
     return (new MailMessage)->subject("Vip")->markdown('user.request.email_update', [
-      'emailUpdateRequest' => $this->emailUpdateRequest,
+      'token' => $this->emailUpdateRequest->token,
       'user' => $notifiable
     ]);
   }
