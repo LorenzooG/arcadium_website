@@ -33,6 +33,7 @@ return [
 
   'product' => [
     'purchased' => [
+      'message' => 'The following products was purchased, so wait the payment work, and checkout in the server.',
       'subject' => 'Products purchased',
     ],
     'paid' => [
