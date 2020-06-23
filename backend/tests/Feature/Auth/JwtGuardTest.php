@@ -6,6 +6,7 @@ namespace Tests\Feature\Auth;
 use App\Auth\JwtGuard;
 use App\Repositories\Tokens\JwtRepository;
 use App\User;
+use Exception;
 use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
@@ -149,5 +150,85 @@ final class JwtGuardTest extends TestCase
 
     $this->assertFalse($jwt->check());
     $this->assertTrue($jwt->guest());
+  }
+
+  public function testShouldOnceThrowsException()
+  {
+    /** @var JwtRepository $repository */
+    $repository = app(JwtRepository::class);
+
+    /** @var User $user */
+    $user = factory(User::class)->create();
+
+    /** @var StatefulGuard $jwt */
+    $jwt = app(JwtGuard::class, [
+      'secret' => config('auth.jwt.secret'),
+      'algos' => config('auth.jwt.algos'),
+      'jwtRepository' => $repository,
+    ]);
+
+    $this->expectException(Exception::class);
+
+    $jwt->once();
+  }
+
+  public function testShouldOnceUsingIdThrowsException()
+  {
+    /** @var JwtRepository $repository */
+    $repository = app(JwtRepository::class);
+
+    /** @var User $user */
+    $user = factory(User::class)->create();
+
+    /** @var StatefulGuard $jwt */
+    $jwt = app(JwtGuard::class, [
+      'secret' => config('auth.jwt.secret'),
+      'algos' => config('auth.jwt.algos'),
+      'jwtRepository' => $repository,
+    ]);
+
+    $this->expectException(Exception::class);
+
+    $jwt->onceUsingId($this->faker->numberBetween());
+  }
+
+  public function testShouldViaRememberThrowsException()
+  {
+    /** @var JwtRepository $repository */
+    $repository = app(JwtRepository::class);
+
+    /** @var User $user */
+    $user = factory(User::class)->create();
+
+    /** @var StatefulGuard $jwt */
+    $jwt = app(JwtGuard::class, [
+      'secret' => config('auth.jwt.secret'),
+      'algos' => config('auth.jwt.algos'),
+      'jwtRepository' => $repository,
+    ]);
+
+    $this->expectException(Exception::class);
+
+    $jwt->viaRemember();
+  }
+
+  public function testShouldLogoutThrowsException()
+  {
+    /** @var JwtRepository $repository */
+    $repository = app(JwtRepository::class);
+
+    /** @var User $user */
+    $user = factory(User::class)->create();
+
+    /** @var StatefulGuard $jwt */
+    $jwt = app(JwtGuard::class, [
+      'secret' => config('auth.jwt.secret'),
+      'algos' => config('auth.jwt.algos'),
+      'jwtRepository' => $repository,
+    ]);
+
+    $this->expectException(Exception::class);
+
+    $jwt->logout();
   }
 }
