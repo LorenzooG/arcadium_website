@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class RequestEmailUpdateNotification extends Notification
+class EmailResetNotification extends Notification
 {
   use Queueable;
 
@@ -42,10 +42,12 @@ class RequestEmailUpdateNotification extends Notification
    */
   public function toMail($notifiable)
   {
-    return (new MailMessage)->subject("Vip")->markdown('user.request.email_update', [
-      'emailUpdateRequest' => $this->emailUpdateRequest,
-      'user' => $notifiable
-    ]);
+    return (new MailMessage)
+      ->subject(trans('notifications.email.reset.subject'))
+      ->markdown('notifications.email.reset', [
+        'token' => $this->emailUpdateRequest->token,
+        'user' => $notifiable
+      ]);
   }
 
   /**
@@ -57,7 +59,7 @@ class RequestEmailUpdateNotification extends Notification
   public function toArray($notifiable)
   {
     return [
-      'emailUpdateRequest' => $this->emailUpdateRequest,
+      'token' => $this->emailUpdateRequest->token,
       'user' => $notifiable
     ];
   }

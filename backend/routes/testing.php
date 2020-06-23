@@ -56,4 +56,11 @@ Route::prefix('notifications')->group(function () {
       })
     ])->toHtml();
   });
+
+  Route::get('email.reset', function (Markdown $markdown) {
+    return $markdown->render('notifications.email.reset', [
+      'user' => factory(User::class)->make(),
+      'token' => Str::random(150)
+    ])->toHtml();
+  });
 });
