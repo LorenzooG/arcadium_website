@@ -8,8 +8,7 @@ use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateEmailRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Notifications\EmailChangedNotification;
-use App\Notifications\RequestEmailUpdateNotification;
+use App\Notifications\EmailResetNotification;
 use App\Post;
 use App\Role;
 use App\User;
@@ -91,22 +90,6 @@ class SelfUserControllerTest extends TestCase
     $this->assertCount(1, $users);
   }
 
-  public function testShouldSendUpdateEmailEmailWhenPostUserUpdateEmail()
-  {
-    Notification::fake();
-
-    /** @var User $user */
-    $user = factory(User::class)->state('admin')->create();
-
-    $response = $this->actingAs($user)->postJson(route('user.request.update.email'), [
-      'email' => $user->email,
-    ]);
-
-    Notification::assertSentTo($user, RequestEmailUpdateNotification::class);
-
-    $response->assertNoContent();
-  }
-
   public function testAssertUpdateUsesFormRequest()
   {
     $this->assertActionUsesFormRequest(
@@ -133,129 +116,6 @@ class SelfUserControllerTest extends TestCase
     $this->assertActionUsesMiddleware(
       ActualUserController::class,
       'update',
-      'can:update_self'
-    );
-  }
-
-  public function testShouldUpdatePasswordWhenPutUser()
-  {
-    $password = $this->faker->password(8, 16);
-    $newPassword = $this->faker->password(8, 16);
-
-    /** @var User $user */
-    $user = factory(User::class)->state('admin')->create([
-      'password' => $password,
-    ]);
-
-    $response = $this->actingAs($user)->putJson(route('user.update.password'), [
-      'new_password' => $newPassword,
-      'password' => $password
-    ]);
-
-    $this->assertTrue(Hash::check($newPassword, $user->password));
-
-    $response->assertNoContent();
-  }
-
-  public function testAssertUpdatePasswordUsesFormRequest()
-  {
-    $this->assertActionUsesFormRequest(
-      ActualUserController::class,
-      'updatePassword',
-      UserUpdatePasswordRequest::class
-    );
-  }
-
-  public function testAssertUpdatePasswordUsesMiddleware()
-  {
-    $this->assertActionUsesMiddleware(
-      ActualUserController::class,
-      'updatePassword',
-      'auth:api'
-    );
-
-    $this->assertActionUsesMiddleware(
-      ActualUserController::class,
-      'updatePassword',
-      'xss'
-    );
-
-    $this->assertActionUsesMiddleware(
-      ActualUserController::class,
-      'updatePassword',
-      'can:update_self'
-    );
-  }
-
-  public function testShouldUpdateEmailUserWhenPutUserEmail()
-  {
-    Notification::fake();
-
-    /** @var User $user */
-    $user = factory(User::class)->state('admin')->create();
-
-    $token = Str::random(64);
-
-    /** @var EmailUpdate $request */
-    $request = factory(EmailUpdate::class)->create([
-      'user_id' => $user->id,
-      'token' => $token,
-    ]);
-
-    $email = $this->faker->unique()->safeEmail;
-
-    $response = $this->actingAs($user)->putJson(route('user.update.email', [
-      'emailUpdate' => $token
-    ]), [
-      'new_email' => $email
-    ]);
-
-    $users = User::query()
-      ->where('id', $user->id)
-      ->where('name', $user->name)
-      ->where('user_name', $user->user_name)
-      ->where('email', $email)
-      ->where('password', $user->password)
-      ->get();
-
-    $request = EmailUpdate::findOrFail($request->id);
-
-    Notification::assertSentTo($user, EmailChangedNotification::class);
-
-    $this->assertFalse($request->isValid());
-    $this->assertEquals(1, $request->already_used);
-
-    $this->assertCount(1, $users);
-
-    $response->assertNoContent();
-  }
-
-  public function testAssertUpdateEmailUsesFormRequest()
-  {
-    $this->assertActionUsesFormRequest(
-      ActualUserController::class,
-      'updateEmail',
-      UserUpdateEmailRequest::class
-    );
-  }
-
-  public function testAssertUpdateEmailUsesMiddleware()
-  {
-    $this->assertActionUsesMiddleware(
-      ActualUserController::class,
-      'updateEmail',
-      'auth:api'
-    );
-
-    $this->assertActionUsesMiddleware(
-      ActualUserController::class,
-      'updateEmail',
-      'xss'
-    );
-
-    $this->assertActionUsesMiddleware(
-      ActualUserController::class,
-      'updateEmail',
       'can:update_self'
     );
   }

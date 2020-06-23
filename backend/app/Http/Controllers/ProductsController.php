@@ -24,7 +24,7 @@ final class ProductsController extends Controller
    *
    * @param ProductRepository $productRepository
    */
-  public final function __construct(ProductRepository $productRepository)
+  public function __construct(ProductRepository $productRepository)
   {
     $this->productRepository = $productRepository;
   }
@@ -34,7 +34,7 @@ final class ProductsController extends Controller
    *
    * @return AnonymousResourceCollection
    */
-  public final function index()
+  public function index()
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -47,7 +47,7 @@ final class ProductsController extends Controller
    * @param Product $product
    * @return ProductResource
    */
-  public final function show(Product $product)
+  public function show(Product $product)
   {
     return new ProductResource($product);
   }
@@ -58,7 +58,7 @@ final class ProductsController extends Controller
    * @param ProductStoreRequest $request
    * @return ProductResource
    */
-  public final function store(ProductStoreRequest $request)
+  public function store(ProductStoreRequest $request)
   {
     $data = $request->only([
       'title',
@@ -80,7 +80,7 @@ final class ProductsController extends Controller
    * @param ProductUpdateRequest $request
    * @return Response
    */
-  public final function update(Product $product, ProductUpdateRequest $request)
+  public function update(Product $product, ProductUpdateRequest $request)
   {
     $product->update($request->only([
       'title',
@@ -97,7 +97,7 @@ final class ProductsController extends Controller
    * @param Product $product
    * @return BinaryFileResponse
    */
-  public final function image(Product $product)
+  public function image(Product $product)
   {
     return Storage::download('products.images/' . $product->image);
   }
@@ -109,7 +109,7 @@ final class ProductsController extends Controller
    * @param Request $request
    * @return Response
    */
-  public final function updateImage(Product $product, Request $request)
+  public function updateImage(Product $product, Request $request)
   {
     $product->update([
       'image' => $request->file('image')
@@ -125,7 +125,7 @@ final class ProductsController extends Controller
    * @return Response
    * @throws Exception
    */
-  public final function delete(Product $product)
+  public function delete(Product $product)
   {
     $product->delete();
 
@@ -138,7 +138,7 @@ final class ProductsController extends Controller
    * @param Product $product
    * @return Response
    */
-  public final function restore(Product $product)
+  public function restore(Product $product)
   {
     $product->restore();
 
@@ -150,7 +150,7 @@ final class ProductsController extends Controller
    *
    * @return AnonymousResourceCollection
    */
-  public final function trashed()
+  public function trashed()
   {
     $page = Paginator::resolveCurrentPage();
 

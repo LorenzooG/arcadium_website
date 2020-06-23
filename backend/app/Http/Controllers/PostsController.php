@@ -25,7 +25,7 @@ final class PostsController extends Controller
    *
    * @param PostRepository $postRepository
    */
-  public final function __construct(PostRepository $postRepository)
+  public function __construct(PostRepository $postRepository)
   {
     $this->postRepository = $postRepository;
   }
@@ -36,7 +36,7 @@ final class PostsController extends Controller
    *
    * @return ResourceCollection
    */
-  public final function index()
+  public function index()
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -49,14 +49,14 @@ final class PostsController extends Controller
    * @param User $user
    * @return ResourceCollection
    */
-  public final function user(User $user)
+  public function user(User $user)
   {
     $page = Paginator::resolveCurrentPage();
 
     return PostResource::collection($this->postRepository->findPaginatedPostsForUser($user, $page));
   }
 
-  public final function show(Post $post)
+  public function show(Post $post)
   {
     return new PostResource($post);
   }
@@ -67,7 +67,7 @@ final class PostsController extends Controller
    * @param PostStoreRequest $request
    * @return PostResource
    */
-  public final function store(PostStoreRequest $request)
+  public function store(PostStoreRequest $request)
   {
     $post = $this->postRepository->createPost($request->user(), $request->only([
       'title',
@@ -84,7 +84,7 @@ final class PostsController extends Controller
    * @param Post $post
    * @return Response
    */
-  public final function like(PostLikeRequest $request, Post $post)
+  public function like(PostLikeRequest $request, Post $post)
   {
     $post->likes()->save($request->user());
 
@@ -98,7 +98,7 @@ final class PostsController extends Controller
    * @param Post $post
    * @return Response
    */
-  public final function unlike(PostUnlikeRequest $request, Post $post)
+  public function unlike(PostUnlikeRequest $request, Post $post)
   {
     $post->likes()->detach($request->user()->id);
 
@@ -112,7 +112,7 @@ final class PostsController extends Controller
    * @param PostUpdateRequest $request
    * @return Response
    */
-  public final function update(Post $post, PostUpdateRequest $request)
+  public function update(Post $post, PostUpdateRequest $request)
   {
     $post->update($request->only([
       'title',
@@ -129,7 +129,7 @@ final class PostsController extends Controller
    * @return Response
    * @throws Exception
    */
-  public final function delete(Post $post)
+  public function delete(Post $post)
   {
     $post->delete();
 

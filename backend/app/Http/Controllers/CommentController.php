@@ -22,7 +22,7 @@ final class CommentController extends Controller
    *
    * @param $commentRepository
    */
-  public final function __construct(CommentRepository $commentRepository)
+  public function __construct(CommentRepository $commentRepository)
   {
     $this->commentRepository = $commentRepository;
   }
@@ -34,7 +34,7 @@ final class CommentController extends Controller
    *
    * @return AnonymousResourceCollection
    */
-  public final function post(Post $post)
+  public function post(Post $post)
   {
     $page = Paginator::resolveCurrentPage();
 
@@ -49,7 +49,7 @@ final class CommentController extends Controller
    *
    * @return CommentResource
    */
-  public final function store(Post $post, CommentStoreRequest $request)
+  public function store(Post $post, CommentStoreRequest $request)
   {
     $post = $this->commentRepository->createComment($request->user(), $post, [
       'content' => $request->json('content')
@@ -66,7 +66,7 @@ final class CommentController extends Controller
    *
    * @return Response
    */
-  public final function update(Comment $comment, CommentUpdateRequest $request)
+  public function update(Comment $comment, CommentUpdateRequest $request)
   {
     $comment->update([
       'content' => $request->json('content'),
@@ -85,7 +85,7 @@ final class CommentController extends Controller
    *
    * @return Response
    */
-  public final function delete(Comment $comment)
+  public function delete(Comment $comment)
   {
     $comment->delete();
 
