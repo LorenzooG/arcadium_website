@@ -15,6 +15,9 @@ return [
   'dear' => 'Dear, :name',
   'thanks' => 'Thanks',
 
+  'item' => 'Item: :item',
+  'amount' => 'Amount: :amount',
+
   'password' => [
     'reset' => [
       'subject' => 'Password Reset',
@@ -33,6 +36,7 @@ return [
       'subject' => 'Products purchased',
     ],
     'paid' => [
+      'message' => 'Congratulations for your purchase! You have purchased the following items:',
       'subject' => 'Products paid',
     ]
   ]
