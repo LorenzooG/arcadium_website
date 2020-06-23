@@ -18,6 +18,14 @@ return [
   'item' => 'Item: :item',
   'amount' => 'Amount: :amount',
 
+  'email' => [
+    'reset' => [
+      'subject' => 'Email Reset',
+      'message' => "You've requested an email reset in our website, please click in the following link to finish the process, if haven't requested, please reset your password.",
+      'button' => 'Reset email'
+    ],
+  ],
+
   'password' => [
     'reset' => [
       'subject' => 'Password Reset',

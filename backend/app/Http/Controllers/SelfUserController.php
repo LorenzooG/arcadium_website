@@ -5,13 +5,11 @@ namespace App\Http\Controllers;
 use App\EmailUpdate;
 use App\Http\Requests\UserDeleteRequest;
 use App\Http\Requests\UserUpdateEmailRequest;
-use App\Http\Requests\UserUpdateEmailRequestRequest;
 use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\RoleResource;
-use App\Notifications\EmailChangedNotification;
-use App\Notifications\RequestEmailUpdateNotification;
+use App\Notifications\EmailResetNotification;
 use App\Repositories\PostRepository;
 use App\Repositories\RoleRepository;
 use App\User;
@@ -72,7 +70,7 @@ final class SelfUserController extends Controller
       ]))
     ]);
 
-    $user->notify(new RequestEmailUpdateNotification($emailUpdate));
+    $user->notify(new EmailResetNotification($emailUpdate));
 
     return response()->noContent();
   }
