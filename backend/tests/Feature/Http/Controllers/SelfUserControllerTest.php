@@ -136,56 +136,6 @@ class SelfUserControllerTest extends TestCase
     );
   }
 
-  public function testShouldUpdatePasswordWhenPutUser()
-  {
-    $password = $this->faker->password(8, 16);
-    $newPassword = $this->faker->password(8, 16);
-
-    /** @var User $user */
-    $user = factory(User::class)->state('admin')->create([
-      'password' => $password,
-    ]);
-
-    $response = $this->actingAs($user)->putJson(route('user.update.password'), [
-      'new_password' => $newPassword,
-      'password' => $password
-    ]);
-
-    $this->assertTrue(Hash::check($newPassword, $user->password));
-
-    $response->assertNoContent();
-  }
-
-  public function testAssertUpdatePasswordUsesFormRequest()
-  {
-    $this->assertActionUsesFormRequest(
-      ActualUserController::class,
-      'updatePassword',
-      UserUpdatePasswordRequest::class
-    );
-  }
-
-  public function testAssertUpdatePasswordUsesMiddleware()
-  {
-    $this->assertActionUsesMiddleware(
-      ActualUserController::class,
-      'updatePassword',
-      'auth:api'
-    );
-
-    $this->assertActionUsesMiddleware(
-      ActualUserController::class,
-      'updatePassword',
-      'xss'
-    );
-
-    $this->assertActionUsesMiddleware(
-      ActualUserController::class,
-      'updatePassword',
-      'can:update_self'
-    );
-  }
-
   public function testShouldShowPostsOrderedByDescIdWhenGetUserPosts()
   {
     /* @var User $user */
