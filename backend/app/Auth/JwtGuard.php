@@ -6,10 +6,13 @@ use App\Repositories\Tokens\JwtRepository;
 use App\Repositories\UserRepository;
 use App\User;
 use Exception;
+use Firebase\JWT\JWT;
 use Illuminate\Auth\Passwords\TokenRepositoryInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Validator;
 
 final class JwtGuard implements StatefulGuard
 {
@@ -23,6 +26,8 @@ final class JwtGuard implements StatefulGuard
   private TokenRepositoryInterface $jwtRepository;
   private UserRepository $userRepository;
   private Hasher $hasher;
+  private string $secret;
+  private string $algos;
 
   /**
    * JwtGuard constructor
@@ -30,12 +35,16 @@ final class JwtGuard implements StatefulGuard
    * @param UserRepository $userRepository
    * @param JwtRepository $jwtRepository
    * @param Hasher $hasher
+   * @param string $secret
+   * @param string $algos
    */
-  public final function __construct(UserRepository $userRepository, JwtRepository $jwtRepository, Hasher $hasher)
+  public final function __construct(UserRepository $userRepository, JwtRepository $jwtRepository, Hasher $hasher, $secret, $algos)
   {
     $this->jwtRepository = $jwtRepository;
     $this->userRepository = $userRepository;
     $this->hasher = $hasher;
+    $this->secret = $secret;
+    $this->algos = $algos;
   }
 
   /**
@@ -45,7 +54,13 @@ final class JwtGuard implements StatefulGuard
    */
   public final function user()
   {
-    if ($this->check() || $this->validate()) return $this->user;
+    if ($this->check()) return $this->user;
+
+    $bearerToken = Request::bearerToken();
+    $payload = $this->decodePayload($bearerToken);
+    $payload = $this->validatePayload($payload);
+
+    if ($this->validate($payload)) return $this->user;
 
     return new User();
   }
@@ -149,6 +164,33 @@ final class JwtGuard implements StatefulGuard
     $this->setUser($user);
 
     return $user;
+  }
+
+  /**
+   * Decodes payload and return an array
+   *
+   * @param string $bearerToken
+   * @return array
+   */
+  protected final function decodePayload($bearerToken)
+  {
+    return (array)JWT::decode($bearerToken, $this->secret, [$this->algos]);
+  }
+
+  /**
+   * Returns validated payload
+   *
+   * @param $payload
+   * @return array
+   */
+  protected final function validatePayload($payload)
+  {
+    $validator = Validator::make($payload, [
+      'id' => 'required|numeric',
+      'token' => 'required|string'
+    ]);
+
+    return $validator->validate();
   }
 
   /**
