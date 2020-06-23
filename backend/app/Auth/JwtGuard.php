@@ -2,25 +2,33 @@
 
 namespace App\Auth;
 
+use App\Repositories\Tokens\JwtRepository;
+use App\Repositories\UserRepository;
 use App\User;
 use Exception;
-use Firebase\JWT\JWT;
+use Illuminate\Auth\Passwords\TokenRepositoryInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Support\Facades\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use Throwable;
+use Illuminate\Contracts\Hashing\Hasher;
 
 final class JwtGuard implements StatefulGuard
 {
-  private ?Authenticatable $user;
-  private bool $isLogged;
+  /**
+   * Target's user
+   *
+   * @var Authenticatable|User|null $user
+   */
+  protected ?Authenticatable $user = null;
 
-  public final function __construct()
+  private TokenRepositoryInterface $jwtRepository;
+  private UserRepository $userRepository;
+  private Hasher $hasher;
+
+  public final function __construct(UserRepository $userRepository, JwtRepository $jwtRepository, Hasher $hasher)
   {
-    $this->isLogged = false;
-    $this->user = null;
+    $this->jwtRepository = $jwtRepository;
+    $this->userRepository = $userRepository;
+    $this->hasher = $hasher;
   }
 
   /**
@@ -28,7 +36,7 @@ final class JwtGuard implements StatefulGuard
    */
   public final function check()
   {
-    return $this->isLogged;
+    return $this->user != null;
   }
 
   /**
@@ -36,7 +44,7 @@ final class JwtGuard implements StatefulGuard
    */
   public final function guest()
   {
-    return !$this->isLogged;
+    return $this->user == null;
   }
 
   /**
@@ -44,23 +52,7 @@ final class JwtGuard implements StatefulGuard
    */
   public final function user()
   {
-    if ($this->isLogged) {
-      return $this->user;
-    }
-
-    $token = Request::bearerToken();
-    $secret = config("auth.jwt_secret");
-
-    if (isset($token) && $token !== null && strlen($token) > 0) {
-      try {
-        $userId = (int)JWT::decode($token, $secret, ["HS256"]);
-        if ($userId !== null) {
-          $this->loginUsingId($userId);
-        }
-      } catch (Throwable $exception) {
-        throw new BadRequestHttpException();
-      }
-    }
+    if ($this->check() || $this->validate()) return $this->user;
 
     return new User();
   }
@@ -78,18 +70,15 @@ final class JwtGuard implements StatefulGuard
    */
   public final function validate(array $credentials = [])
   {
-    $query = User::query()
-      ->where("email", "=", $credentials["email"]);
+    $id = $credentials['id'];
+    $token = $credentials['token'];
 
-    if ($query->exists()) {
-      $user = $query->first();
+    $user = $this->userRepository->findUserById($id);
+    $result = $this->jwtRepository->exists($user, $token);
 
-      if (password_verify($credentials["password"], $user->password)) {
-        return true;
-      }
-    }
+    $this->setUser($user);
 
-    return false;
+    return $result;
   }
 
   /**
@@ -161,16 +150,11 @@ final class JwtGuard implements StatefulGuard
    */
   public final function attempt(array $credentials = [], $remember = false)
   {
+    $user = $this->userRepository->findUserByEmail($credentials['email']);
 
-    if ($this->validate($credentials)) {
-      $query = User::query()
-        ->where("email", "=", $credentials["email"]);
-      $user = $query->first();
+    if (!$this->hasher->check($credentials['password'], $user->password)) return false;
 
-      return JWT::encode($user->id, config("auth.jwt_secret"));
-    }
-
-    throw new UnauthorizedHttpException("");
+    return $this->jwtRepository->create($user);
   }
 
 }
