@@ -36,6 +36,7 @@ final class JwtGuard implements StatefulGuard
    * @param UserRepository $userRepository
    * @param JwtRepository $jwtRepository
    * @param Hasher $hasher
+   * @param Request $request
    * @param string $secret
    * @param string $algos
    */
