@@ -42,10 +42,12 @@ class EmailResetNotification extends Notification
    */
   public function toMail($notifiable)
   {
-    return (new MailMessage)->subject("Vip")->markdown('user.request.email_update', [
-      'token' => $this->emailUpdateRequest->token,
-      'user' => $notifiable
-    ]);
+    return (new MailMessage)
+      ->subject(trans('notifications.email.reset.subject'))
+      ->markdown('notifications.email.reset', [
+        'token' => $this->emailUpdateRequest->token,
+        'user' => $notifiable
+      ]);
   }
 
   /**
@@ -57,7 +59,7 @@ class EmailResetNotification extends Notification
   public function toArray($notifiable)
   {
     return [
-      'emailUpdateRequest' => $this->emailUpdateRequest,
+      'token' => $this->emailUpdateRequest->token,
       'user' => $notifiable
     ];
   }
