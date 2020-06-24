@@ -45,7 +45,7 @@ final class ChangeImageControllerTest extends TestCase
   {
     $this->assertActionUsesMiddleware(
       ChangeImageController::class,
-      'update',
+      '__invoke',
       'can:update,App\Product'
     );
   }
@@ -54,7 +54,7 @@ final class ChangeImageControllerTest extends TestCase
   {
     $this->assertActionUsesFormRequest(
       ChangeImageController::class,
-      'update',
+      '__invoke',
       ImageUpdateRequest::class
     );
   }
