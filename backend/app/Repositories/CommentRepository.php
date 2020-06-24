@@ -50,7 +50,7 @@ final class CommentRepository
     return $this->cacheRepository->remember($this->getCacheKey("for.$post.paginated.$page"), now()->addHour(), function () use ($post, $page) {
       $this->logger->info("Caching post {$post->id}'s comments in page {$page}.");
 
-      return $post->comments()->paginate();
+      return $post->comments()->withPivot('id')->paginate();
     });
   }
 
@@ -83,10 +83,10 @@ final class CommentRepository
   {
     $this->logger->info("Creating comment for user {$user->id} and for post {$post->id}.");
 
-    $data['user_id'] = $user->id;
-    $data['post_id'] = $post->id;
-
-    return Comment::create($data);
+    return Comment::create(array_merge($data, [
+      'user_id' => $user->id,
+      'post_id' => $post->id
+    ]));
   }
 
   /**
