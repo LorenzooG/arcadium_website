@@ -163,6 +163,8 @@ final class User extends Authenticatable
   {
     $this->attributes["password"] = Hash::make(htmlspecialchars_decode($value));
 
+    if (!$this->exists) return;
+
     /** @var TokenRepositoryInterface $jwtRepository */
     $jwtRepository = app(JwtRepository::class);
     $jwtRepository->delete($this);
