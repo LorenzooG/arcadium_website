@@ -146,9 +146,9 @@ Route::prefix('products')->name('products.')->group(function () {
     Route::post("/restore", "ProductsController@restore")->middleware('can:restore,App\Product')->name('restore');
     Route::delete('/', 'ProductsController@delete')->middleware('can:delete,App\Product')->name('delete');
 
-    Route::prefix('image')->name('image.')->group(function () {
-      Route::get('/', 'ProductsController@image')->name('show');
-      Route::post('/', 'Product\ChangeImageController')->middleware('can:update,App\Product')->name('update.image');
+    Route::prefix('image')->group(function () {
+      Route::get('/', 'ProductsController@image')->name('image');
+      Route::post('/', 'Product\ChangeImageController')->middleware('can:update,App\Product')->name('image.update');
     });
 
     Route::prefix('commands')->name('commands.')->group(function () {
