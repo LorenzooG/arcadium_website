@@ -60,7 +60,7 @@ final class ChangePasswordControllerTest extends TestCase
     $this->assertActionUsesMiddleware(
       ChangePasswordController::class,
       '__invoke',
-      'can:update_self'
+      'can:updateSelf,App\User'
     );
   }
 }
