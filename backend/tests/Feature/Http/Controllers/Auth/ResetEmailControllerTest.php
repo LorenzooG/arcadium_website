@@ -35,7 +35,7 @@ final class ResetEmailControllerTest extends TestCase
     $this->assertActionUsesMiddleware(
       ChangeEmailController::class,
       '__invoke',
-      'can:update_self'
+      'can:updateSelf,App\User'
     );
   }
 }
