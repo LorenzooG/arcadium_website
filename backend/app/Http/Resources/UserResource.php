@@ -26,13 +26,13 @@ final class UserResource extends JsonResource
   public final function toArray($request)
   {
     return [
-      "id" => $this->id,
-      "email" => $this->when($request->user()->hasPermission(Permission::VIEW_USER_EMAIL), $this->email),
-      "user_name" => $this->user_name,
-      "name" => $this->name,
-      "deleted_at" => $this->deleted_at,
-      "created_at" => $this->created_at,
-      "updated_at" => $this->updated_at
+      'id' => $this->id,
+      'email' => $this->when($request->user()->hasPermission(Permission::VIEW_USER_EMAIL), $this->email),
+      'user_name' => $this->user_name,
+      'name' => $this->name,
+      'deleted_at' => $this->deleted_at,
+      'created_at' => $this->created_at,
+      'updated_at' => $this->updated_at
     ];
   }
 }
