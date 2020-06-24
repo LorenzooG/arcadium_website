@@ -51,11 +51,11 @@ final class CommentController extends Controller
    */
   public function store(Post $post, CommentStoreRequest $request)
   {
-    $post = $this->commentRepository->createComment($request->user(), $post, [
+    $comment = $this->commentRepository->createComment($request->user(), $post, [
       'content' => $request->json('content')
     ]);
 
-    return new CommentResource($post);
+    return new CommentResource($comment);
   }
 
   /**
