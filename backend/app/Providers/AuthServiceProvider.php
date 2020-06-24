@@ -20,7 +20,6 @@ use App\Product;
 use App\ProductCommand;
 use App\Punishment;
 use App\Repositories\Tokens\JwtRepository;
-use App\Repositories\Tokens\VerifyEmailTokenRepository;
 use App\Repositories\UserRepository;
 use App\Role;
 use App\User;
@@ -75,15 +74,6 @@ class AuthServiceProvider extends ServiceProvider
         config('auth.jwt.algos'),
         config('auth.jwt.hash_algos'),
         config('auth.jwt.expires'),
-      );
-    });
-
-    $this->app->singleton(VerifyEmailTokenRepository::class, function (Application $app) {
-      return new VerifyEmailTokenRepository(
-        $app->make(ConnectionInterface::class),
-        config('auth.verify_email.algos'),
-        config('auth.verify_email.expires'),
-        config('auth.verify_email.throttle')
       );
     });
 
