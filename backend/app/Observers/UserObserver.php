@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Repositories\UserRepository;
 use App\User;
+use GuzzleHttp\Client;
 use Illuminate\Filesystem\FilesystemManager;
 
 /**
@@ -39,14 +40,7 @@ final class UserObserver
   {
     $this->userRepository->flushCache();
 
-    /** @var string $mcHeadsUrl */
-    $mcHeadsUrl = config('app.mc_heads_url');
-    $mcHeadsUrl = str_replace('{userName}', urlencode($user->user_name), $mcHeadsUrl);
-
-    $imageUrl = User::AVATARS_STORAGE_KEY . '/' . $user->id;
-
-    $this->storage->disk($this->storage->getDefaultDriver())
-      ->put($imageUrl, file_get_contents($mcHeadsUrl));
+    $user->downloadImage();
   }
 
   /**

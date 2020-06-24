@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
@@ -75,6 +76,14 @@ final class Handler extends ExceptionHandler
         ], 404);
       }
     }
+
+    if ($exception instanceof ClientException) {
+      return response()->json([
+        'message' => $exception->getMessage(),
+        'code' => $exception->getCode()
+      ], 500);
+    }
+
     return parent::render($request, $exception);
   }
 }
