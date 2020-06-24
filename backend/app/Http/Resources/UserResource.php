@@ -29,6 +29,12 @@ final class UserResource extends JsonResource
       'email' => $this->when($request->user()->hasPermission(Permission::VIEW_USER_EMAIL), $this->email),
       'user_name' => $this->resource->user_name,
       'name' => $this->resource->name,
+      'posts' => route('users.posts.index', [
+        'user' => $this->resource->id
+      ]),
+      'roles' => route('users.roles.index', [
+        'user' => $this->resource->id
+      ]),
       'deleted_at' => $this->resource->deleted_at,
       'created_at' => $this->resource->created_at,
       'updated_at' => $this->resource->updated_at
