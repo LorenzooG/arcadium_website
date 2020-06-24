@@ -74,33 +74,27 @@ final class UserRepository
    * Find user by email
    *
    * @param $email
-   * @param bool $includeDeleted
    * @return Builder|Model|object|User
    */
-  public final function findUserByEmail($email, $includeDeleted = true)
+  public final function findUserByEmail($email)
   {
-    $query = $includeDeleted ? User::withTrashed() : User::query();
-
-    return $query->where('email', $email)->firstOrFail();
+    return User::query()->where('email', $email)->firstOrFail();
   }
 
   /**
    * Find user by it's id
    *
    * @param int $id
-   * @param bool $includeDeleted
    * @return User
    */
-  public final function findUserById($id, $includeDeleted = true)
+  public final function findUserById($id)
   {
     $this->logger->info("Retrieving user {$id}.");
 
-    return $this->cacheRepository->remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($includeDeleted, $id) {
+    return $this->cacheRepository->remember($this->getCacheKey("show.$id"), now()->addHour(), function () use ($id) {
       $this->logger->info("Caching user {$id}.");
 
-      $query = $includeDeleted ? User::withTrashed() : User::query();
-
-      return $query->findOrFail($id);
+      return User::withTrashed()->findOrFail($id);
     });
   }
 
