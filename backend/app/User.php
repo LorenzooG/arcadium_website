@@ -133,7 +133,8 @@ final class User extends Authenticatable
    */
   public final function hasPermission(int $permission)
   {
-    return ($this->permissions() & $permission) !== 0;
+    return ($this->permissions() & $permission) !== 0
+      && $this->hasVerifiedEmail();
   }
 
   /**
