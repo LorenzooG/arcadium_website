@@ -214,7 +214,7 @@ class ProductsControllerTest extends TestCase
         'title' => $product->title,
         'price' => $product->price,
         'description' => $product->description,
-        'image' => route('products.image.show', [
+        'image' => route('products.image', [
           'product' => $product->id
         ]),
         'commands' => route('products.commands.index', [
