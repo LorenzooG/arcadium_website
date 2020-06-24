@@ -37,6 +37,9 @@ class UsersControllerTest extends TestCase
             'roles' => route('users.roles.index', [
               'user' => $user->id
             ]),
+            'avatar' => route('users.avatar', [
+              'user' => $user->id
+            ]),
             'deleted_at' => $user->deleted_at,
             'created_at' => $user->created_at->toISOString(),
             'updated_at' => $user->updated_at->toISOString(),
@@ -63,6 +66,9 @@ class UsersControllerTest extends TestCase
               'user' => $user->id
             ]),
             'roles' => route('users.roles.index', [
+              'user' => $user->id
+            ]),
+            'avatar' => route('users.avatar', [
               'user' => $user->id
             ]),
             'deleted_at' => $user->deleted_at,
@@ -100,6 +106,9 @@ class UsersControllerTest extends TestCase
               'user' => $user->id
             ]),
             'roles' => route('users.roles.index', [
+              'user' => $user->id
+            ]),
+            'avatar' => route('users.avatar', [
               'user' => $user->id
             ]),
             'deleted_at' => $user->deleted_at->toISOString(),
@@ -142,6 +151,9 @@ class UsersControllerTest extends TestCase
         'roles' => route('users.roles.index', [
           'user' => $user->id
         ]),
+        'avatar' => route('users.avatar', [
+          'user' => $user->id
+        ]),
         'created_at' => $user->created_at->toISOString(),
         'updated_at' => $user->updated_at->toISOString(),
         'deleted_at' => $user->deleted_at ?
@@ -173,6 +185,9 @@ class UsersControllerTest extends TestCase
           'user' => $user->id
         ]),
         'roles' => route('users.roles.index', [
+          'user' => $user->id
+        ]),
+        'avatar' => route('users.avatar', [
           'user' => $user->id
         ]),
         'created_at' => $user->created_at->toISOString(),

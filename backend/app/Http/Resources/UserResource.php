@@ -35,6 +35,9 @@ final class UserResource extends JsonResource
       'roles' => route('users.roles.index', [
         'user' => $this->resource->id
       ]),
+      'avatar' => route('users.avatar', [
+        'user' => $this->resource->id
+      ]),
       'deleted_at' => $this->resource->deleted_at,
       'created_at' => $this->resource->created_at,
       'updated_at' => $this->resource->updated_at
