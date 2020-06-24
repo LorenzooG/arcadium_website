@@ -7,7 +7,7 @@
 
   {{ trans('notifications.email.verify.message') }}
 
-  @component('mail::button', ['url' => $url])
+  @component('mail::button', ['url' => $link])
     {{ trans('notifications.email.verify.button') }}
   @endcomponent
 

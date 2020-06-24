@@ -61,7 +61,7 @@ Route::prefix('notifications')->group(function () {
   Route::get('email.verify', function (Markdown $markdown, UrlGenerator $urlGenerator) {
     return $markdown->render('notifications.email.verify', [
       'user' => factory(User::class)->make(),
-      'url' => $urlGenerator->temporarySignedRoute('user.verify.email', now()->addDay())
+      'link' => $urlGenerator->temporarySignedRoute('user.verify.email', now()->addDay())
     ])->toHtml();
   });
 
