@@ -80,7 +80,7 @@ final class JwtGuard implements StatefulGuard
     $id = $credentials['id'];
     $token = $credentials['token'];
 
-    $user = $this->userRepository->findUserById($id, false, false);
+    $user = $this->userRepository->findUserById($id, false);
 
     $result = $this->jwtRepository->exists($user, $token);
 
@@ -98,7 +98,7 @@ final class JwtGuard implements StatefulGuard
    */
   public final function attempt(array $credentials = [], $remember = false)
   {
-    $user = $this->userRepository->findUserByEmail($credentials['email'], false, false);
+    $user = $this->userRepository->findUserByEmail($credentials['email'], false);
 
     if (!$this->hasher->check($credentials['password'], $user->password)) return false;
 
