@@ -17,7 +17,7 @@ Route::post('forgot_password', 'Auth\ForgotPasswordController')->name('user.forg
 Route::post('reset_password', 'Auth\ResetPasswordController')->name('user.reset.password');
 
 Route::prefix('user')->middleware('auth:api')->group(function () {
-  Route::delete('/', 'SelfUserController@delete')->middleware('can:delete_self')->name('user.delete');
+  Route::delete('/', 'SelfUserController@delete')->middleware('can:deleteSelf,App\User')->name('user.delete');
 
   Route::get('posts', 'SelfUserController@posts')->name('user.posts.index');
   Route::get('roles', 'SelfUserController@roles')->middleware('can:viewSelf,App\Role')->name('user.roles.index');
@@ -26,7 +26,7 @@ Route::prefix('user')->middleware('auth:api')->group(function () {
     Route::post('posts', 'PostsController@store')->middleware('can:create,App\Post')->name('posts.store');
     Route::delete('posts/{post}', 'PostsController@delete')->middleware('can:delete,post')->name('user.posts.delete');
 
-    Route::middleware('can:update_self')->group(function () {
+    Route::middleware('can:updateSelf,App\User')->group(function () {
       Route::put('/', 'SelfUserController@update')->name('user.update');
       Route::post('/request/update_email', 'Auth\ResetEmailController')->name('user.request.update.email');
       Route::post('/avatar', 'Auth\ChangeAvatarController')->name('user.update.avatar');
