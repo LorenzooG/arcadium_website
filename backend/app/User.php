@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Hash;
  * @property string name
  * @property string user_name
  * @property string email
+ * @property string avatar_url
  * @property string password
  * @property Collection<Role> roles
  * @property Collection<Post> posts
@@ -35,6 +36,12 @@ use Illuminate\Support\Facades\Hash;
  */
 final class User extends Authenticatable
 {
+
+  /**
+   * The storage key that the system will use to save the avatars
+   */
+  public const AVATARS_STORAGE_KEY = 'users.avatars';
+
   use Notifiable, SoftDeletes;
 
   /**

@@ -8,23 +8,28 @@ use App\Http\Resources\UserResource;
 use App\Repositories\UserRepository;
 use App\User;
 use Exception;
+use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 final class UsersController extends Controller
 {
 
   private UserRepository $userRepository;
+  private FilesystemManager $storage;
 
   /**
    * UsersController constructor
    *
    * @param UserRepository $userRepository
+   * @param FilesystemManager $storage
    */
-  public function __construct(UserRepository $userRepository)
+  public function __construct(UserRepository $userRepository, FilesystemManager $storage)
   {
     $this->userRepository = $userRepository;
+    $this->storage = $storage;
   }
 
   /**
@@ -51,6 +56,19 @@ final class UsersController extends Controller
   }
 
   /**
+   * Find and show user's avatar
+   *
+   * @param User $user
+   * @return BinaryFileResponse
+   */
+  public function image(User $user)
+  {
+    return response()->file($this->storage
+      ->disk($this->storage->getDefaultDriver())
+      ->url(User::AVATARS_STORAGE_KEY . '/' . $user->id));
+  }
+
+  /**
    * Store user in database
    *
    * @param UserStoreRequest $request
@@ -64,8 +82,6 @@ final class UsersController extends Controller
       'name',
       'user_name'
     ]);
-
-    $data['avatar_url'] = '';
 
     $user = $this->userRepository->createUser($data);
 
