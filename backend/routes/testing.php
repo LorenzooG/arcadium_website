@@ -3,6 +3,7 @@
 use App\Product;
 use App\User;
 use Illuminate\Mail\Markdown;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -54,6 +55,13 @@ Route::prefix('notifications')->group(function () {
 
         return $product;
       })
+    ])->toHtml();
+  });
+
+  Route::get('email.verify', function (Markdown $markdown, UrlGenerator $urlGenerator) {
+    return $markdown->render('notifications.email.verify', [
+      'user' => factory(User::class)->make(),
+      'url' => $urlGenerator->temporarySignedRoute('user.verify.email', now()->addDay())
     ])->toHtml();
   });
 
