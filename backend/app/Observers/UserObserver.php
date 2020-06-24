@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Repositories\UserRepository;
 use App\User;
+use Illuminate\Filesystem\FilesystemManager;
 
 /**
  * Class UserObserver
@@ -14,15 +15,18 @@ final class UserObserver
 {
 
   private UserRepository $userRepository;
+  private FilesystemManager $storage;
 
   /**
    * UserObserver constructor
    *
    * @param UserRepository $userRepository
+   * @param FilesystemManager $storage
    */
-  public final function __construct(UserRepository $userRepository)
+  public final function __construct(UserRepository $userRepository, FilesystemManager $storage)
   {
     $this->userRepository = $userRepository;
+    $this->storage = $storage;
   }
 
   /**
@@ -34,8 +38,6 @@ final class UserObserver
   public final function created(User $user)
   {
     $this->userRepository->flushCache();
-
-    $user->downloadImage();
   }
 
   /**
