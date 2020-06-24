@@ -238,6 +238,8 @@ return [
 
   'payment_currency' => env("PAYMENT_CURRENCY", "BRL"),
 
-  'payment_title' => "{amount} vips"
+  'payment_title' => "{amount} vips",
+
+  'mc_heads_url' => 'https://www.mc-heads.net/avatar/{userName}'
 
 ];
