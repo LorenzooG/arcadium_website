@@ -29,6 +29,7 @@ Route::prefix('user')->middleware('auth:api')->group(function () {
     Route::middleware('can:update_self')->group(function () {
       Route::put('/', 'SelfUserController@update')->name('user.update');
       Route::post('/request/update_email', 'Auth\ResetEmailController')->name('user.request.update.email');
+      Route::post('/avatar', 'Auth\ChangeAvatarController')->name('user.update.avatar');
       Route::put('/password', 'Auth\ChangePasswordController')->name('user.update.password');
       Route::put('/email/{emailUpdate}', 'Auth\ChangeEmailController')->name('user.update.email');
     });
@@ -75,6 +76,8 @@ Route::prefix('users')->group(function () {
   Route::get('{user}/roles', 'RolesController@user')->middleware('can:viewAny,App\Role')->name('users.roles.index');
 
   Route::get('{user}/posts', 'PostsController@user')->name('users.posts.index');
+
+  Route::post('{user}/avatar', 'Auth\ChangeAvatarController')->middleware('can:update,App\User')->name('users.update.avatar');
 
   Route::middleware('xss')->group(function () {
     Route::post("/", "UsersController@store")->name('users.store');
