@@ -41,7 +41,7 @@ final class UserObserver
 
     /** @var string $mcHeadsUrl */
     $mcHeadsUrl = config('app.mc_heads_url');
-    $mcHeadsUrl = str_replace('{userName}', $user->name, $mcHeadsUrl);
+    $mcHeadsUrl = str_replace('{userName}', urlencode($user->user_name), $mcHeadsUrl);
 
     $imageUrl = User::AVATARS_STORAGE_KEY . '/' . $user->id;
 
