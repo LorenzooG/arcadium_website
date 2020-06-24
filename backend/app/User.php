@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Hash;
  * @property string name
  * @property string user_name
  * @property string email
+ * @property string avatar_url
  * @property string password
  * @property Collection<Role> roles
  * @property Collection<Post> posts
