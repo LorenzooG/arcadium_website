@@ -69,9 +69,9 @@ final class ProductsController extends Controller
       'description'
     ]);
 
-    $data['image'] = $request->file('image');
-
     $product = $this->productRepository->createProduct($data);
+
+    $product->saveImage($request->file('image'));
 
     return new ProductResource($product);
   }
