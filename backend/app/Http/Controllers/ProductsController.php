@@ -8,25 +8,28 @@ use App\Http\Resources\ProductResource;
 use App\Product;
 use App\Repositories\ProductRepository;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 final class ProductsController extends Controller
 {
   private ProductRepository $productRepository;
+  private FilesystemAdapter $storage;
 
   /**
    * ProductsController constructor
    *
    * @param ProductRepository $productRepository
+   * @param FilesystemManager $storage
    */
-  public function __construct(ProductRepository $productRepository)
+  public function __construct(ProductRepository $productRepository, FilesystemManager $storage)
   {
     $this->productRepository = $productRepository;
+    $this->storage = $storage->disk($storage->getDefaultDriver());
   }
 
   /**
@@ -99,23 +102,7 @@ final class ProductsController extends Controller
    */
   public function image(Product $product)
   {
-    return Storage::download('products.images/' . $product->image);
-  }
-
-  /**
-   * Find and update product's image
-   *
-   * @param Product $product
-   * @param Request $request
-   * @return Response
-   */
-  public function updateImage(Product $product, Request $request)
-  {
-    $product->update([
-      'image' => $request->file('image')
-    ]);
-
-    return response()->noContent();
+    return response()->file($this->storage->url(Product::IMAGES_STORAGE_KEY . '/' . $product->id));
   }
 
   /**

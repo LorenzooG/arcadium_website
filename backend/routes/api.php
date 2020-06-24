@@ -148,7 +148,7 @@ Route::prefix('products')->name('products.')->group(function () {
 
     Route::prefix('image')->name('image.')->group(function () {
       Route::get('/', 'ProductsController@image')->name('show');
-      Route::post('/', 'ProductsController@updateImage')->middleware('can:update,App\Product')->name('update');
+      Route::post('/', 'Product\ChangeImageController')->middleware('can:update,App\Product')->name('update.image');
     });
 
     Route::prefix('commands')->name('commands.')->group(function () {

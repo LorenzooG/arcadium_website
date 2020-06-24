@@ -18,7 +18,6 @@ class CreateProductsTable extends Migration
 
       $table->string('title', 72);
       $table->string('description', 6000);
-      $table->string('image_url', 32);
       $table->double('price')->default(15.0);
 
       $table->softDeletes();
