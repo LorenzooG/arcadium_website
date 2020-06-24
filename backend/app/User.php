@@ -35,6 +35,12 @@ use Illuminate\Support\Facades\Hash;
  */
 final class User extends Authenticatable
 {
+
+  /**
+   * The storage key that the system will use to save the avatars
+   */
+  public const AVATARS_STORAGE_KEY = 'users.avatars';
+
   use Notifiable, SoftDeletes;
 
   /**

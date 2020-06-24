@@ -65,8 +65,6 @@ final class UsersController extends Controller
       'user_name'
     ]);
 
-    $data['avatar_url'] = '';
-
     $user = $this->userRepository->createUser($data);
 
     return new UserResource($user);
