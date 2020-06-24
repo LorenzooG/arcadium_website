@@ -78,6 +78,6 @@ final class UserPolicy
    */
   public final function deleteSelf(User $user)
   {
-    return $user->hasPermission(Permission::UPDATE_USER);
+    return $user->hasPermission(Permission::DELETE_USER);
   }
 }
