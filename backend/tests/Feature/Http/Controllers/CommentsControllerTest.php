@@ -40,15 +40,18 @@ class CommentsControllerTest extends TestCase
 
     $response->assertOk()
       ->assertJson([
-        'data' => Collection::make($post->comments()->paginate()->items())->map(function (Comment $comment) {
+        'data' => Collection::make($post->comments()->paginate()->items())->map(function (User $user) {
+          /** @var Comment $pivot */
+          $pivot = $user->pivot;
+
           return [
-            'id' => $comment->id,
-            'content' => $comment->content,
+            'id' => $pivot->id,
+            'content' => $pivot->content,
             'created_by' => route('users.show', [
-              'user' => $comment->user->id
+              'user' => $pivot->user_id
             ]),
-            'updated_at' => $comment->updated_at->toISOString(),
-            'created_at' => $comment->updated_at->toISOString()
+            'updated_at' => $pivot->updated_at->toISOString(),
+            'created_at' => $pivot->updated_at->toISOString()
           ];
         })->toArray()
       ]);

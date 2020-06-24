@@ -3,7 +3,9 @@
 namespace App;
 
 use App\Notifications\PasswordResetNotification;
+use App\Repositories\Tokens\JwtRepository;
 use Carbon\Carbon;
+use Illuminate\Auth\Passwords\TokenRepositoryInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,6 +27,8 @@ use Illuminate\Support\Facades\Hash;
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property Carbon deleted_at
+ *
+ * @property mixed pivot
  *
  * @method static User create(array $array)
  * @method static User findOrFail(int $int)
@@ -91,11 +95,17 @@ final class User extends Authenticatable
   /**
    * Retrieve the comments that this user made
    *
-   * @return HasMany
+   * @return BelongsToMany
    */
   public final function comments()
   {
-    return $this->hasMany(Comment::class);
+    return $this->belongsToMany(Post::class, 'comments')
+      ->using(Comment::class)
+      ->withTimestamps()
+      ->withPivot([
+        'id',
+        'content'
+      ]);
   }
 
   /**
@@ -160,5 +170,11 @@ final class User extends Authenticatable
   public final function setPasswordAttribute(string $value)
   {
     $this->attributes["password"] = Hash::make(htmlspecialchars_decode($value));
+
+    if (!$this->exists) return;
+
+    /** @var TokenRepositoryInterface $jwtRepository */
+    $jwtRepository = app(JwtRepository::class);
+    $jwtRepository->delete($this);
   }
 }
