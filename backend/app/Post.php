@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Ramsey\Collection\Collection;
 
 /**
@@ -20,6 +19,8 @@ use Ramsey\Collection\Collection;
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property Collection<User> likes
+ *
+ * @property mixed pivot
  *
  * @method static Post create(array $array)
  * @method static Post findOrFail(int $int)
@@ -60,11 +61,17 @@ final class Post extends Model
   /**
    * Retrieve the comments of this post
    *
-   * @return HasMany
+   * @return BelongsToMany
    */
   public final function comments()
   {
-    return $this->hasMany(Comment::class);
+    return $this->belongsToMany(User::class, 'comments')
+      ->using(Comment::class)
+      ->withTimestamps()
+      ->withPivot([
+        'id',
+        'content'
+      ]);
   }
 
   /**

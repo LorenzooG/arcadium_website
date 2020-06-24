@@ -3,8 +3,8 @@
 namespace App;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * @package App
@@ -20,8 +20,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Comment create(array $array)
  * @method static Comment findOrFail(int $int)
  */
-final class Comment extends Model
+final class Comment extends Pivot
 {
+
+  /**
+   * The table associated with the model.
+   *
+   * @var string
+   */
+  protected $table = 'comments';
+
+  /**
+   * Indicates if the IDs are auto-incrementing.
+   *
+   * @var bool
+   */
+  public $incrementing = true;
 
   /**
    * The attributes that are mass assignable.
