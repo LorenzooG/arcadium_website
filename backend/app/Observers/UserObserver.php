@@ -4,8 +4,6 @@ namespace App\Observers;
 
 use App\Repositories\UserRepository;
 use App\User;
-use GuzzleHttp\Client;
-use Illuminate\Filesystem\FilesystemManager;
 
 /**
  * Class UserObserver
@@ -16,18 +14,15 @@ final class UserObserver
 {
 
   private UserRepository $userRepository;
-  private FilesystemManager $storage;
 
   /**
    * UserObserver constructor
    *
    * @param UserRepository $userRepository
-   * @param FilesystemManager $storage
    */
-  public final function __construct(UserRepository $userRepository, FilesystemManager $storage)
+  public final function __construct(UserRepository $userRepository)
   {
     $this->userRepository = $userRepository;
-    $this->storage = $storage;
   }
 
   /**
