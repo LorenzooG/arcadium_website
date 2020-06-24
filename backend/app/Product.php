@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\UploadedFile;
 
 /**
  * @package App
@@ -54,5 +55,15 @@ final class Product extends Model
   public final function commands()
   {
     return $this->hasMany(ProductCommand::class);
+  }
+
+  /**
+   * Saves product image
+   *
+   * @param UploadedFile $image
+   */
+  public final function saveImage($image)
+  {
+    $image->storeAs(self::IMAGES_STORAGE_KEY, $this->id);
   }
 }
