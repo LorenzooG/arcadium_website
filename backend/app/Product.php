@@ -6,8 +6,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Str;
 
 /**
  * @package App
@@ -32,6 +30,11 @@ final class Product extends Model
   use SoftDeletes;
 
   /**
+   * The storage key that the system will use to save the images
+   */
+  public const IMAGES_STORAGE_KEY = 'products.images';
+
+  /**
    * The attributes that are mass assignable.
    *
    * @var array
@@ -52,33 +55,4 @@ final class Product extends Model
   {
     return $this->hasMany(ProductCommand::class);
   }
-
-  /**
-   * Gets image attribute
-   *
-   * @return string
-   */
-  public final function getImageAttribute()
-  {
-    return $this->attributes['image_url'];
-  }
-
-  /**
-   * Sets image attribute
-   *
-   * @param UploadedFile $image
-   */
-  public final function setImageAttribute(UploadedFile $image)
-  {
-    $imageDirectory = Str::random(32);
-
-    if (isset($this->attributes['image_url'])) {
-      $imageDirectory = $this->attributes['image_url'];
-    }
-
-    $image->storeAs('products.images', $imageDirectory);
-
-    $this->attributes['image_url'] = $imageDirectory;
-  }
-
 }
