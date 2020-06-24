@@ -3,7 +3,9 @@
 namespace App;
 
 use App\Notifications\PasswordResetNotification;
+use App\Repositories\Tokens\JwtRepository;
 use Carbon\Carbon;
+use Illuminate\Auth\Passwords\TokenRepositoryInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -160,5 +162,9 @@ final class User extends Authenticatable
   public final function setPasswordAttribute(string $value)
   {
     $this->attributes["password"] = Hash::make(htmlspecialchars_decode($value));
+
+    /** @var TokenRepositoryInterface $jwtRepository */
+    $jwtRepository = app(JwtRepository::class);
+    $jwtRepository->delete($this);
   }
 }
