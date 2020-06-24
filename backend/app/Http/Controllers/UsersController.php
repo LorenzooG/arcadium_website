@@ -8,6 +8,8 @@ use App\Http\Resources\UserResource;
 use App\Repositories\UserRepository;
 use App\User;
 use Exception;
+use GuzzleHttp\Client;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
@@ -18,7 +20,7 @@ final class UsersController extends Controller
 {
 
   private UserRepository $userRepository;
-  private FilesystemManager $storage;
+  private FilesystemAdapter $storage;
 
   /**
    * UsersController constructor
@@ -29,7 +31,7 @@ final class UsersController extends Controller
   public function __construct(UserRepository $userRepository, FilesystemManager $storage)
   {
     $this->userRepository = $userRepository;
-    $this->storage = $storage;
+    $this->storage = $storage->disk($storage->getDefaultDriver());
   }
 
   /**
@@ -63,9 +65,20 @@ final class UsersController extends Controller
    */
   public function image(User $user)
   {
-    return response()->file($this->storage
-      ->disk($this->storage->getDefaultDriver())
-      ->url(User::AVATARS_STORAGE_KEY . '/' . $user->id));
+    $imageLocation = User::AVATARS_STORAGE_KEY . '/' . $user->id;
+
+    if (!$this->storage->exists($imageLocation)) {
+      $mcHeadsUrl = config('app.mc_heads_url');
+      $mcHeadsUrl = str_replace('{userName}', urlencode($user->user_name), $mcHeadsUrl);
+
+      $imageUrl = User::AVATARS_STORAGE_KEY . '/' . $user->id;
+
+      $client = (new Client)->get($mcHeadsUrl);
+
+      $this->storage->put($imageUrl, $client->getBody()->getContents());
+    }
+
+    return response()->file($this->storage->url($imageLocation));
   }
 
   /**
