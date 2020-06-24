@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Repositories\UserRepository;
 use App\User;
-use Illuminate\Filesystem\FilesystemManager;
 
 /**
  * Class UserObserver
@@ -15,18 +14,15 @@ final class UserObserver
 {
 
   private UserRepository $userRepository;
-  private FilesystemManager $storage;
 
   /**
    * UserObserver constructor
    *
    * @param UserRepository $userRepository
-   * @param FilesystemManager $storage
    */
-  public final function __construct(UserRepository $userRepository, FilesystemManager $storage)
+  public final function __construct(UserRepository $userRepository)
   {
     $this->userRepository = $userRepository;
-    $this->storage = $storage;
   }
 
   /**
@@ -39,14 +35,7 @@ final class UserObserver
   {
     $this->userRepository->flushCache();
 
-    /** @var string $mcHeadsUrl */
-    $mcHeadsUrl = config('app.mc_heads_url');
-    $mcHeadsUrl = str_replace('{userName}', urlencode($user->user_name), $mcHeadsUrl);
-
-    $imageUrl = User::AVATARS_STORAGE_KEY . '/' . $user->id;
-
-    $this->storage->disk($this->storage->getDefaultDriver())
-      ->put($imageUrl, file_get_contents($mcHeadsUrl));
+    $user->downloadImage();
   }
 
   /**

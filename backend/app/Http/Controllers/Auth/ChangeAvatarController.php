@@ -4,7 +4,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AvatarUpdateRequest;
+use App\Http\Requests\ImageUpdateRequest;
 use App\User;
 use Illuminate\Http\Response;
 
@@ -19,11 +19,11 @@ final class ChangeAvatarController extends Controller
   /**
    * Handle update current avatar
    *
-   * @param AvatarUpdateRequest $request
+   * @param ImageUpdateRequest $request
    * @param User|null $user
    * @return Response
    */
-  public function __invoke(AvatarUpdateRequest $request, ?User $user = null)
+  public function __invoke(ImageUpdateRequest $request, ?User $user = null)
   {
     if (is_null($user)) $user = $request->user();
 

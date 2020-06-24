@@ -42,6 +42,9 @@ final class StaffsControllerTest extends TestCase
               'roles' => route('users.roles.index', [
                 'user' => $user->id
               ]),
+              'avatar' => route('users.avatar', [
+                'user' => $user->id
+              ]),
               'deleted_at' => $user->deleted_at
                 ? $user->deleted_at->toISOString()
                 : null,
