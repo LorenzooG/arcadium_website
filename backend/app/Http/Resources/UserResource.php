@@ -2,18 +2,17 @@
 
 namespace App\Http\Resources;
 
+use App\User;
 use App\Utils\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property mixed id
- * @property mixed user_name
- * @property mixed created_at
- * @property mixed deleted_at
- * @property mixed email
- * @property mixed updated_at
- * @property mixed name
+ * Class UserResource
+ *
+ * @property User resource
+ *
+ * @package App\Http\Resources
  */
 final class UserResource extends JsonResource
 {
@@ -26,13 +25,19 @@ final class UserResource extends JsonResource
   public final function toArray($request)
   {
     return [
-      "id" => $this->id,
-      "email" => $this->when($request->user()->hasPermission(Permission::VIEW_USER_EMAIL), $this->email),
-      "user_name" => $this->user_name,
-      "name" => $this->name,
-      "deleted_at" => $this->deleted_at,
-      "created_at" => $this->created_at,
-      "updated_at" => $this->updated_at
+      'id' => $this->resource->id,
+      'email' => $this->when($request->user()->hasPermission(Permission::VIEW_USER_EMAIL), $this->email),
+      'user_name' => $this->resource->user_name,
+      'name' => $this->resource->name,
+      'posts' => route('users.posts.index', [
+        'user' => $this->resource->id
+      ]),
+      'roles' => route('users.roles.index', [
+        'user' => $this->resource->id
+      ]),
+      'deleted_at' => $this->resource->deleted_at,
+      'created_at' => $this->resource->created_at,
+      'updated_at' => $this->resource->updated_at
     ];
   }
 }

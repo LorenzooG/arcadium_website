@@ -1,4 +1,5 @@
 *
 !public/
 !products.images/
+!users.avatars/
 !.gitignore

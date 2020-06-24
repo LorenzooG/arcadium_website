@@ -62,7 +62,7 @@ final class UserPolicyTest extends TestCase
       'permission_level' => Permission::UPDATE_USER
     ]));
 
-    $this->assertTrue($user->can('update_self'));
+    $this->assertTrue($user->can('updateSelf', User::class));
   }
 
   public function testShouldCanDeleteSelfWhenHavePermissionDeleteUser()
@@ -73,6 +73,6 @@ final class UserPolicyTest extends TestCase
       'permission_level' => Permission::DELETE_USER
     ]));
 
-    $this->assertTrue($user->can('delete_self'));
+    $this->assertTrue($user->can('deleteSelf', User::class));
   }
 }

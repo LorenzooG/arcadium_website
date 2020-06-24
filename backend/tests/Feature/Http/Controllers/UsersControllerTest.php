@@ -31,6 +31,12 @@ class UsersControllerTest extends TestCase
             'id' => $user->id,
             'user_name' => $user->user_name,
             'name' => $user->name,
+            'posts' => route('users.posts.index', [
+              'user' => $user->id
+            ]),
+            'roles' => route('users.roles.index', [
+              'user' => $user->id
+            ]),
             'deleted_at' => $user->deleted_at,
             'created_at' => $user->created_at->toISOString(),
             'updated_at' => $user->updated_at->toISOString(),
@@ -53,6 +59,12 @@ class UsersControllerTest extends TestCase
             'user_name' => $user->user_name,
             'email' => $user->email,
             'name' => $user->name,
+            'posts' => route('users.posts.index', [
+              'user' => $user->id
+            ]),
+            'roles' => route('users.roles.index', [
+              'user' => $user->id
+            ]),
             'deleted_at' => $user->deleted_at,
             'created_at' => $user->created_at->toISOString(),
             'updated_at' => $user->updated_at->toISOString(),
@@ -84,6 +96,12 @@ class UsersControllerTest extends TestCase
             'email' => $user->email,
             'user_name' => $user->user_name,
             'name' => $user->name,
+            'posts' => route('users.posts.index', [
+              'user' => $user->id
+            ]),
+            'roles' => route('users.roles.index', [
+              'user' => $user->id
+            ]),
             'deleted_at' => $user->deleted_at->toISOString(),
             'created_at' => $user->created_at->toISOString(),
             'updated_at' => $user->updated_at->toISOString()
@@ -118,6 +136,12 @@ class UsersControllerTest extends TestCase
         'id' => $user->id,
         'user_name' => $user->user_name,
         'name' => $user->name,
+        'posts' => route('users.posts.index', [
+          'user' => $user->id
+        ]),
+        'roles' => route('users.roles.index', [
+          'user' => $user->id
+        ]),
         'created_at' => $user->created_at->toISOString(),
         'updated_at' => $user->updated_at->toISOString(),
         'deleted_at' => $user->deleted_at ?
@@ -145,6 +169,12 @@ class UsersControllerTest extends TestCase
         'user_name' => $user->user_name,
         'email' => $user->email,
         'name' => $user->name,
+        'posts' => route('users.posts.index', [
+          'user' => $user->id
+        ]),
+        'roles' => route('users.roles.index', [
+          'user' => $user->id
+        ]),
         'created_at' => $user->created_at->toISOString(),
         'updated_at' => $user->updated_at->toISOString(),
         'deleted_at' => $user->deleted_at ?

@@ -2,20 +2,13 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\EmailUpdate;
 use App\Http\Controllers\SelfUserController as ActualUserController;
 use App\Http\Requests\UserDeleteRequest;
-use App\Http\Requests\UserUpdateEmailRequest;
-use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Notifications\EmailResetNotification;
 use App\Post;
 use App\Role;
 use App\User;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Str;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
@@ -51,7 +44,7 @@ class SelfUserControllerTest extends TestCase
     $this->assertActionUsesMiddleware(
       ActualUserController::class,
       'delete',
-      'can:delete_self'
+      'can:deleteSelf,App\User'
     );
   }
 
@@ -116,7 +109,7 @@ class SelfUserControllerTest extends TestCase
     $this->assertActionUsesMiddleware(
       ActualUserController::class,
       'update',
-      'can:update_self'
+      'can:updateSelf,App\User'
     );
   }
 

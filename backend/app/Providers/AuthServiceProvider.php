@@ -23,14 +23,12 @@ use App\Repositories\Tokens\JwtRepository;
 use App\Repositories\UserRepository;
 use App\Role;
 use App\User;
-use App\Utils\Permission;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -77,14 +75,6 @@ class AuthServiceProvider extends ServiceProvider
         config('auth.jwt.hash_algos'),
         config('auth.jwt.expires'),
       );
-    });
-
-    Gate::define('update_self', function (User $user) {
-      return $user->hasPermission(Permission::UPDATE_USER);
-    });
-
-    Gate::define('delete_self', function (User $user) {
-      return $user->hasPermission(Permission::DELETE_USER);
     });
 
     Auth::extend('jwt', function (Application $app) {

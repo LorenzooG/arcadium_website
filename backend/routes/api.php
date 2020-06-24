@@ -17,7 +17,7 @@ Route::post('forgot_password', 'Auth\ForgotPasswordController')->name('user.forg
 Route::post('reset_password', 'Auth\ResetPasswordController')->name('user.reset.password');
 
 Route::prefix('user')->middleware('auth:api')->group(function () {
-  Route::delete('/', 'SelfUserController@delete')->middleware('can:delete_self')->name('user.delete');
+  Route::delete('/', 'SelfUserController@delete')->middleware('can:deleteSelf,App\User')->name('user.delete');
 
   Route::get('posts', 'SelfUserController@posts')->name('user.posts.index');
   Route::get('roles', 'SelfUserController@roles')->middleware('can:viewSelf,App\Role')->name('user.roles.index');
@@ -26,9 +26,10 @@ Route::prefix('user')->middleware('auth:api')->group(function () {
     Route::post('posts', 'PostsController@store')->middleware('can:create,App\Post')->name('posts.store');
     Route::delete('posts/{post}', 'PostsController@delete')->middleware('can:delete,post')->name('user.posts.delete');
 
-    Route::middleware('can:update_self')->group(function () {
+    Route::middleware('can:updateSelf,App\User')->group(function () {
       Route::put('/', 'SelfUserController@update')->name('user.update');
       Route::post('/request/update_email', 'Auth\ResetEmailController')->name('user.request.update.email');
+      Route::post('/avatar', 'Auth\ChangeAvatarController')->name('user.update.avatar');
       Route::put('/password', 'Auth\ChangePasswordController')->name('user.update.password');
       Route::put('/email/{emailUpdate}', 'Auth\ChangeEmailController')->name('user.update.email');
     });
@@ -73,8 +74,10 @@ Route::prefix('users')->group(function () {
   Route::get('{user}', 'UsersController@show')->name('users.show');
 
   Route::get('{user}/roles', 'RolesController@user')->middleware('can:viewAny,App\Role')->name('users.roles.index');
-
   Route::get('{user}/posts', 'PostsController@user')->name('users.posts.index');
+
+  Route::post('{user}/avatar', 'Auth\ChangeAvatarController')->middleware('can:update,App\User')->name('users.update.avatar');
+  Route::get('{user}/avatar', 'UsersController@image')->name('users.avatar');
 
   Route::middleware('xss')->group(function () {
     Route::post("/", "UsersController@store")->name('users.store');

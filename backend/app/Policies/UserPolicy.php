@@ -58,4 +58,26 @@ final class UserPolicy
   {
     return $user->hasPermission(Permission::VIEW_TRASHED_USERS);
   }
+
+  /**
+   * Determine whether the user can update self user.
+   *
+   * @param User $user
+   * @return mixed
+   */
+  public final function updateSelf(User $user)
+  {
+    return $user->hasPermission(Permission::UPDATE_USER);
+  }
+
+  /**
+   * Determine whether the user can delete self user.
+   *
+   * @param User $user
+   * @return mixed
+   */
+  public final function deleteSelf(User $user)
+  {
+    return $user->hasPermission(Permission::DELETE_USER);
+  }
 }

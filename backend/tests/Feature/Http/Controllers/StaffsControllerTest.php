@@ -33,14 +33,20 @@ final class StaffsControllerTest extends TestCase
           ],
           'users' => $role->users->map(function (User $user) {
             return [
-              "id" => $user->id,
-              "user_name" => $user->user_name,
-              "name" => $user->name,
-              "deleted_at" => $user->deleted_at
+              'id' => $user->id,
+              'user_name' => $user->user_name,
+              'name' => $user->name,
+              'posts' => route('users.posts.index', [
+                'user' => $user->id
+              ]),
+              'roles' => route('users.roles.index', [
+                'user' => $user->id
+              ]),
+              'deleted_at' => $user->deleted_at
                 ? $user->deleted_at->toISOString()
                 : null,
-              "created_at" => $user->created_at->toISOString(),
-              "updated_at" => $user->updated_at->toISOString()
+              'created_at' => $user->created_at->toISOString(),
+              'updated_at' => $user->updated_at->toISOString()
             ];
           })->toArray()
         ];
