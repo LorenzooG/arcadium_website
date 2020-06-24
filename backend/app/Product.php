@@ -13,7 +13,6 @@ use Illuminate\Http\UploadedFile;
  *
  * @property int id
  * @property string title
- * @property string image
  * @property double price
  * @property string command
  * @property string description
@@ -42,7 +41,6 @@ final class Product extends Model
    */
   protected $fillable = [
     'title',
-    'image',
     'price',
     'description',
   ];
