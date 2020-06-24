@@ -47,10 +47,6 @@ final class UserObserver
 
     $this->storage->disk($this->storage->getDefaultDriver())
       ->put($imageUrl, file_get_contents($mcHeadsUrl));
-
-    $user->update([
-      'avatar_url' => $imageUrl
-    ]);
   }
 
   /**

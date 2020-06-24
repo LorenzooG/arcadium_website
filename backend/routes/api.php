@@ -74,10 +74,10 @@ Route::prefix('users')->group(function () {
   Route::get('{user}', 'UsersController@show')->name('users.show');
 
   Route::get('{user}/roles', 'RolesController@user')->middleware('can:viewAny,App\Role')->name('users.roles.index');
-
   Route::get('{user}/posts', 'PostsController@user')->name('users.posts.index');
 
   Route::post('{user}/avatar', 'Auth\ChangeAvatarController')->middleware('can:update,App\User')->name('users.update.avatar');
+  Route::get('{user}/avatar', 'UsersController@image')->name('users.avatar');
 
   Route::middleware('xss')->group(function () {
     Route::post("/", "UsersController@store")->name('users.store');
