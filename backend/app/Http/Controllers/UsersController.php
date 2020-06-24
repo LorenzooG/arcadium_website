@@ -71,11 +71,9 @@ final class UsersController extends Controller
       $mcHeadsUrl = config('app.mc_heads_url');
       $mcHeadsUrl = str_replace('{userName}', urlencode($user->user_name), $mcHeadsUrl);
 
-      $imageUrl = User::AVATARS_STORAGE_KEY . '/' . $user->id;
-
       $client = (new Client)->get($mcHeadsUrl);
 
-      $this->storage->put($imageUrl, $client->getBody()->getContents());
+      $this->storage->put($imageLocation, $client->getBody()->getContents());
     }
 
     return response()->file($this->storage->url($imageLocation));
