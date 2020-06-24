@@ -35,7 +35,7 @@ class ProductsControllerTest extends TestCase
             'title' => $product->title,
             'price' => $product->price,
             'description' => $product->description,
-            'image' => route('products.image.show', [
+            'image' => route('products.image', [
               'product' => $product->id
             ]),
             'created_at' => $product->created_at->toISOString(),
@@ -62,7 +62,7 @@ class ProductsControllerTest extends TestCase
             'title' => $product->title,
             'price' => $product->price,
             'description' => $product->description,
-            'image' => route('products.image.show', [
+            'image' => route('products.image', [
               'product' => $product->id
             ]),
             'commands' => route('products.commands.index', [
@@ -98,7 +98,7 @@ class ProductsControllerTest extends TestCase
             'title' => $product->title,
             'description' => $product->description,
             'price' => $product->price,
-            'image' => route('products.image.show', [
+            'image' => route('products.image', [
               'product' => $product->id
             ]),
             'commands' => route('products.commands.index', [
@@ -138,7 +138,7 @@ class ProductsControllerTest extends TestCase
         'title' => $product->title,
         'price' => $product->price,
         'description' => $product->description,
-        'image' => route('products.image.show', [
+        'image' => route('products.image', [
           'product' => $product->id
         ]),
         'created_at' => $product->created_at->toISOString(),
@@ -166,7 +166,7 @@ class ProductsControllerTest extends TestCase
         'title' => $product->title,
         'price' => $product->price,
         'description' => $product->description,
-        'image' => route('products.image.show', [
+        'image' => route('products.image', [
           'product' => $product->id
         ]),
         'commands' => route('products.commands.index', [
@@ -371,12 +371,6 @@ class ProductsControllerTest extends TestCase
       ActualProductsController::class,
       'update',
       'xss'
-    );
-
-    $this->assertActionUsesMiddleware(
-      ActualProductsController::class,
-      'updateImage',
-      'can:update,App\Product'
     );
 
     $this->assertActionUsesMiddleware(

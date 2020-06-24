@@ -6,7 +6,6 @@ namespace App\Repositories;
 
 use App\Product;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Log\Logger;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -90,7 +89,7 @@ final class ProductRepository
    * Create product in database
    *
    * @param array $data
-   * @return Model
+   * @return Product
    */
   public final function createProduct(array $data)
   {
