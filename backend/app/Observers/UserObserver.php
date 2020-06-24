@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Repositories\UserRepository;
 use App\User;
-use GuzzleHttp\Client;
 use Illuminate\Filesystem\FilesystemManager;
 
 /**
@@ -39,8 +38,6 @@ final class UserObserver
   public final function created(User $user)
   {
     $this->userRepository->flushCache();
-
-    $user->downloadImage();
   }
 
   /**
