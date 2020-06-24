@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('forgot_password', 'Auth\ForgotPasswordController')->name('user.forgot.password');
 Route::post('reset_password', 'Auth\ResetPasswordController')->name('user.reset.password');
 
+Route::post('verify_email', 'Auth\VerifyEmailController')->middleware('signed')->name('user.verify.email');
+Route::post('verify_email/resend', 'Auth\ResendVerifyEmailNotificationController')->name('user.resend.verify.email.notification');
+
 Route::prefix('user')->middleware('auth:api')->group(function () {
   Route::delete('/', 'SelfUserController@delete')->middleware('can:deleteSelf,App\User')->name('user.delete');
 

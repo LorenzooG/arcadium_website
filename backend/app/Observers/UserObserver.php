@@ -38,6 +38,8 @@ final class UserObserver
   public final function created(User $user)
   {
     $this->userRepository->flushCache();
+
+    $user->sendEmailVerificationNotification();
   }
 
   /**
