@@ -188,3 +188,8 @@ Route::get('translations', 'TranslationsController')->name('translations');
 Route::prefix('auth')->group(function () {
   Route::post('login', 'Auth\LoginController')->name('login');
 });
+
+
+Route::get('/', fn() => [
+  'message' => "Welcome to the " . config('app.name') . " api!"
+])->name('index');
