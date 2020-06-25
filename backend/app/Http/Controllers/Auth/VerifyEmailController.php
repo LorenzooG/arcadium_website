@@ -28,12 +28,13 @@ final class VerifyEmailController extends Controller
    * Handle mark verified
    *
    * @param Request $request
+   * @param string $email
    * @return Response
    */
-  public function __invoke(Request $request)
+  public function __invoke(Request $request, $email)
   {
     /** @var User $user */
-    $user = $this->userRepository->findUserByEmail($request);
+    $user = $this->userRepository->findUserByEmail($email);
     $user->markEmailAsVerified();
 
     return response()->noContent();
