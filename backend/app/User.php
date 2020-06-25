@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Hash;
  * @property string password
  * @property Collection<Role> roles
  * @property Collection<Post> posts
+ * @property Carbon email_verified_at
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property Carbon deleted_at
@@ -55,7 +56,8 @@ final class User extends Authenticatable
     'email',
     'password',
     'user_name',
-    'avatar_url'
+    'avatar_url',
+    'email_verified_at'
   ];
 
   /**
