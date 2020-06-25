@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Notifications\PasswordResetNotification;
+use App\Notifications\VerifyEmailNotification;
 use App\Repositories\Tokens\JwtRepository;
 use Carbon\Carbon;
 use Illuminate\Auth\Passwords\TokenRepositoryInterface;
@@ -133,7 +134,8 @@ final class User extends Authenticatable
    */
   public final function hasPermission(int $permission)
   {
-    return ($this->permissions() & $permission) !== 0;
+    return ($this->permissions() & $permission) !== 0
+      && $this->hasVerifiedEmail();
   }
 
   /**
@@ -183,5 +185,15 @@ final class User extends Authenticatable
     /** @var TokenRepositoryInterface $jwtRepository */
     $jwtRepository = app(JwtRepository::class);
     $jwtRepository->delete($this);
+  }
+
+  /**
+   * Send the email verification notification.
+   *
+   * @return void
+   */
+  public final function sendEmailVerificationNotification()
+  {
+    $this->notify(new VerifyEmailNotification());
   }
 }
