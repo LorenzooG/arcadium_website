@@ -17,7 +17,7 @@ class EmailResetRequest extends FormRequest
     /** @var EmailResetTokenRepository $repository */
     $repository = resolve(EmailResetTokenRepository::class);
 
-    return $repository->recentlyCreatedToken($this->user());
+    return !$repository->recentlyCreatedToken($this->user());
   }
 
   /**
