@@ -6,8 +6,10 @@ namespace Tests\Feature\Http\Controllers\Auth;
 use App\EmailUpdate;
 use App\Http\Controllers\Auth\ChangeEmailController;
 use App\Http\Requests\UserUpdateEmailRequest;
+use App\Notifications\VerifyEmailNotification;
+use App\Repositories\Tokens\EmailResetTokenRepository;
 use App\User;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Notification;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
@@ -20,19 +22,14 @@ final class ChangeEmailControllerTest extends TestCase
     /** @var User $user */
     $user = factory(User::class)->state('admin')->create();
 
-    $token = Str::random(64);
+    /** @var EmailResetTokenRepository $repository */
+    $repository = $this->app[EmailResetTokenRepository::class];
 
-    /** @var EmailUpdate $request */
-    $request = factory(EmailUpdate::class)->create([
-      'user_id' => $user->id,
-      'token' => $token,
-    ]);
+    $token = $repository->create($user);
 
     $email = $this->faker->unique()->safeEmail;
 
-    $response = $this->actingAs($user)->putJson(route('user.update.email', [
-      'emailUpdate' => $token
-    ]), [
+    $response = $this->actingAs($user)->putJson(route('user.update.email') . "?token=$token", [
       'new_email' => $email
     ]);
 
@@ -44,10 +41,9 @@ final class ChangeEmailControllerTest extends TestCase
       ->where('password', $user->password)
       ->get();
 
-    $request = EmailUpdate::findOrFail($request->id);
+    Notification::assertSentTo($user, VerifyEmailNotification::class);
 
-    $this->assertFalse($request->isValid());
-    $this->assertEquals(1, $request->already_used);
+    $this->assertFalse($repository->exists($user, $token));
 
     $this->assertCount(1, $users);
 
