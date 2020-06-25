@@ -19,6 +19,7 @@ use App\Post;
 use App\Product;
 use App\ProductCommand;
 use App\Punishment;
+use App\Repositories\Tokens\EmailResetTokenRepository;
 use App\Repositories\Tokens\JwtRepository;
 use App\Repositories\UserRepository;
 use App\Role;
@@ -74,6 +75,14 @@ class AuthServiceProvider extends ServiceProvider
         config('auth.jwt.algos'),
         config('auth.jwt.hash_algos'),
         config('auth.jwt.expires'),
+      );
+    });
+
+    $this->app->singleton(EmailResetTokenRepository::class, function (Application $app) {
+      return new EmailResetTokenRepository(
+        $app->make(ConnectionInterface::class),
+        config('auth.email_reset.expires'),
+        config('auth.email_reset.throttle'),
       );
     });
 

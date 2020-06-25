@@ -3,9 +3,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\EmailUpdate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserUpdateEmailRequest;
+use App\Repositories\Tokens\EmailResetTokenRepository;
+use App\User;
 use Illuminate\Http\Response;
 
 /**
@@ -16,24 +17,38 @@ use Illuminate\Http\Response;
  */
 final class ChangeEmailController extends Controller
 {
+  private EmailResetTokenRepository $emailResetTokenRepository;
+
+  /**
+   * ResetEmailController constructor
+   *
+   * @param EmailResetTokenRepository $emailResetTokenRepository
+   */
+  public function __construct(EmailResetTokenRepository $emailResetTokenRepository)
+  {
+    $this->emailResetTokenRepository = $emailResetTokenRepository;
+  }
+
   /**
    * Changes current user's email
    *
-   * @param EmailUpdate $emailUpdate
    * @param UserUpdateEmailRequest $request
    * @return Response
    */
-  public function __invoke(EmailUpdate $emailUpdate, UserUpdateEmailRequest $request)
+  public function __invoke(UserUpdateEmailRequest $request)
   {
-    $emailUpdate->update([
-      'already_used' => true
+    /** @var User $user */
+    $user = $request->user();
+
+    $user->update([
+      'email' => $request->get('new_email'),
+      'email_verified_at' => null
     ]);
 
-    $request->user()
-      ->fill([
-        'email' => $request->get('new_email')
-      ])
-      ->save();
+    // Resent email verification notification when change email.
+    $user->sendEmailVerificationNotification();
+
+    $this->emailResetTokenRepository->delete($user);
 
     return response()->noContent();
   }

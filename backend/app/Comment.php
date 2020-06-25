@@ -3,7 +3,6 @@
 namespace App;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
@@ -47,25 +46,4 @@ final class Comment extends Pivot
     'user_id',
     'post_id'
   ];
-
-  /**
-   * Retrieve the user owner of this comment
-   *
-   * @return BelongsTo
-   */
-  public final function user()
-  {
-    return $this->belongsTo(User::class);
-  }
-
-
-  /**
-   * Retrieve the post owner of this comment
-   *
-   * @return BelongsTo
-   */
-  public final function post()
-  {
-    return $this->belongsTo(Post::class);
-  }
 }

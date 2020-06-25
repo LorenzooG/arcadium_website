@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers\Auth;
 
 use App\Http\Controllers\Auth\ChangeEmailController;
 use App\Notifications\EmailResetNotification;
+use App\Repositories\Tokens\EmailResetTokenRepository;
 use App\User;
 use Illuminate\Support\Facades\Notification;
 use JMac\Testing\Traits\AdditionalAssertions;
@@ -17,6 +18,16 @@ final class ResetEmailControllerTest extends TestCase
   public function testShouldSendEmailChangeNotification()
   {
     Notification::fake();
+
+    /** @var User $user */
+    $user = factory(User::class)->state('admin')->create();
+
+    /** @var EmailResetTokenRepository $repository */
+    $repository = $this->app[EmailResetTokenRepository::class];
+
+    // Delete old tokens
+    $repository->delete($user);
+    $repository->deleteExpired();
 
     /** @var User $user */
     $user = factory(User::class)->state('admin')->create();

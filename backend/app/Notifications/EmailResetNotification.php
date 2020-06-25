@@ -11,16 +11,16 @@ class EmailResetNotification extends Notification
 {
   use Queueable;
 
-  public EmailUpdate $emailUpdateRequest;
+  public string $token;
 
   /**
    * Create a new notification instance.
    *
-   * @param EmailUpdate $emailUpdateRequest
+   * @param string $token
    */
-  public function __construct(EmailUpdate $emailUpdateRequest)
+  public function __construct($token)
   {
-    $this->emailUpdateRequest = $emailUpdateRequest;
+    $this->token = $token;
   }
 
   /**
@@ -45,7 +45,7 @@ class EmailResetNotification extends Notification
     return (new MailMessage)
       ->subject(trans('notifications.email.reset.subject'))
       ->markdown('notifications.email.reset', [
-        'token' => $this->emailUpdateRequest->token,
+        'token' => $this->token,
         'user' => $notifiable
       ]);
   }
@@ -59,7 +59,7 @@ class EmailResetNotification extends Notification
   public function toArray($notifiable)
   {
     return [
-      'token' => $this->emailUpdateRequest->token,
+      'token' => $this->token,
       'user' => $notifiable
     ];
   }
