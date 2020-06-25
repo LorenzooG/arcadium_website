@@ -30,7 +30,6 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class AuthServiceProvider
@@ -64,8 +63,6 @@ class AuthServiceProvider extends ServiceProvider
    */
   public function boot()
   {
-    Log::info("Bootstrapping authentication service.");
-
     $this->registerPolicies();
 
     $this->app->singleton(JwtRepository::class, function (Application $app) {
@@ -96,7 +93,5 @@ class AuthServiceProvider extends ServiceProvider
         config('auth.jwt.algos')
       );
     });
-
-    Log::info("Bootstrapped authentication service.");
   }
 }
