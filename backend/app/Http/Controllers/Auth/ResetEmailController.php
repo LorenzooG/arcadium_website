@@ -4,11 +4,11 @@
 namespace App\Http\Controllers\Auth;
 
 
-use App\EmailUpdate;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EmailResetRequest;
 use App\Notifications\EmailResetNotification;
+use App\Repositories\Tokens\EmailResetTokenRepository;
 use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
@@ -19,27 +19,32 @@ use Illuminate\Http\Response;
  */
 final class ResetEmailController extends Controller
 {
+  private EmailResetTokenRepository $emailResetTokenRepository;
+
+  /**
+   * ResetEmailController constructor
+   *
+   * @param EmailResetTokenRepository $emailResetTokenRepository
+   */
+  public function __construct(EmailResetTokenRepository $emailResetTokenRepository)
+  {
+    $this->emailResetTokenRepository = $emailResetTokenRepository;
+  }
+
   /**
    * Sends reset email notification
    *
-   * @param Request $request
+   * @param EmailResetRequest $request
    * @return Response
    */
-  public function __invoke(Request $request)
+  public function __invoke(EmailResetRequest $request)
   {
     /** @var User $user */
     $user = $request->user();
 
-    /** @var EmailUpdate $emailUpdate */
-    $emailUpdate = $user->emailUpdates()->create([
-      'origin_address' => $request->ip(),
-      'token' => hash('sha256', json_encode([
-        'user_id' => $user->id,
-        'time' => microtime(true)
-      ]))
-    ]);
+    $token = $this->emailResetTokenRepository->create($user);
 
-    $user->notify(new EmailResetNotification($emailUpdate));
+    $user->notify(new EmailResetNotification($token));
 
     return response()->noContent();
   }
