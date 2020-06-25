@@ -81,7 +81,6 @@ class AuthServiceProvider extends ServiceProvider
     $this->app->singleton(EmailResetTokenRepository::class, function (Application $app) {
       return new EmailResetTokenRepository(
         $app->make(ConnectionInterface::class),
-        config('auth.email_reset.secret'),
         config('auth.email_reset.expires'),
         config('auth.email_reset.throttle'),
       );
