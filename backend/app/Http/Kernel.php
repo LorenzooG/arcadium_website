@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\AdminOnly;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\ClearXss;
@@ -73,6 +72,5 @@ final class Kernel extends HttpKernel
     'throttle' => ThrottleRequests::class,
     'verified' => EnsureEmailIsVerified::class,
     'xss' => ClearXss::class,
-    'admin' => AdminOnly::class,
   ];
 }
