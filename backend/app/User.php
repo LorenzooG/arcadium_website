@@ -5,6 +5,7 @@ namespace App;
 use App\Notifications\PasswordResetNotification;
 use App\Notifications\VerifyEmailNotification;
 use App\Repositories\Tokens\JwtRepository;
+use App\Utils\Permission;
 use Carbon\Carbon;
 use Illuminate\Auth\Passwords\TokenRepositoryInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -131,9 +132,11 @@ final class User extends Authenticatable
    */
   public final function permissions(): int
   {
+    if (!$this->exists) return config('app.default_permissions', Permission::NONE);
+
     return $this->roles
       ->map(fn($role) => $role->permission_level)
-      ->reduce(fn($role, $otherRole) => $role | $otherRole, 1);
+      ->reduce(fn($role, $otherRole) => $role | $otherRole, Permission::NONE);
   }
 
   /**
