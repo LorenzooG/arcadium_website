@@ -101,22 +101,6 @@ final class User extends Authenticatable
   }
 
   /**
-   * Retrieve the comments that this user made
-   *
-   * @return BelongsToMany
-   */
-  public final function comments()
-  {
-    return $this->belongsToMany(Post::class, 'comments')
-      ->using(Comment::class)
-      ->withTimestamps()
-      ->withPivot([
-        'id',
-        'content'
-      ]);
-  }
-
-  /**
    * Retrieve the posts that this user post
    *
    * @return HasMany

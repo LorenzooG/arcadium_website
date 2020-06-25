@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
@@ -38,24 +37,4 @@ final class PurchasedProduct extends Pivot
     'amount',
     'product_id'
   ];
-
-  /**
-   * Retrieve the product owner of this purchased product
-   *
-   * @return BelongsTo
-   */
-  public final function product()
-  {
-    return $this->belongsTo(Product::class);
-  }
-
-  /**
-   * Retrieve the payment owner of this purchased product
-   *
-   * @return BelongsTo
-   */
-  public final function payment()
-  {
-    return $this->belongsTo(Payment::class);
-  }
 }
