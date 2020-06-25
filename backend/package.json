@@ -1,0 +1,16 @@
+{
+  "name": "arcadium-website-backend",
+  "version": "1.0.0",
+  "description": "Arcadium Minecraft Server's website",
+  "main": "index.js",
+  "repository": "https://github.com/LorenzooG/arcadium-website",
+  "author": "Lorenzo Guimarães de Oliveira <lorenzooguimaraes@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "laravel-echo-server": "^1.6.2"
+  },
+  "scripts": {
+    "echo": "laravel-echo-server"
+  }
+}
