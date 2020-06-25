@@ -16,28 +16,6 @@ final class RolePolicy
   use HandlesAuthorization;
 
   /**
-   * Determine whether the user can view any models.
-   *
-   * @param User $user
-   * @return mixed
-   */
-  public final function viewAny(User $user)
-  {
-    return $user->hasPermission(Permission::VIEW_ANY_ROLE);
-  }
-
-  /**
-   * Determine whether the user can view the model.
-   *
-   * @param User $user
-   * @return mixed
-   */
-  public final function view(User $user)
-  {
-    return $user->hasPermission(Permission::VIEW_ROLE);
-  }
-
-  /**
    * Determine whether the user can create models.
    *
    * @param User $user
@@ -68,18 +46,6 @@ final class RolePolicy
   public final function delete(User $user)
   {
     return $user->hasPermission(Permission::DELETE_ROLE);
-  }
-
-  /**
-   * Determine whether the user can view self roles
-   *
-   * @param User $user
-   * @return bool
-   */
-  public final function viewSelf(User $user)
-  {
-    return $user->hasPermission(Permission::VIEW_SELF_ROLES)
-      || $user->hasPermission(Permission::VIEW_ANY_ROLE);
   }
 
   /**

@@ -23,7 +23,7 @@ Route::prefix('user')->name('user.')->middleware('auth:api')->group(function () 
   Route::delete('/', 'SelfUserController@delete')->middleware('can:deleteSelf,App\User')->name('delete');
 
   Route::get('posts', 'SelfUserController@posts')->name('posts.index');
-  Route::get('roles', 'SelfUserController@roles')->middleware('can:viewSelf,App\Role')->name('roles.index');
+  Route::get('roles', 'SelfUserController@roles')->name('roles.index');
 
   Route::middleware(['xss', 'throttle:3,1'])->group(function () {
     Route::post('posts', 'PostsController@store')->middleware('can:create,App\Post')->name('posts.store');
@@ -40,9 +40,9 @@ Route::prefix('user')->name('user.')->middleware('auth:api')->group(function () 
 });
 
 Route::prefix('roles')->group(function () {
-  Route::get('/', 'RolesController@index')->middleware('can:viewAny,App\Role')->name('roles.index');
+  Route::get('/', 'RolesController@index')->name('roles.index');
 
-  Route::get('{role}', 'RolesController@show')->middleware('can:view,App\Role')->name('roles.show');
+  Route::get('{role}', 'RolesController@show')->name('roles.show');
 
   Route::middleware('throttle:10,1')->group(function () {
     Route::post('{role}/attach/{user}', 'RolesController@attach')->middleware('can:attach,App\Role')->name('roles.attach');
@@ -80,7 +80,7 @@ Route::prefix('users')->group(function () {
   Route::get('/', 'UsersController@index')->name('users.index');
   Route::get('{user}', 'UsersController@show')->name('users.show');
 
-  Route::get('{user}/roles', 'RolesController@user')->middleware('can:viewAny,App\Role')->name('users.roles.index');
+  Route::get('{user}/roles', 'RolesController@user')->name('users.roles.index');
   Route::get('{user}/posts', 'PostsController@user')->name('users.posts.index');
 
   Route::post('{user}/avatar', 'Auth\ChangeAvatarController')->middleware('can:update,App\User')->name('users.update.avatar');
