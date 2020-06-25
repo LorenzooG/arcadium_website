@@ -113,7 +113,7 @@ Route::prefix("/payments")->name('payments.')->group(function () {
   Route::get("{payment}", "PaymentsController@show")->middleware('can:view,App\Payment')->name('show');
   Route::get("{payment}/products", "PaymentsController@products")->middleware('can:view,App\Payment')->name('products');
   Route::post("/{paymentHandler}/notifications", "PaymentsController@notification")->name('notifications');
-  Route::post("/{paymentHandler}/", "PaymentsController@payment")->name('checkout');
+  Route::post("/{paymentHandler}/", "PaymentsController@payment")->middleware('can:checkout,App\Payment')->name('checkout');
 });
 
 Route::prefix('punishments')->name('punishments.')->group(function () {
