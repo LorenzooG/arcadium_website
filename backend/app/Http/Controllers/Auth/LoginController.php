@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Auth\StatefulGuard;
@@ -9,7 +10,7 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 /**
  * Class LoginController
  *
- * @package App\Http\Controllers
+ * @package App\Http\Controllers\Auth
  * @noinspection PhpUnused
  */
 final class LoginController extends Controller
