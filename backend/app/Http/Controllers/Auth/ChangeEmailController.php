@@ -3,7 +3,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\EmailUpdate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserUpdateEmailRequest;
 use Illuminate\Http\Response;
@@ -19,16 +18,11 @@ final class ChangeEmailController extends Controller
   /**
    * Changes current user's email
    *
-   * @param EmailUpdate $emailUpdate
    * @param UserUpdateEmailRequest $request
    * @return Response
    */
-  public function __invoke(EmailUpdate $emailUpdate, UserUpdateEmailRequest $request)
+  public function __invoke(UserUpdateEmailRequest $request)
   {
-    $emailUpdate->update([
-      'already_used' => true
-    ]);
-
     $request->user()
       ->fill([
         'email' => $request->get('new_email')

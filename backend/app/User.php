@@ -135,16 +135,6 @@ final class User extends Authenticatable
   }
 
   /**
-   * Retrieve the email updates that this user have
-   *
-   * @return HasMany
-   */
-  public final function emailUpdates()
-  {
-    return $this->hasMany(EmailUpdate::class);
-  }
-
-  /**
    * Send the password reset notification
    *
    * @param string $token
