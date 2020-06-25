@@ -9,7 +9,6 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -21,9 +20,6 @@ final class Handler extends ExceptionHandler
    * @var array
    */
   protected $dontReport = [
-    BadRequestHttpException::class,
-    ModelNotFoundException::class,
-    NotFoundHttpException::class
   ];
 
   /**
