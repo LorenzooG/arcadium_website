@@ -31,7 +31,8 @@ module.exports = {
     "no-unused-vars": [0],
     indent: ["error", 2],
     "linebreak-style": ["error", "unix"],
-    quotes: ["error", "double"],
-    semi: ["error", "always"]
+    quotes: ["error", "single"],
+    quotemark: [0],
+    semi: ["error", "never"]
   }
 };
