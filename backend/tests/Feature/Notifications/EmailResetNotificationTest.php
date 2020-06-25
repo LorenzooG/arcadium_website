@@ -3,7 +3,6 @@
 
 namespace Tests\Feature\Notifications;
 
-use App\EmailUpdate;
 use App\Notifications\EmailResetNotification;
 use App\User;
 use Illuminate\Support\Str;
@@ -17,11 +16,7 @@ final class EmailResetNotificationTest extends TestCase
     /** @var User $user */
     $user = factory(User::class)->make();
 
-    $emailUpdate = factory(EmailUpdate::class)->make([
-      'token' => $token
-    ]);
-
-    $notification = new EmailResetNotification($emailUpdate);
+    $notification = new EmailResetNotification($token);
 
     $rendered = $notification->toMail($user)->render();
 
@@ -35,11 +30,7 @@ final class EmailResetNotificationTest extends TestCase
     /** @var User $user */
     $user = factory(User::class)->make();
 
-    $emailUpdate = factory(EmailUpdate::class)->make([
-      'token' => $token
-    ]);
-
-    $notification = new EmailResetNotification($emailUpdate);
+    $notification = new EmailResetNotification($token);
 
     $this->assertEquals(['mail'], $notification->via($user));
   }
@@ -50,11 +41,7 @@ final class EmailResetNotificationTest extends TestCase
     /** @var User $user */
     $user = factory(User::class)->make();
 
-    $emailUpdate = factory(EmailUpdate::class)->make([
-      'token' => $token
-    ]);
-
-    $notification = new EmailResetNotification($emailUpdate);
+    $notification = new EmailResetNotification($token);
 
     $this->assertEquals([
       'token' => $token,
