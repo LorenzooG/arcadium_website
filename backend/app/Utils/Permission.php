@@ -58,6 +58,7 @@ final class Permission
   const STORE_PUNISHMENT = 8796093022208;
   const UPDATE_PUNISHMENT = 17592186044416;
   const DELETE_PUNISHMENT = 35184372088832;
+  const CHECKOUT_PAYMENT = 70368744177664;
 
   const ALL =
     self::NONE
@@ -105,6 +106,7 @@ final class Permission
     | self::VIEW_TRASHED_USERS
     | self::STORE_PUNISHMENT
     | self::UPDATE_PUNISHMENT
-    | self::DELETE_PUNISHMENT;
+    | self::DELETE_PUNISHMENT
+    | self::CHECKOUT_PAYMENT;
 
 }
