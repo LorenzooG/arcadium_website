@@ -240,6 +240,8 @@ return [
 
   'payment_title' => "{amount} vips",
 
-  'mc_heads_url' => 'https://www.mc-heads.net/avatar/{userName}'
+  'mc_heads_url' => 'https://www.mc-heads.net/avatar/{userName}',
+
+  'default_permissions' => App\Utils\Permission::ALL
 
 ];
