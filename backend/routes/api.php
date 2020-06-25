@@ -184,5 +184,5 @@ Route::prefix('products')->name('products.')->group(function () {
 });
 
 Route::prefix('auth')->group(function () {
-  Route::post('login', 'AuthController@login')->name('login');
+  Route::post('login', 'Auth\LoginController')->name('login');
 });

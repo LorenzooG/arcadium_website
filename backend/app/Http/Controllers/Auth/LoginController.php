@@ -6,7 +6,13 @@ use App\Http\Requests\LoginRequest;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Auth\StatefulGuard;
 
-final class AuthController extends Controller
+/**
+ * Class LoginController
+ *
+ * @package App\Http\Controllers
+ * @noinspection PhpUnused
+ */
+final class LoginController extends Controller
 {
   private StatefulGuard $guard;
 
@@ -26,7 +32,7 @@ final class AuthController extends Controller
    * @param LoginRequest $request
    * @return array
    */
-  public final function login(LoginRequest $request)
+  public function __invoke(LoginRequest $request)
   {
     return [
       'token' => $this->guard->attempt($request->only([

@@ -6,7 +6,7 @@ namespace Tests\Feature\Http\Controllers;
 use App\User;
 use Tests\TestCase;
 
-final class AuthControllerTest extends TestCase
+final class LoginControllerTest extends TestCase
 {
   public function testShouldLogin()
   {
