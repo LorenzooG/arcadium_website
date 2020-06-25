@@ -85,6 +85,9 @@ final class EmailResetTokenRepository implements TokenRepositoryInterface
   public function recentlyCreatedToken(CanResetPasswordContract $user)
   {
     $record = $this->table->where('user_id', $user->id)->first();
+
+    if (is_null($record)) return false;
+
     $createdAt = $record->getAttribute('created_at');
 
     return $createdAt
