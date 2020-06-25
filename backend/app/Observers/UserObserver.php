@@ -35,7 +35,7 @@ final class UserObserver
   {
     $this->userRepository->flushCache();
 
-    $user->downloadImage();
+    $user->sendEmailVerificationNotification();
   }
 
   /**

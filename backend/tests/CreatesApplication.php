@@ -4,6 +4,7 @@ namespace Tests;
 
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
 trait CreatesApplication
@@ -20,6 +21,7 @@ trait CreatesApplication
     $app->make(Kernel::class)->bootstrap();
 
     Storage::fake();
+    Notification::fake();
 
     return $app;
   }

@@ -26,7 +26,7 @@ final class ChangeImageController extends Controller
    */
   public function __invoke(ImageUpdateRequest $request, Product $product)
   {
-    $request->file('image')->storeAs(Product::IMAGES_STORAGE_KEY, $product->id);
+    $product->saveImage($request->file('image'));
 
     return response()->noContent();
   }

@@ -128,6 +128,19 @@ return [
     'hash_algos' => 'sha256',
     'expires' => 30
 
+  ],
+
+  /*
+  |--------------------------------------------------------------------------
+  | Verify Email Configuration
+  |--------------------------------------------------------------------------
+  |
+  | Here you may define the amount of hours the token is valid and the throttle
+  |
+  */
+
+  'verification' => [
+    'expires' => 24
   ]
 
 ];

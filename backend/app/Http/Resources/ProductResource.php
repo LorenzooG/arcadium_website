@@ -29,7 +29,7 @@ final class ProductResource extends JsonResource
       'title' => $this->resource->title,
       'description' => $this->resource->description,
       'price' => $this->resource->price,
-      'image' => route('products.image.show', [
+      'image' => route('products.image', [
         'product' => $this->resource->id
       ]),
       'commands' => $this->when($request->user()->hasPermission(Permission::VIEW_PRODUCT_COMMANDS),
