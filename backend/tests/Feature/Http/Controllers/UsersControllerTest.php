@@ -40,7 +40,10 @@ class UsersControllerTest extends TestCase
             'avatar' => route('users.avatar', [
               'user' => $user->id
             ]),
-            'deleted_at' => $user->deleted_at,
+            'email_verified_at' => $user->email_verified_at->toISOString(),
+            'deleted_at' => $user->deleted_at ?
+              $user->deleted_at->toISOString()
+              : null,
             'created_at' => $user->created_at->toISOString(),
             'updated_at' => $user->updated_at->toISOString(),
           ];
@@ -71,7 +74,12 @@ class UsersControllerTest extends TestCase
             'avatar' => route('users.avatar', [
               'user' => $user->id
             ]),
-            'deleted_at' => $user->deleted_at,
+            'email_verified_at' => $user->email_verified_at ?
+              $user->email_verified_at->toISOString()
+              : null,
+            'deleted_at' => $user->deleted_at ?
+              $user->deleted_at->toISOString()
+              : null,
             'created_at' => $user->created_at->toISOString(),
             'updated_at' => $user->updated_at->toISOString(),
           ];
@@ -111,6 +119,7 @@ class UsersControllerTest extends TestCase
             'avatar' => route('users.avatar', [
               'user' => $user->id
             ]),
+            'email_verified_at' => $user->email_verified_at->toISOString(),
             'deleted_at' => $user->deleted_at->toISOString(),
             'created_at' => $user->created_at->toISOString(),
             'updated_at' => $user->updated_at->toISOString()
@@ -154,6 +163,7 @@ class UsersControllerTest extends TestCase
         'avatar' => route('users.avatar', [
           'user' => $user->id
         ]),
+        'email_verified_at' => $user->email_verified_at->toISOString(),
         'created_at' => $user->created_at->toISOString(),
         'updated_at' => $user->updated_at->toISOString(),
         'deleted_at' => $user->deleted_at ?
@@ -190,6 +200,7 @@ class UsersControllerTest extends TestCase
         'avatar' => route('users.avatar', [
           'user' => $user->id
         ]),
+        'email_verified_at' => $user->email_verified_at->toISOString(),
         'created_at' => $user->created_at->toISOString(),
         'updated_at' => $user->updated_at->toISOString(),
         'deleted_at' => $user->deleted_at ?
@@ -238,6 +249,7 @@ class UsersControllerTest extends TestCase
         'id' => $user->id,
         'user_name' => $user->user_name,
         'name' => $user->name,
+        'email_verified_at' => null,
         'created_at' => $user->created_at->toISOString(),
         'updated_at' => $user->updated_at->toISOString(),
         'deleted_at' => null
