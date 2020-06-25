@@ -77,6 +77,8 @@ class CommentsControllerTest extends TestCase
       'content' => $content
     ]);
 
+    $a = $this->app['router']->getRoutes();
+
     $comments = Comment::query()
       ->where('id', $response->json('id'))
       ->where('content', $content)

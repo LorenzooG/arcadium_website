@@ -135,7 +135,7 @@ class PaymentsControllerTest extends TestCase
   public function testShouldCheckoutPaymentWhenPostPaymentsCheckout()
   {
     /** @var User $user */
-    $user = factory(User::class)->create();
+    $user = factory(User::class)->state('admin')->create();
 
     $idMock = $this->faker->numberBetween(1, 1000);
     $preferenceIdMock = $this->faker->numberBetween(1, 1000);

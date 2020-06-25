@@ -45,6 +45,9 @@ final class StaffsControllerTest extends TestCase
               'avatar' => route('users.avatar', [
                 'user' => $user->id
               ]),
+              'email_verified_at' => $user->email_verified_at ?
+                $user->email_verified_at->toISOString()
+                : null,
               'deleted_at' => $user->deleted_at
                 ? $user->deleted_at->toISOString()
                 : null,
