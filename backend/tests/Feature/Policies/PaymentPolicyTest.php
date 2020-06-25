@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 final class PaymentPolicyTest extends TestCase
 {
-  public function testShouldCanViewPunishmentWhenHavePermissionViewPunishment()
+  public function testShouldCanViewPaymentWhenHavePermissionViewPayment()
   {
     /** @var User $user */
     $user = factory(User::class)->create();
