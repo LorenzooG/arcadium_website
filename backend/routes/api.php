@@ -31,10 +31,10 @@ Route::prefix('user')->middleware('auth:api')->group(function () {
 
     Route::middleware('can:updateSelf,App\User')->group(function () {
       Route::put('/', 'SelfUserController@update')->name('user.update');
-      Route::post('/request/update_email', 'Auth\ResetEmailController')->name('user.request.update.email');
       Route::post('/avatar', 'Auth\ChangeAvatarController')->name('user.update.avatar');
       Route::put('/password', 'Auth\ChangePasswordController')->name('user.update.password');
-      Route::put('/email/{emailUpdate}', 'Auth\ChangeEmailController')->name('user.update.email');
+      Route::post('update_email', 'Auth\ResetEmailController')->name('user.request.update.email');
+      Route::put('update_email', 'Auth\ChangeEmailController')->name('user.update.email');
     });
   });
 });
