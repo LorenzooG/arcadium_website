@@ -24,6 +24,12 @@ return [
       'message' => "You've requested an email reset in our website, please click in the following link to finish the process, if haven't requested, please reset your password.",
       'button' => 'Reset email'
     ],
+
+    'verify' => [
+      'subject' => 'Email Verification',
+      'message' => "You've registered in our app, so please verify your email",
+      'button' => 'Verify email'
+    ],
   ],
 
   'password' => [
