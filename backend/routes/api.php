@@ -183,6 +183,8 @@ Route::prefix('products')->name('products.')->group(function () {
   });
 });
 
+Route::get('translations', 'TranslationsController')->name('translations');
+
 Route::prefix('auth')->group(function () {
   Route::post('login', 'Auth\LoginController')->name('login');
 });
