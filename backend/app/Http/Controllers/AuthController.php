@@ -2,17 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\LoginRequest;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Contracts\Auth\StatefulGuard;
 
 final class AuthController extends Controller
 {
+  private StatefulGuard $guard;
 
-  public final function login(Request $request)
+  /**
+   * AuthController constructor
+   *
+   * @param AuthFactory $auth
+   */
+  public function __construct(AuthFactory $auth)
   {
-    return response()->json([
-      "token" => Auth::attempt($request->only(["email", "password"]))
-    ]);
+    $this->guard = $auth->guard();
+  }
+
+  /**
+   * Handle user login
+   *
+   * @param LoginRequest $request
+   * @return array
+   */
+  public final function login(LoginRequest $request)
+  {
+    return [
+      'token' => $this->guard->attempt($request->only([
+        'email',
+        'password'
+      ]))
+    ];
   }
 
 }
