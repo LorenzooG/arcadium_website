@@ -242,6 +242,6 @@ return [
 
   'mc_heads_url' => 'https://www.mc-heads.net/avatar/{userName}',
 
-  'default_permissions' => App\Utils\Permission::ALL
+  'default_permissions' => App\Utils\Permission::NONE
 
 ];
