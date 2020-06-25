@@ -141,6 +141,11 @@ return [
 
   'verification' => [
     'expires' => 24
+  ],
+
+  'email_reset' => [
+    'expires' => 24,
+    'throttle' => 24,
   ]
 
 ];

@@ -5,25 +5,19 @@ namespace App\Http\Requests;
 use App\Repositories\Tokens\EmailResetTokenRepository;
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * Class UserUpdateEmailRequest
- *
- * @package App\Http\Requests
- */
-final class UserUpdateEmailRequest extends FormRequest
+class EmailResetRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
    *
    * @return bool
    */
-  public final function authorize()
+  public function authorize()
   {
     /** @var EmailResetTokenRepository $repository */
     $repository = resolve(EmailResetTokenRepository::class);
-    $token = $this->query('token', '');
 
-    return $repository->exists($this->user(), $token);
+    return !$repository->recentlyCreatedToken($this->user());
   }
 
   /**
@@ -31,10 +25,10 @@ final class UserUpdateEmailRequest extends FormRequest
    *
    * @return array
    */
-  public final function rules()
+  public function rules()
   {
     return [
-      'new_email' => 'required|string|min:8|max:48'
+      //
     ];
   }
 }
