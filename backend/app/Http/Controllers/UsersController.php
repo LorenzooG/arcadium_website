@@ -8,12 +8,12 @@ use App\Http\Resources\UserResource;
 use App\Repositories\UserRepository;
 use App\User;
 use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 final class UsersController extends Controller
@@ -71,9 +71,9 @@ final class UsersController extends Controller
       $mcHeadsUrl = config('app.mc_heads_url');
       $mcHeadsUrl = str_replace('{userName}', urlencode($user->user_name), $mcHeadsUrl);
 
-      $client = (new Client)->get($mcHeadsUrl);
+      $client = Http::get($mcHeadsUrl);
 
-      $this->storage->put($imageLocation, $client->getBody()->getContents());
+      $this->storage->put($imageLocation, $client->body());
     }
 
     return response()->file($this->storage->url($imageLocation));
