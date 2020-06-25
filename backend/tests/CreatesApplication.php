@@ -8,7 +8,6 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Tests\Mocks\ThrottleRequestsMock;
 
 trait CreatesApplication
 {
@@ -22,21 +21,24 @@ trait CreatesApplication
     /** @var Application $app */
     $app = require __DIR__ . '/../bootstrap/app.php';
 
-    $app->singleton(\App\Http\Kernel::class, function (Application $app) {
-      $kernel = new \App\Http\Kernel($app, $app->make(Router::class));
-
-      $kernel->routeMiddleware['throttle'] = ThrottleRequestsMock::class;
-
-      foreach ($kernel->middlewareGroups['api'] as $key => $middleware) {
-        if (!Str::contains('throttle', $middleware)) continue;
-
-        $kernel->middlewareGroups['api'][$key] = 'throttle:1000,1';
-      }
-
-      return $kernel;
-    });
-
     $app->make(Kernel::class)->bootstrap();
+
+    /** @var Router $router */
+    $router = $app['router'];
+
+    $routes = $router->getRoutes();
+    $routes = $routes->getRoutes();
+
+    foreach ($routes as $index => $route) {
+      $route->parameters = [];
+
+      $middleware = collect($route->action['middleware'] ?? [])
+        ->filter(fn($middleware) => !Str::contains($middleware, 'throttle'));
+
+      $route->action['middleware'] = $middleware->toArray();
+
+      $routes[$index] = $route;
+    };
 
     Storage::fake();
     Notification::fake();

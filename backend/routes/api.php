@@ -118,7 +118,7 @@ Route::prefix('posts')->name('posts.')->group(function () {
 });
 
 Route::prefix('comments')->name('comments.')->group(function () {
-  Route::middleware(['xss', 'can:update,comment', 'throttle:1,5'])->group(function () {
+  Route::middleware(['xss', 'can:update,comment', 'throttle:1,1'])->group(function () {
     Route::put('{comment}', 'CommentController@update')->name('update');
   });
 
