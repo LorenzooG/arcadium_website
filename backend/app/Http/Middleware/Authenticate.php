@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 final class Authenticate extends Middleware
 {
@@ -16,6 +15,6 @@ final class Authenticate extends Middleware
    */
   protected final function redirectTo($request)
   {
-    throw new UnauthorizedHttpException("");
+    return route('index');
   }
 }

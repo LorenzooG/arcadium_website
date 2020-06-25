@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\AdminOnly;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\ClearXss;
@@ -30,7 +29,7 @@ final class Kernel extends HttpKernel
    *
    * @var array
    */
-  protected $middleware = [
+  public $middleware = [
     TrustProxies::class,
     HandleCors::class,
     CheckForMaintenanceMode::class,
@@ -44,13 +43,13 @@ final class Kernel extends HttpKernel
    *
    * @var array
    */
-  protected $middlewareGroups = [
+  public $middlewareGroups = [
     'web' => [
       SubstituteBindings::class,
     ],
 
     'api' => [
-      'throttle:220,1',
+      'throttle:60,1',
       SubstituteBindings::class,
     ],
   ];
@@ -62,7 +61,7 @@ final class Kernel extends HttpKernel
    *
    * @var array
    */
-  protected $routeMiddleware = [
+  public $routeMiddleware = [
     'auth' => Authenticate::class,
     'auth.basic' => AuthenticateWithBasicAuth::class,
     'bindings' => SubstituteBindings::class,
@@ -73,6 +72,5 @@ final class Kernel extends HttpKernel
     'throttle' => ThrottleRequests::class,
     'verified' => EnsureEmailIsVerified::class,
     'xss' => ClearXss::class,
-    'admin' => AdminOnly::class,
   ];
 }

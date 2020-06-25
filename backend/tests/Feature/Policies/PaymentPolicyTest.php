@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 final class PaymentPolicyTest extends TestCase
 {
-  public function testShouldCanViewPunishmentWhenHavePermissionViewPunishment()
+  public function testShouldCanViewPaymentWhenHavePermissionViewPayment()
   {
     /** @var User $user */
     $user = factory(User::class)->create();
@@ -20,5 +20,16 @@ final class PaymentPolicyTest extends TestCase
     ]));
 
     $this->assertTrue($user->can('view', Payment::class));
+  }
+
+  public function testShouldCanCheckoutPaymentWhenHavePermissionCheckoutPayment()
+  {
+    /** @var User $user */
+    $user = factory(User::class)->create();
+    $user->roles()->save(factory(Role::class)->create([
+      'permission_level' => Permission::CHECKOUT_PAYMENT
+    ]));
+
+    $this->assertTrue($user->can('checkout', Payment::class));
   }
 }
