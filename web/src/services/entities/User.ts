@@ -19,7 +19,8 @@ export default class User implements Entity {
     public isAdmin: boolean,
     public createdAt: Date,
     public updatedAt: Date
-  ) {}
+  ) {
+  }
 
   public static new(data: UserConstructor): User {
     return new User(

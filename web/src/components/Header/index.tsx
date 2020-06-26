@@ -1,28 +1,28 @@
-import React from "react";
+import React from 'react'
 
-import { FiShoppingCart } from "react-icons/fi";
+import { FiShoppingCart } from 'react-icons/fi'
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
-import { useSelector } from "react-redux";
-import { RootState } from "~/store/modules";
-import { Item } from "~/store/modules/cart/reducer";
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store/modules'
+import { Item } from '~/store/modules/cart/reducer'
 
-import { Navbar } from "~/components";
+import { Navbar } from '~/components'
 
-import { app, locale } from "~/services";
+import { app, locale } from '~/services'
 
 import {
-  Wrapper,
-  Container,
   CartIcon,
-  CartWrapper,
   CartText,
-  Title
-} from "./styles";
+  CartWrapper,
+  Container,
+  Title,
+  Wrapper
+} from './styles'
 
 const Header: React.FC = () => {
-  const items = useSelector<RootState, Item[]>(state => state.cart.items);
+  const items = useSelector<RootState, Item[]>(state => state.cart.items)
 
   return (
     <>
@@ -32,12 +32,12 @@ const Header: React.FC = () => {
             <h1>{app.name()}</h1>
           </Title>
           <CartWrapper>
-            <Link to={"/cart"}>
+            <Link to={'/cart'}>
               <CartText>
                 <h4>
                   {locale
-                    .getTranslation("message.items.in.cart")
-                    .replace("$amount", items.length.toString())}
+                    .getTranslation('message.items.in.cart')
+                    .replace('$amount', items.length.toString())}
                 </h4>
               </CartText>
               <CartIcon>
@@ -49,7 +49,7 @@ const Header: React.FC = () => {
       </Wrapper>
       <Navbar />
     </>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

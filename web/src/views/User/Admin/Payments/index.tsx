@@ -14,7 +14,7 @@ const AdminPayments: React.FC = () => {
           <h1>{locale.getTranslation("page.payments")}</h1>
         </header>
 
-        <PaymentContainer />
+        <PaymentContainer/>
       </UserWrapper>
     </AdminWrapper>
   );

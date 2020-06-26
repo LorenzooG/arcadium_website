@@ -1,35 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react'
 
-import { FiXCircle } from "react-icons/fi";
+import { FiXCircle } from 'react-icons/fi'
 
 import {
+  BackButton,
   Container,
   Content,
+  Footer,
   Header,
   Main,
-  Footer,
-  BackButton,
   SubmitButton
-} from "./styles";
+} from './styles'
 
 type Props = {
-  open: boolean;
+  open: boolean
 
-  title?: string;
+  title?: string
 
-  submit?: string;
+  submit?: string
 
-  handleBack?: () => void;
+  handleBack?: () => void
 
-  handleSubmit?: () => void;
+  handleSubmit?: () => void
 
-  setOpen: (value: boolean) => void;
-};
+  setOpen: (value: boolean) => void
+}
 
 const Modal: React.FC<Props> = ({
   open,
   submit,
-  title = "Modal",
+  title = 'Modal',
   setOpen,
   handleSubmit,
   handleBack = () => setOpen(false),
@@ -37,16 +37,16 @@ const Modal: React.FC<Props> = ({
 }) => {
   useEffect(() => {
     if (open) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden'
     }
 
     return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [open]);
+      document.body.style.overflow = 'auto'
+    }
+  }, [open])
 
   if (!open) {
-    return null;
+    return null
   }
 
   return (
@@ -71,7 +71,7 @@ const Modal: React.FC<Props> = ({
         </Footer>
       </Main>
     </Container>
-  );
-};
+  )
+}
 
-export default Modal;
+export default Modal

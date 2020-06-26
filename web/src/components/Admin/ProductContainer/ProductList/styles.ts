@@ -1,12 +1,12 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 import {
   ContainerAddEntityButton,
   ContainerListUl
-} from "~/components/Admin/styles";
+} from '~/components/Admin/styles'
 
-export const Container = styled.div``;
+export const Container = styled.div``
 
-export const List = styled(ContainerListUl)``;
+export const List = styled(ContainerListUl)``
 
-export const AddProductButton = styled(ContainerAddEntityButton)``;
+export const AddProductButton = styled(ContainerAddEntityButton)``

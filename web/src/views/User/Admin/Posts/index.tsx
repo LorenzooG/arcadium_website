@@ -14,7 +14,7 @@ const AdminPosts: React.FC = () => {
           <h1>{locale.getTranslation("page.posts")}</h1>
         </header>
 
-        <PostContainer />
+        <PostContainer/>
       </UserWrapper>
     </AdminWrapper>
   );

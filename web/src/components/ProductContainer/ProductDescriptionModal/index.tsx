@@ -1,27 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react'
 
-import { useDispatch } from "react-redux";
-import { addToCartAction } from "~/store/modules/cart/actions";
+import { useDispatch } from 'react-redux'
+import { addToCartAction } from '~/store/modules/cart/actions'
 
-import { toLocalePrice } from "~/utils";
-import { markdown, locale } from "~/services";
-import { Product } from "~/services/entities";
+import { toLocalePrice } from '~/utils'
+import { locale, markdown } from '~/services'
+import { Product } from '~/services/entities'
 
 import {
-  Container,
-  Content,
-  Header,
   AddToCartButton,
   BackButton,
+  Container,
+  Content,
   Footer,
+  Header,
   Main
-} from "./styles";
+} from './styles'
 
 type Props = {
-  product: Product;
-  open: boolean;
-  setOpen: (value: boolean) => void;
-};
+  product: Product
+  open: boolean
+  setOpen: (value: boolean) => void
+}
 
 const ProductDescriptionModal: React.FC<Props> = ({
   open,
@@ -30,22 +30,22 @@ const ProductDescriptionModal: React.FC<Props> = ({
 }) => {
   useEffect(() => {
     if (open) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden'
     }
 
     return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [open]);
+      document.body.style.overflow = 'auto'
+    }
+  }, [open])
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   if (!open) {
-    return null;
+    return null
   }
 
   function handleAddToCart() {
-    dispatch(addToCartAction(product));
+    dispatch(addToCartAction(product))
   }
 
   return (
@@ -71,16 +71,16 @@ const ProductDescriptionModal: React.FC<Props> = ({
 
         <Footer>
           <BackButton onClick={() => setOpen(false)}>
-            {locale.getTranslation("action.back").toUpperCase()}
+            {locale.getTranslation('action.back').toUpperCase()}
           </BackButton>
 
           <AddToCartButton onClick={handleAddToCart}>
-            {locale.getTranslation("action.add.to.cart").toUpperCase()}
+            {locale.getTranslation('action.add.to.cart').toUpperCase()}
           </AddToCartButton>
         </Footer>
       </Main>
     </Container>
-  );
-};
+  )
+}
 
-export default ProductDescriptionModal;
+export default ProductDescriptionModal

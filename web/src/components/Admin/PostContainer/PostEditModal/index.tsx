@@ -7,7 +7,7 @@ import { Modal } from "~/components";
 
 import { toastMessage } from "~/utils";
 
-import { errors, posts, markdown, locale } from "~/services";
+import { errors, locale, markdown, posts } from "~/services";
 import { Post } from "~/services/entities";
 
 import { Input, MarkdownWrapper } from "./styles";
@@ -23,11 +23,11 @@ type Props = {
 };
 
 const AdminPostEditModal: React.FC<Props> = ({
-  open,
-  setOpen,
-  post,
-  create
-}) => {
+                                               open,
+                                               setOpen,
+                                               post,
+                                               create
+                                             }) => {
   const [title, setTitle] = useState(post?.title);
   const [description, setDescription] = useState(post?.description);
 
@@ -37,8 +37,8 @@ const AdminPostEditModal: React.FC<Props> = ({
   const localeTitleMessage = locale.getTranslation("message.title");
 
   const localeAction = (create
-    ? locale.getTranslation("action.create.entity")
-    : locale.getTranslation("action.update.entity")
+      ? locale.getTranslation("action.create.entity")
+      : locale.getTranslation("action.update.entity")
   ).replace("$entity", localeEntity);
 
   async function handleSubmit(event?: FormEvent) {

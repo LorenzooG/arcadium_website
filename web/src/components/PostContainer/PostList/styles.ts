@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.main`
   ul {
@@ -9,4 +9,4 @@ export const Container = styled.main`
   li:nth-child(n + 2) {
     margin-top: 18px;
   }
-`;
+`

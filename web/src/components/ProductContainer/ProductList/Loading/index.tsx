@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
-import { Container } from "../styles";
-import ProductLoading from "~/components/ProductContainer/ProductComponent/Loading";
+import { Container } from '../styles'
+import ProductLoading from '~/components/ProductContainer/ProductComponent/Loading'
 
 const ProductListLoading: React.FC = () => {
   return (
@@ -12,7 +12,7 @@ const ProductListLoading: React.FC = () => {
         ))}
       </ul>
     </Container>
-  );
-};
+  )
+}
 
-export default ProductListLoading;
+export default ProductListLoading

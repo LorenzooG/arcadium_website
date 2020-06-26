@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.li`
   grid-template-columns: 1fr 6fr 1fr 1fr 60px 1fr;
@@ -16,7 +16,7 @@ export const Container = styled.li`
     border-radius: 6px;
     gap: 10px;
   }
-`;
+`
 
 export const AmountInput = styled.input`
   width: 100%;
@@ -34,7 +34,7 @@ export const AmountInput = styled.input`
     width: fit-content;
     margin: 12px auto;
   }
-`;
+`
 
 export const RemoveButton = styled.button`
   border: 0;
@@ -54,11 +54,11 @@ export const RemoveButton = styled.button`
     position: absolute;
     margin: 0 8px;
   }
-`;
+`
 
 export const ProductImage = styled.img`
   width: 48px;
   height: 48px;
   margin: 16px auto;
   border-radius: 30%;
-`;
+`

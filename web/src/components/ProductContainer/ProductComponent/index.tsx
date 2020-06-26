@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
-import { useDispatch } from "react-redux";
-import { addToCartAction } from "~/store/modules/cart/actions";
+import { useDispatch } from 'react-redux'
+import { addToCartAction } from '~/store/modules/cart/actions'
 
-import { toLocalePrice } from "~/utils";
+import { toLocalePrice } from '~/utils'
 
-import ProductDescriptionModal from "../ProductDescriptionModal";
+import ProductDescriptionModal from '../ProductDescriptionModal'
 
-import { locale } from "~/services";
-import { Product } from "~/services/entities";
+import { locale } from '~/services'
+import { Product } from '~/services/entities'
 
-import { AddButton, Container, DescriptionButton } from "./styles";
+import { AddButton, Container, DescriptionButton } from './styles'
 
 type Props = {
-  product: Product;
-};
+  product: Product
+}
 
 const ProductComponent: React.FC<Props> = ({ product }) => {
-  const [open, setOpen] = useState(false);
-  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false)
+  const dispatch = useDispatch()
 
   return (
     <Container>
@@ -36,15 +36,15 @@ const ProductComponent: React.FC<Props> = ({ product }) => {
 
       <div>
         <AddButton onClick={() => dispatch(addToCartAction(product))}>
-          {locale.getTranslation("action.add.to.cart").toUpperCase()}
+          {locale.getTranslation('action.add.to.cart').toUpperCase()}
         </AddButton>
 
         <DescriptionButton onClick={() => setOpen(true)}>
-          {locale.getTranslation("message.description").toUpperCase()}
+          {locale.getTranslation('message.description').toUpperCase()}
         </DescriptionButton>
       </div>
     </Container>
-  );
-};
+  )
+}
 
-export default ProductComponent;
+export default ProductComponent

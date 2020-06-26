@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react'
 
-import ProductComponent from "../ProductComponent";
-import Empty from "./Empty";
+import ProductComponent from '../ProductComponent'
+import Empty from './Empty'
 
-import { Product } from "~/services/entities";
+import { Product } from '~/services/entities'
 
-import { Container } from "./styles";
+import { Container } from './styles'
 
 type Props = {
-  products: Product[];
-};
+  products: Product[]
+}
 
 const ProductList: React.FC<Props> = ({ products }) => {
   return (
@@ -24,7 +24,7 @@ const ProductList: React.FC<Props> = ({ products }) => {
         <Empty />
       )}
     </Container>
-  );
-};
+  )
+}
 
-export default ProductList;
+export default ProductList

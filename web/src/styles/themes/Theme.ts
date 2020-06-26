@@ -6,7 +6,8 @@ class Theme implements DefaultTheme {
     public name: string,
     public colors: Colors,
     public options: Options
-  ) {}
+  ) {
+  }
 }
 
 export default Theme;

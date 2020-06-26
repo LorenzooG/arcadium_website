@@ -9,7 +9,7 @@ const AdminPaymentListLoading: React.FC = () => {
     <Container>
       <List>
         {[1, 2, 3, 4, 5].map(key => (
-          <PaymentComponentLoading key={key} />
+          <PaymentComponentLoading key={key}/>
         ))}
       </List>
     </Container>

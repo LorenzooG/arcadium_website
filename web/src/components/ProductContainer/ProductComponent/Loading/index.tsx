@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react'
 
-import { Container } from "./styles";
-import { Bar, Loading } from "~/styles";
+import { Container } from './styles'
+import { Bar, Loading } from '~/styles'
 
 const ProductLoading: React.FC = () => {
   return (
     <Container>
-      <Bar size={"305px"}>
+      <Bar size={'305px'}>
         <Loading />
       </Bar>
     </Container>
-  );
-};
+  )
+}
 
-export default ProductLoading;
+export default ProductLoading

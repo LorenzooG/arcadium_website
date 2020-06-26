@@ -1,21 +1,16 @@
-import { put, call, all, takeEvery } from "redux-saga/effects";
+import { all, call, put, takeEvery } from "redux-saga/effects";
 
 import { toast } from "react-toastify";
 
 import { toastMessage } from "~/utils";
 
-import { payments as service, errors, locale } from "~/services";
+import { errors, locale, payments as service } from "~/services";
 
-import {
-  checkoutFailAction,
-  checkoutSuccessAction,
-  Actions,
-  CheckoutCartAction
-} from "./actions";
+import { Actions, CheckoutCartAction, checkoutFailAction, checkoutSuccessAction } from "./actions";
 
 export function* handleCheckout({
-  payload: { items, paymentMethod, userName }
-}: CheckoutCartAction) {
+                                  payload: { items, paymentMethod, userName }
+                                }: CheckoutCartAction) {
   const localeAction = locale.getTranslation("action.checkout.cart");
 
   const localeTryNotification = locale.getTranslation("notification.try");

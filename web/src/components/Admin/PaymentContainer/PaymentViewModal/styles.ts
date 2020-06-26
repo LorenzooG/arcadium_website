@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.div`
   padding: 1em 0;
@@ -6,7 +6,7 @@ export const Container = styled.div`
   h1 {
     margin-bottom: 1em;
   }
-`;
+`
 
 export const Field = styled.h3`
   font-weight: normal;
@@ -25,7 +25,7 @@ export const Field = styled.h3`
     margin-left: 8px;
     font-weight: bold;
   }
-`;
+`
 
 export const SubProduct = styled.div`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.05);
@@ -34,7 +34,7 @@ export const SubProduct = styled.div`
   text-align: left;
   padding: 6px;
   margin: 8px;
-`;
+`
 
 export const SubField = styled.div`
   img {
@@ -47,4 +47,4 @@ export const SubField = styled.div`
     margin-left: 8px;
     font-weight: bold;
   }
-`;
+`

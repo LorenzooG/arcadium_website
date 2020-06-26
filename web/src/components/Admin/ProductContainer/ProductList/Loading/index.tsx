@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react'
 
-import ProductComponentLoading from "~/components/Admin/ProductContainer/ProductComponent/Loading";
+import ProductComponentLoading from '~/components/Admin/ProductContainer/ProductComponent/Loading'
 
-import { Container, List } from "../styles";
+import { Container, List } from '../styles'
 
 const AdminProductListLoading: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const AdminProductListLoading: React.FC = () => {
         ))}
       </List>
     </Container>
-  );
-};
+  )
+}
 
-export default AdminProductListLoading;
+export default AdminProductListLoading

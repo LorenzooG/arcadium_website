@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react'
 
-import { FiXOctagon } from "react-icons/fi";
+import { FiXOctagon } from 'react-icons/fi'
 
-import { locale } from "~/services";
+import { locale } from '~/services'
 
-import { Container, Error } from "./styles";
+import { Container, Error } from './styles'
 
 type Props = {
-  error?: string;
-};
+  error?: string
+}
 
 const ErrorComponent: React.FC<Props> = ({
-  error = locale.getTranslation("error.default")
+  error = locale.getTranslation('error.default')
 }) => {
   return (
     <Container>
@@ -22,7 +22,7 @@ const ErrorComponent: React.FC<Props> = ({
         <span>{error?.toUpperCase()}</span>
       </Error>
     </Container>
-  );
-};
+  )
+}
 
-export default ErrorComponent;
+export default ErrorComponent

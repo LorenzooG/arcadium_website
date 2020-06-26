@@ -1,22 +1,22 @@
-import { createContext } from "react";
-import { Product } from "~/services/entities";
+import { createContext } from 'react'
+import { Product } from '~/services/entities'
 
 type ContextType = {
-  addProduct: (post: Product) => void;
-  deleteProduct: (id: number) => void;
-  updateProduct: (id: number, post: Product) => void;
-};
+  addProduct: (post: Product) => void
+  deleteProduct: (id: number) => void
+  updateProduct: (id: number, post: Product) => void
+}
 
 const ProductContainerContext = createContext<ContextType>({
   addProduct: () => {
-    return;
+    return
   },
   updateProduct: () => {
-    return;
+    return
   },
   deleteProduct: () => {
-    return;
+    return
   }
-});
+})
 
-export default ProductContainerContext;
+export default ProductContainerContext

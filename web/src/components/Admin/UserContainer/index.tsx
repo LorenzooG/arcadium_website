@@ -19,11 +19,11 @@ const AdminUserContainer: React.FC = () => {
   useEffect(() => void setUsers(_users), [_users]);
 
   if (loading) {
-    return <Loading />;
+    return <Loading/>;
   }
 
   if (error) {
-    return <Error />;
+    return <Error/>;
   }
 
   return (
@@ -55,7 +55,7 @@ const AdminUserContainer: React.FC = () => {
         }
       }}
     >
-      <UserList users={users} />
+      <UserList users={users}/>
     </ContainerContext.Provider>
   );
 };

@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react'
 
-import { requestPlayerHead, toLocalePrice } from "~/utils";
+import { requestPlayerHead, toLocalePrice } from '~/utils'
 
-import { Modal } from "~/components";
+import { Modal } from '~/components'
 
-import { locale } from "~/services";
-import { Payment } from "~/services/entities";
+import { locale } from '~/services'
+import { Payment } from '~/services/entities'
 
-import { Container, Field, SubField, SubProduct } from "./styles";
+import { Container, Field, SubField, SubProduct } from './styles'
 
 type Props = {
-  open: boolean;
-  setOpen: (value: boolean) => void;
-  payment: Payment;
-};
+  open: boolean
+  setOpen: (value: boolean) => void
+  payment: Payment
+}
 
 const AdminPaymentEditModal: React.FC<Props> = ({ open, setOpen, payment }) => {
   // noinspection SuspiciousTypeOfGuard
@@ -21,14 +21,14 @@ const AdminPaymentEditModal: React.FC<Props> = ({ open, setOpen, payment }) => {
     <Modal
       open={open}
       setOpen={setOpen}
-      title={`${locale.getTranslation("entity.payment")} ${payment.id}`}
+      title={`${locale.getTranslation('entity.payment')} ${payment.id}`}
     >
       <Container>
         <h1>
-          {locale.getTranslation("entity.payment")}: {payment.id}
+          {locale.getTranslation('entity.payment')}: {payment.id}
         </h1>
         <Field>
-          {locale.getTranslation("message.user_name")}:
+          {locale.getTranslation('message.user_name')}:
           <span>{payment.userName}</span>
           <img
             src={requestPlayerHead(payment.userName)}
@@ -36,7 +36,7 @@ const AdminPaymentEditModal: React.FC<Props> = ({ open, setOpen, payment }) => {
           />
         </Field>
         <Field>
-          {locale.getTranslation("entity.user")}:
+          {locale.getTranslation('entity.user')}:
           <span>
             {payment.user.email} | {payment.user.id}
           </span>
@@ -46,51 +46,51 @@ const AdminPaymentEditModal: React.FC<Props> = ({ open, setOpen, payment }) => {
           />
         </Field>
         <Field>
-          {locale.getTranslation("message.delivered")}:
+          {locale.getTranslation('message.delivered')}:
           <span>
             {payment.isPaid
-              ? locale.getTranslation("message.yes")
-              : locale.getTranslation("message.no")}
+              ? locale.getTranslation('message.yes')
+              : locale.getTranslation('message.no')}
           </span>
         </Field>
         <Field>
-          {locale.getTranslation("message.is.paid")}:{" "}
+          {locale.getTranslation('message.is.paid')}:{' '}
           <span>
             {payment.isPaid
-              ? locale.getTranslation("message.yes")
-              : locale.getTranslation("message.no")}
+              ? locale.getTranslation('message.yes')
+              : locale.getTranslation('message.no')}
           </span>
         </Field>
         <Field>
-          {locale.getTranslation("message.origin.ip")}:{" "}
+          {locale.getTranslation('message.origin.ip')}:{' '}
           <span>{payment.originIp}</span>
         </Field>
         <Field>
-          {locale.getTranslation("message.payment.method")}:{" "}
+          {locale.getTranslation('message.payment.method')}:{' '}
           <span>{payment.paymentMethod}</span>
         </Field>
         <Field>
-          {locale.getTranslation("message.total.price")}:{" "}
+          {locale.getTranslation('message.total.price')}:{' '}
           <span>{toLocalePrice(payment.totalPrice())}</span>
         </Field>
 
         <Field>
-          {locale.getTranslation("message.updated.at")}:{" "}
+          {locale.getTranslation('message.updated.at')}:{' '}
           <span>{payment.updatedAt.toLocaleString()}</span>
         </Field>
 
-        <Field>{locale.getTranslation("message.products")}: </Field>
+        <Field>{locale.getTranslation('message.products')}: </Field>
         {payment.products.map((product, index) =>
-          typeof product.product === "number" ? (
+          typeof product.product === 'number' ? (
             String(product.product)
           ) : (
             <SubProduct key={index}>
               <SubField>
-                {locale.getTranslation("message.amount")}:{" "}
+                {locale.getTranslation('message.amount')}:{' '}
                 <span>{product.amount}</span>
               </SubField>
               <SubField>
-                {locale.getTranslation("entity.product")}:{" "}
+                {locale.getTranslation('entity.product')}:{' '}
                 <span>{product.product.id}</span>
               </SubField>
             </SubProduct>
@@ -98,12 +98,12 @@ const AdminPaymentEditModal: React.FC<Props> = ({ open, setOpen, payment }) => {
         )}
 
         <Field>
-          {locale.getTranslation("message.created.at")}:{" "}
+          {locale.getTranslation('message.created.at')}:{' '}
           <span>{payment.createdAt.toLocaleString()}</span>
         </Field>
       </Container>
     </Modal>
-  );
-};
+  )
+}
 
-export default AdminPaymentEditModal;
+export default AdminPaymentEditModal

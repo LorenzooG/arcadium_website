@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
 
-import produce from "immer";
-import { useResource } from "~/utils";
+import produce from 'immer'
+import { useResource } from '~/utils'
 
-import Error from "~/components/ErrorComponent";
-import Loading from "./ProductList/Loading";
-import ProductList from "./ProductList";
+import Error from '~/components/ErrorComponent'
+import Loading from './ProductList/Loading'
+import ProductList from './ProductList'
 
-import { products as service } from "~/services";
-import { Product } from "~/services/entities";
+import { products as service } from '~/services'
+import { Product } from '~/services/entities'
 
-import ContainerContext from "./ProductContainerContext";
+import ContainerContext from './ProductContainerContext'
 
 const AdminProductContainer: React.FC = () => {
-  const [_products, loading, error] = useResource<Product[]>(service.fetchAll);
-  const [products, setProducts] = useState(_products);
+  const [_products, loading, error] = useResource<Product[]>(service.fetchAll)
+  const [products, setProducts] = useState(_products)
 
-  useEffect(() => void setProducts(_products), [_products]);
+  useEffect(() => void setProducts(_products), [_products])
 
   if (loading) {
-    return <Loading />;
+    return <Loading />
   }
 
   if (error) {
-    return <Error />;
+    return <Error />
   }
 
   return (
@@ -34,16 +34,16 @@ const AdminProductContainer: React.FC = () => {
             produce(products, draft => {
               draft[
                 products.findIndex(_product => _product.id === id)
-              ] = product;
+              ] = product
             })
-          );
+          )
         },
         addProduct: product => {
           setProducts(
             produce(products, draft => {
-              draft.push(product);
+              draft.push(product)
             })
-          );
+          )
         },
         deleteProduct: id => {
           setProducts(
@@ -51,15 +51,15 @@ const AdminProductContainer: React.FC = () => {
               draft.splice(
                 products.findIndex(product => product.id === id),
                 1
-              );
+              )
             })
-          );
+          )
         }
       }}
     >
       <ProductList products={products} />
     </ContainerContext.Provider>
-  );
-};
+  )
+}
 
-export default AdminProductContainer;
+export default AdminProductContainer

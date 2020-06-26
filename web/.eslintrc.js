@@ -6,33 +6,34 @@ module.exports = {
     node: true
   },
   extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended"
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended'
   ],
   globals: {
-    Atomics: "readonly",
-    SharedArrayBuffer: "readonly"
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly'
   },
-  parser: "@typescript-eslint/parser",
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true
     },
     ecmaVersion: 2018,
-    sourceType: "module"
+    sourceType: 'module'
   },
-  plugins: ["react", "@typescript-eslint", "react-hooks"],
+  plugins: ['react', '@typescript-eslint', 'react-hooks'],
   rules: {
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "error",
-    "@typescript-eslint/explicit-function-return-type": [0],
-    "react/prop-types": [0],
-    "no-unused-vars": [0],
-    indent: ["error", 2],
-    "linebreak-style": ["error", "unix"],
-    quotes: ["error", "single"],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'error',
+    '@typescript-eslint/explicit-function-return-type': [0],
+    '@typescript-eslint/member-delimiter-style': [0],
+    'react/prop-types': [0],
+    'no-unused-vars': [0],
+    indent: ['error', 2],
+    'linebreak-style': ['error', 'unix'],
+    quotes: ['error', 'single'],
     quotemark: [0],
-    semi: ["error", "never"]
+    semi: ['error', 'never']
   }
-};
+}

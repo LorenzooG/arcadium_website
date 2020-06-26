@@ -14,7 +14,7 @@ const AdminWrapper: React.FC<Props> = ({ children, path }) => {
   return (
     <Container>
       <div>
-        <Sidebar open={open} />
+        <Sidebar open={open}/>
 
         <Navbar
           sidebarOpen={open}

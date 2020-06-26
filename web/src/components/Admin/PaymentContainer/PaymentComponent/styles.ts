@@ -1,9 +1,6 @@
 import styled from "styled-components";
 
-import {
-  ContainerComponent,
-  ContainerComponentEditButton
-} from "~/components/Admin/styles";
+import { ContainerComponent, ContainerComponentEditButton } from "~/components/Admin/styles";
 
 export const Container = styled(ContainerComponent)`
   grid-template-columns: 1fr 72px 8fr 2fr 48px;

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import { locale } from "~/services";
 
-import { Container, Item, Toggler, ReturnToTheSite } from "./styles";
+import { Container, Item, ReturnToTheSite, Toggler } from "./styles";
 
 type Props = {
   path?: string;
@@ -15,14 +15,14 @@ type Props = {
 };
 
 const AdminNavbar: React.FC<Props> = ({
-  path = locale.getTranslation("page.home"),
-  toggleSidebar,
-  sidebarOpen
-}) => {
+                                        path = locale.getTranslation("page.home"),
+                                        toggleSidebar,
+                                        sidebarOpen
+                                      }) => {
   return (
     <Container sidebarOpen={sidebarOpen}>
       <Toggler onClick={toggleSidebar}>
-        <FiMenu />
+        <FiMenu/>
       </Toggler>
 
       <Item>

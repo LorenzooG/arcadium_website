@@ -19,11 +19,11 @@ const AdminPostContainer: React.FC = () => {
   useEffect(() => void setPosts(_posts), [_posts]);
 
   if (loading) {
-    return <Loading />;
+    return <Loading/>;
   }
 
   if (error) {
-    return <Error />;
+    return <Error/>;
   }
 
   return (
@@ -55,7 +55,7 @@ const AdminPostContainer: React.FC = () => {
         }
       }}
     >
-      <PostList posts={posts} />
+      <PostList posts={posts}/>
     </ContainerContext.Provider>
   );
 };

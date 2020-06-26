@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react'
 
-import { PostContainer } from "~/components";
+import { PostContainer } from '~/components'
 
 const HomeHome: React.FC = () => {
-  return <PostContainer />;
-};
+  return <PostContainer />
+}
 
-export default HomeHome;
+export default HomeHome

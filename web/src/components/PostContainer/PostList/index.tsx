@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react'
 
-import PostComponent from "../PostComponent";
-import Empty from "./Empty";
+import PostComponent from '../PostComponent'
+import Empty from './Empty'
 
-import { Post } from "~/services/entities";
+import { Post } from '~/services/entities'
 
-import { Container } from "./styles";
+import { Container } from './styles'
 
 type Props = {
-  posts: Post[];
-};
+  posts: Post[]
+}
 
 const PostList: React.FC<Props> = ({ posts }) => {
   return (
@@ -22,7 +22,7 @@ const PostList: React.FC<Props> = ({ posts }) => {
         )}
       </ul>
     </Container>
-  );
-};
+  )
+}
 
-export default PostList;
+export default PostList

@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react'
 
-import { Container } from "./styles";
-import { Bar, Loading } from "~/styles";
+import { Container } from './styles'
+import { Bar, Loading } from '~/styles'
 
 const AdminProductComponentLoading: React.FC = () => {
   return (
     <Container>
-      <Bar size={"64px"}>
+      <Bar size={'64px'}>
         <Loading />
       </Bar>
     </Container>
-  );
-};
+  )
+}
 
-export default AdminProductComponentLoading;
+export default AdminProductComponentLoading

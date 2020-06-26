@@ -1,13 +1,13 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const List = styled.ul`
   display: flex;
-`;
+`
 
 export const Nav = styled.div<{ open: boolean }>`
   display: flex;
   @media (max-width: 700px) {
-    display: ${props => (props.open ? "flex" : "none")};
+    display: ${props => (props.open ? 'flex' : 'none')};
     justify-content: initial;
     flex-direction: column;
     ul {
@@ -24,7 +24,7 @@ export const Nav = styled.div<{ open: boolean }>`
   }
   width: 100%;
   justify-content: space-between;
-`;
+`
 
 export const Toggler = styled.span`
   display: none;
@@ -40,14 +40,14 @@ export const Toggler = styled.span`
     font-size: 54px;
     margin-left: auto;
   }
-`;
+`
 
 export const Container = styled.div`
   margin: auto;
   width: 100%;
   max-width: 1000px;
   background: transparent;
-`;
+`
 
 export const User = styled.div`
   img {
@@ -84,14 +84,14 @@ export const User = styled.div`
   a {
     margin: auto;
   }
-`;
+`
 
 export const ContainerWrapper = styled.div`
   background: #2766c7;
   display: flex;
   height: 100%;
   border-bottom: 6px solid #254fa0;
-`;
+`
 
 export const LogOut = styled.button`
   padding: 1em 2em;
@@ -107,7 +107,7 @@ export const LogOut = styled.button`
   svg {
     font-size: 30px;
   }
-`;
+`
 
 export const Item = styled.li`
   a {
@@ -120,4 +120,4 @@ export const Item = styled.li`
     text-decoration: none;
     padding: 2em;
   }
-`;
+`
