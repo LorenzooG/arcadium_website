@@ -5,6 +5,7 @@
   "dependencies": {
     "@types/redux-saga": "^0.10.5",
     "axios": "^0.19.2",
+    "babel-plugin-styled-components": "^1.10.7",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "history": "^4.10.1",
