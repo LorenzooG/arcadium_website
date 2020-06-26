@@ -19,6 +19,7 @@
   "scripts": {
     "start": "next start",
     "build": "next build",
+    "dev": "next",
     "test": "next test",
     "eject": "next eject"
   },
