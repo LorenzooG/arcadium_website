@@ -10,6 +10,7 @@ import { HYDRATE } from 'next-redux-wrapper'
 
 interface State {
   posts: Post[]
+  error?: Error
   loading: boolean
 }
 
@@ -37,6 +38,11 @@ const reducer = (state: State = INITIAL_STATE, action: AnyAction) => {
         draft.loading = false
 
         break
+
+      case Actions.FAIL_POSTS:
+        draft.posts = []
+        draft.loading = false
+        draft.error = action.payload
     }
   })
 }
