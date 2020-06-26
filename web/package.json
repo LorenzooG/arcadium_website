@@ -98,9 +98,10 @@
     "yup": "^0.28.4"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "start": "next start ./src/pages",
+    "build": "next build ./src/pages",
+    "dev": "next ./src/pages",
+    "test": "next test ./src/pages"
   },
   "eslintConfig": {
     "extends": "react-app"
