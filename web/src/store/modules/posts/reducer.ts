@@ -23,8 +23,8 @@ const reducer = (state: State = INITIAL_STATE, action: AnyAction) => {
   return produce(state, draft => {
     switch (action.type) {
       case HYDRATE:
-        draft.posts = action.payload.posts
-        draft.loading = action.payload.loading
+        draft.posts = action.payload.posts.posts
+        draft.loading = action.payload.posts.loading
 
         break
 
