@@ -1,7 +1,8 @@
 import React from 'react'
+import { NextPage } from 'next'
 
-const App: React.FC = () => {
-  return <>Coming soon!</>
+const Index: NextPage = () => {
+  return <>Hello, world</>
 }
 
-export default App
+export default Index
