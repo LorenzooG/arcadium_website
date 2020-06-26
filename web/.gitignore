@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 
+
 # testing
 /coverage
 
@@ -19,7 +20,12 @@
 .env.production.local
 
 .next
+.env*
+!.env.template
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.idea
+.vscode
