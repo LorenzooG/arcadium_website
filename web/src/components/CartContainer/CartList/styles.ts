@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.section`
   display: flex;
@@ -17,14 +17,14 @@ export const Container = styled.section`
     border-radius: 6px;
     padding: 8px 1em;
   }
-`;
+`
 
 export const Title = styled.h1`
   margin-bottom: 1em;
   margin-left: 16px;
   display: flex;
   align-items: center;
-`;
+`
 
 export const ClearCartButton = styled.button`
   background: #d0282e;
@@ -36,7 +36,7 @@ export const ClearCartButton = styled.button`
   font-weight: bold;
   cursor: pointer;
   border-radius: 6px;
-`;
+`
 
 export const EmptyCart = styled.div`
   display: flex;
@@ -48,4 +48,4 @@ export const EmptyCart = styled.div`
     font-weight: normal;
     font-size: 20px;
   }
-`;
+`

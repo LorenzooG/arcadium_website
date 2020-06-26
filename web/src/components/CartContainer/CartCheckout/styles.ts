@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Info = styled.h2`
   margin: 0;
@@ -20,7 +20,7 @@ export const Info = styled.h2`
 
     border: 1px solid #dddd;
   }
-`;
+`
 
 export const LoginFirst = styled.span`
   width: 100%;
@@ -56,7 +56,7 @@ export const LoginFirst = styled.span`
       }
     }
   }
-`;
+`
 
 export const Section = styled.section`
   padding-left: 1em;
@@ -73,7 +73,7 @@ export const Section = styled.section`
     font-size: 20px;
     margin: 1em 0;
   }
-`;
+`
 
 export const Container = styled.section`
   box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.08) !important;
@@ -96,7 +96,7 @@ export const Container = styled.section`
   h2 + h2 {
     margin-top: 6px;
   }
-`;
+`
 
 export const CheckoutButton = styled.button`
   background: #1973d0;
@@ -115,7 +115,7 @@ export const CheckoutButton = styled.button`
   }
 
   float: right;
-`;
+`
 
 export const UserNameInput = styled.input`
   margin-left: 1em;
@@ -128,9 +128,9 @@ export const UserNameInput = styled.input`
   }
 
   padding: 8px;
-`;
+`
 
 export const UserImage = styled.img`
   height: 72px;
   width: 72px;
-`;
+`

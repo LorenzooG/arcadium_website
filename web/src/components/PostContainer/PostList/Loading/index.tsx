@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react'
 
-import PostLoading from "~/components/PostContainer/PostComponent/Loading";
+import PostLoading from '~/components/PostContainer/PostComponent/Loading'
 
-import { Container } from "../styles";
+import { Container } from '../styles'
 
 const PostsLoading: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const PostsLoading: React.FC = () => {
         ))}
       </ul>
     </Container>
-  );
-};
+  )
+}
 
-export default PostsLoading;
+export default PostsLoading

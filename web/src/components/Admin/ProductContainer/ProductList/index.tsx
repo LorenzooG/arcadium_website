@@ -1,20 +1,20 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
-import { FiPlusCircle } from "react-icons/all";
+import { FiPlusCircle } from 'react-icons/all'
 
-import ProductComponent from "../ProductComponent";
-import ProductEditModal from "../ProductEditModal";
+import ProductComponent from '../ProductComponent'
+import ProductEditModal from '../ProductEditModal'
 
-import { Product } from "~/services/entities";
+import { Product } from '~/services/entities'
 
-import { List, Container, AddProductButton } from "./styles";
+import { AddProductButton, Container, List } from './styles'
 
 type Props = {
-  products: Product[];
-};
+  products: Product[]
+}
 
 const AdminUserList: React.FC<Props> = ({ products }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   return (
     <Container>
@@ -32,7 +32,7 @@ const AdminUserList: React.FC<Props> = ({ products }) => {
         </li>
       </List>
     </Container>
-  );
-};
+  )
+}
 
-export default AdminUserList;
+export default AdminUserList

@@ -21,7 +21,8 @@ class Product implements Entity {
     public createdAt: Date,
     public updatedAt: Date,
     public commands?: string[]
-  ) {}
+  ) {
+  }
 
   public static new(data: ProductConstructor): Product {
     return new Product(

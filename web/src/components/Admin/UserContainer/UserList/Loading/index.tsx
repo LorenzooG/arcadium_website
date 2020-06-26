@@ -9,7 +9,7 @@ const AdminUserListLoading: React.FC = () => {
     <Container>
       <List>
         {[1, 2, 3, 4, 5].map(key => (
-          <UserComponentLoading key={key} />
+          <UserComponentLoading key={key}/>
         ))}
       </List>
     </Container>

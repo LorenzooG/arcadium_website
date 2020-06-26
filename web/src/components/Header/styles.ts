@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
-import dirt from "~/assets/header_background.jpeg";
+import dirt from '~/assets/header_background.jpeg'
 
 export const Wrapper = styled.header`
   height: 260px;
@@ -12,7 +12,7 @@ export const Wrapper = styled.header`
     justify-content: center;
     height: fit-content;
   }
-`;
+`
 
 export const Container = styled.div`
   width: 100%;
@@ -22,13 +22,13 @@ export const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-`;
+`
 
 export const CartText = styled.div`
   h4 {
     margin: auto;
   }
-`;
+`
 
 export const ItemWrapper = styled.div`
   display: flex;
@@ -38,7 +38,7 @@ export const ItemWrapper = styled.div`
   @media (max-width: 610px) {
     width: 100%;
   }
-`;
+`
 
 export const CartWrapper = styled(ItemWrapper)`
   display: flex;
@@ -55,7 +55,7 @@ export const CartWrapper = styled(ItemWrapper)`
     display: flex;
     border-radius: 6px;
   }
-`;
+`
 
 export const CartIcon = styled.span`
   background: #2766c7;
@@ -68,7 +68,7 @@ export const CartIcon = styled.span`
     }
     margin: auto;
   }
-`;
+`
 
 export const Title = styled(ItemWrapper)`
   h1 {
@@ -79,4 +79,4 @@ export const Title = styled(ItemWrapper)`
     filter: none;
     margin: auto;
   }
-`;
+`

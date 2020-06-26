@@ -6,15 +6,15 @@ import { UserWrapper } from "~/components";
 import AdminWrapper from "../Main";
 
 import {
-  users as userService,
+  locale,
+  payments as paymentService,
   posts as postService,
   products as productService,
-  payments as paymentService,
-  locale
+  users as userService
 } from "~/services";
-import { Post, User, Payment, Product } from "~/services/entities";
+import { Payment, Post, Product, User } from "~/services/entities";
 
-import { Item, List, FakeChart } from "./styles";
+import { FakeChart, Item, List } from "./styles";
 
 const AdminHome: React.FC = () => {
   const [payments] = useResource<Payment[]>(paymentService.fetchAll);

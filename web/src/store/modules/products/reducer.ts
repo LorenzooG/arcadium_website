@@ -4,7 +4,7 @@ import { Product } from "~/services/entities";
 
 import produce from "immer";
 
-import { ProductsAction, Actions } from "./actions";
+import { Actions, ProductsAction } from "./actions";
 
 export type ProductsState = {
   loading: boolean;

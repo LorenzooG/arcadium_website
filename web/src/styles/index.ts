@@ -22,7 +22,7 @@ export const Loading = styled.div<{ color?: number }>`
 
 export const RandomLoading = styled(Loading)`
   animation: ${() =>
-    Math.floor(Math.random() * 6) + 1 + "s bar-animation ease-in-out infinite"};
+  Math.floor(Math.random() * 6) + 1 + "s bar-animation ease-in-out infinite"};
 `;
 
 export const Bar = styled.div<{ size: string }>`

@@ -1,31 +1,31 @@
-import React from "react";
+import React from 'react'
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
-import { useDispatch } from "react-redux";
-import { Item } from "~/store/modules/cart/reducer";
-import { clearCartAction } from "~/store/modules/cart/actions";
+import { useDispatch } from 'react-redux'
+import { Item } from '~/store/modules/cart/reducer'
+import { clearCartAction } from '~/store/modules/cart/actions'
 
-import CartItem from "../CartItem";
+import CartItem from '../CartItem'
 
-import { locale } from "~/services";
+import { locale } from '~/services'
 
-import { Container, Title, ClearCartButton, EmptyCart } from "./styles";
+import { ClearCartButton, Container, EmptyCart, Title } from './styles'
 
 type Props = {
-  items: Item[];
-};
+  items: Item[]
+}
 
 const CartList: React.FC<Props> = ({ items }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   return (
     <div>
       <Container>
         <Title>
-          <span>{locale.getTranslation("message.cart")}</span>
+          <span>{locale.getTranslation('message.cart')}</span>
           <ClearCartButton onClick={() => dispatch(clearCartAction())}>
-            {locale.getTranslation("message.clear.cart").toUpperCase()}
+            {locale.getTranslation('message.clear.cart').toUpperCase()}
           </ClearCartButton>
         </Title>
         {items.length > 0 ? (
@@ -38,9 +38,9 @@ const CartList: React.FC<Props> = ({ items }) => {
           <EmptyCart>
             <div>
               <h1>
-                {locale.getTranslation("message.your.cart.is.empty")}{" "}
-                <Link to={"/products"}>
-                  {locale.getTranslation("message.your.cart.is.empty.link")}
+                {locale.getTranslation('message.your.cart.is.empty')}{' '}
+                <Link to={'/products'}>
+                  {locale.getTranslation('message.your.cart.is.empty.link')}
                 </Link>
               </h1>
             </div>
@@ -48,7 +48,7 @@ const CartList: React.FC<Props> = ({ items }) => {
         )}
       </Container>
     </div>
-  );
-};
+  )
+}
 
-export default CartList;
+export default CartList

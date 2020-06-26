@@ -22,14 +22,14 @@ const HomePost: React.FC = () => {
   const [post, loading, error] = useResource<Post>(service.fetch, postId);
 
   if (loading) {
-    return <PostLoading />;
+    return <PostLoading/>;
   }
 
   if (error) {
-    return <ErrorComponent />;
+    return <ErrorComponent/>;
   }
 
-  return <PostComponent complete post={post} />;
+  return <PostComponent complete post={post}/>;
 };
 
 export default HomePost;

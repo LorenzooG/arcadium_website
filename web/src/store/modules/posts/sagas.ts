@@ -1,12 +1,8 @@
-import { put, call, all, takeEvery } from "redux-saga/effects";
+import { all, call, put, takeEvery } from "redux-saga/effects";
 
-import {
-  fetchPostsFailAction,
-  fetchPostsSuccessAction,
-  Actions
-} from "./actions";
+import { Actions, fetchPostsFailAction, fetchPostsSuccessAction } from "./actions";
 
-import { posts as service, errors } from "~/services";
+import { errors, posts as service } from "~/services";
 
 export function* handleFetchPosts() {
   try {

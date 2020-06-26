@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.div`
   box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.08) !important;
@@ -12,4 +12,4 @@ export const Container = styled.div`
   }
 
   padding: 3em;
-`;
+`

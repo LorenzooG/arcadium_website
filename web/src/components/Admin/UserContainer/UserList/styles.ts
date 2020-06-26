@@ -1,8 +1,5 @@
 import styled from "styled-components";
-import {
-  ContainerAddEntityButton,
-  ContainerListUl
-} from "~/components/Admin/styles";
+import { ContainerAddEntityButton, ContainerListUl } from "~/components/Admin/styles";
 
 export const Container = styled.div``;
 

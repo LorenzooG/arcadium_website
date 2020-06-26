@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.div`
   width: 100%;
@@ -12,7 +12,7 @@ export const Container = styled.div`
   text-align: initial;
 
   background: rgba(0, 0, 0, 0.9);
-`;
+`
 
 export const Button = styled.button`
   padding: 1em;
@@ -28,15 +28,15 @@ export const Button = styled.button`
   :hover {
     filter: brightness(90%);
   }
-`;
+`
 
 export const BackButton = styled(Button)`
   background: #a7232c !important;
-`;
+`
 
 export const AddToCartButton = styled(Button)`
   background: #15a738 !important;
-`;
+`
 
 export const Main = styled.div`
   width: 650px !important;
@@ -46,7 +46,7 @@ export const Main = styled.div`
   margin: auto;
   background: #f9f9f9;
   border-radius: 6px;
-`;
+`
 
 export const Content = styled.main`
   padding: 1em;
@@ -56,7 +56,7 @@ export const Content = styled.main`
     display: block;
     word-break: break-all;
   }
-`;
+`
 
 export const Header = styled.header`
   display: flex;
@@ -85,7 +85,7 @@ export const Header = styled.header`
     border: 1px solid #dddd;
     margin-right: 12px;
   }
-`;
+`
 
 export const Footer = styled.footer`
   background: #2766c7;
@@ -100,4 +100,4 @@ export const Footer = styled.footer`
 
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
-`;
+`

@@ -10,7 +10,7 @@ import { UserWrapper } from "~/components";
 import { locale } from "~/services";
 import { User } from "~/services/entities";
 
-import { Header, Body, Input, SubmitButton, Form, Image } from "./styles";
+import { Body, Form, Header, Image, Input, SubmitButton } from "./styles";
 import { requestPlayerHead } from "~/utils";
 
 const UserHome: React.FC = () => {

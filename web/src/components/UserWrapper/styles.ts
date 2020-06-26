@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.div`
   background: #ffff;
@@ -19,7 +19,7 @@ export const Container = styled.div`
   }
 
   width: 100%;
-`;
+`
 
 export const Wrapper = styled.div`
   background: #625ee2;
@@ -41,4 +41,4 @@ export const Wrapper = styled.div`
   margin: 3em auto;
 
   box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.08) !important;
-`;
+`

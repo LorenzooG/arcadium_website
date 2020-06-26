@@ -1,26 +1,26 @@
-import React from "react";
+import React from 'react'
 
-import { FiTrash } from "react-icons/fi";
+import { FiTrash } from 'react-icons/fi'
 
-import { useDispatch } from "react-redux";
+import { useDispatch } from 'react-redux'
 import {
   removeFromCartAction,
   updateCartAction
-} from "~/store/modules/cart/actions";
+} from '~/store/modules/cart/actions'
 
-import { toLocalePrice } from "~/utils";
+import { toLocalePrice } from '~/utils'
 
-import { Product } from "~/services/entities";
+import { Product } from '~/services/entities'
 
-import { Container, AmountInput, ProductImage, RemoveButton } from "./styles";
+import { AmountInput, Container, ProductImage, RemoveButton } from './styles'
 
 type Props = {
-  product: Product;
-  amount: number;
-};
+  product: Product
+  amount: number
+}
 
 const CartItem: React.FC<Props> = ({ product, amount }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   return (
     <Container>
@@ -35,13 +35,13 @@ const CartItem: React.FC<Props> = ({ product, amount }) => {
       </span>
 
       <AmountInput
-        type={"number"}
-        min={"1"}
-        max={"40"}
+        type={'number'}
+        min={'1'}
+        max={'40'}
         value={amount}
         onChange={ev => {
           if (ev.target.valueAsNumber <= 40) {
-            dispatch(updateCartAction(product, ev.target.valueAsNumber));
+            dispatch(updateCartAction(product, ev.target.valueAsNumber))
           }
         }}
       />
@@ -50,7 +50,7 @@ const CartItem: React.FC<Props> = ({ product, amount }) => {
         <FiTrash />
       </RemoveButton>
     </Container>
-  );
-};
+  )
+}
 
-export default CartItem;
+export default CartItem

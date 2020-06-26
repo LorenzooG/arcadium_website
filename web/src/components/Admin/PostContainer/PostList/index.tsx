@@ -7,7 +7,7 @@ import PostEditModal from "../PostEditModal";
 
 import { Post } from "~/services/entities";
 
-import { List, Container, AddPostButton } from "./styles";
+import { AddPostButton, Container, List } from "./styles";
 
 type Props = {
   posts: Post[];
@@ -18,16 +18,16 @@ const AdminUserList: React.FC<Props> = ({ posts }) => {
 
   return (
     <Container>
-      <PostEditModal create open={open} setOpen={setOpen} />
+      <PostEditModal create open={open} setOpen={setOpen}/>
 
       <List>
         {posts.map(post => (
-          <PostComponent post={post} key={post.id} />
+          <PostComponent post={post} key={post.id}/>
         ))}
 
         <li>
           <AddPostButton onClick={() => setOpen(true)}>
-            <FiPlusCircle />
+            <FiPlusCircle/>
           </AddPostButton>
         </li>
       </List>

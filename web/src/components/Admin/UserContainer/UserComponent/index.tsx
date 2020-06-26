@@ -7,7 +7,7 @@ import UserDeleteModal from "../UserDeleteModal";
 
 import { User } from "~/services/entities";
 
-import { DeleteButton, EditButton, Container } from "./styles";
+import { Container, DeleteButton, EditButton } from "./styles";
 import { requestPlayerHead } from "~/utils";
 
 type Props = {
@@ -20,22 +20,22 @@ const AdminUserComponent: React.FC<Props> = ({ user }) => {
 
   return (
     <Container key={user.id}>
-      <UserEditModal open={editOpen} setOpen={setEditOpen} user={user} />
-      <UserDeleteModal open={deleteOpen} setOpen={setDeleteOpen} id={user.id} />
+      <UserEditModal open={editOpen} setOpen={setEditOpen} user={user}/>
+      <UserDeleteModal open={deleteOpen} setOpen={setDeleteOpen} id={user.id}/>
 
       <span>{user.id}</span>
 
-      <img src={requestPlayerHead(user.userName)} alt={user.userName} />
+      <img src={requestPlayerHead(user.userName)} alt={user.userName}/>
 
       <span>{user.name}</span>
 
       <div>
         <EditButton onClick={() => setEditOpen(true)}>
-          <FiEdit />
+          <FiEdit/>
         </EditButton>
 
         <DeleteButton onClick={() => setDeleteOpen(true)}>
-          <FiTrash />
+          <FiTrash/>
         </DeleteButton>
       </div>
     </Container>

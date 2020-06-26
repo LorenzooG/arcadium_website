@@ -1,26 +1,26 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef } from 'react'
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify'
 
-import { toastMessage } from "~/utils";
+import { toastMessage } from '~/utils'
 
-import ReactMde from "react-markdown-editor-lite";
-import { Modal } from "~/components";
+import ReactMde from 'react-markdown-editor-lite'
+import { Modal } from '~/components'
 
-import { products, markdown, errors, locale } from "~/services";
-import { Product } from "~/services/entities";
+import { errors, locale, markdown, products } from '~/services'
+import { Product } from '~/services/entities'
 
-import ContainerContext from "../ProductContainerContext";
+import ContainerContext from '../ProductContainerContext'
 
-import { Input, MarkdownWrapper } from "./styles";
-import "react-markdown-editor-lite/lib/index.css";
+import { Input, MarkdownWrapper } from './styles'
+import 'react-markdown-editor-lite/lib/index.css'
 
 type Props = {
-  open: boolean;
-  setOpen: (value: boolean) => void;
-  product?: Product;
-  create?: boolean;
-};
+  open: boolean
+  setOpen: (value: boolean) => void
+  product?: Product
+  create?: boolean
+}
 
 const AdminProductEditModal: React.FC<Props> = ({
   open,
@@ -28,62 +28,62 @@ const AdminProductEditModal: React.FC<Props> = ({
   product,
   create
 }) => {
-  const formRef = useRef<HTMLFormElement>(null);
+  const formRef = useRef<HTMLFormElement>(null)
 
-  const context = useContext(ContainerContext);
+  const context = useContext(ContainerContext)
 
-  const localeEntity = locale.getTranslation("entity.product");
+  const localeEntity = locale.getTranslation('entity.product')
 
   const localeAction = (create
-    ? locale.getTranslation("action.create.entity")
-    : locale.getTranslation("action.update.entity")
-  ).replace("$entity", localeEntity);
+    ? locale.getTranslation('action.create.entity')
+    : locale.getTranslation('action.update.entity')
+  ).replace('$entity', localeEntity)
 
   async function handleSubmit(event?: React.FormEvent) {
-    event?.preventDefault();
+    event?.preventDefault()
 
-    const localeTryNotification = locale.getTranslation("notification.try");
+    const localeTryNotification = locale.getTranslation('notification.try')
 
     toast.warn(
-      toastMessage(localeTryNotification.replace("$action", localeAction))
-    );
+      toastMessage(localeTryNotification.replace('$action', localeAction))
+    )
 
-    if (!formRef.current) return;
+    if (!formRef.current) return
 
     try {
-      const content = new FormData(formRef.current);
+      const content = new FormData(formRef.current)
 
       if (create) {
-        const createdProduct = await products.store(content);
+        const createdProduct = await products.store(content)
 
-        context.addProduct(createdProduct);
+        context.addProduct(createdProduct)
       } else if (product) {
         const updatedProduct = await products
           .update(product.id, content)
-          .then(() => products.fetch(product.id));
+          .then(() => products.fetch(product.id))
 
-        context.updateProduct(product.id, updatedProduct);
+        context.updateProduct(product.id, updatedProduct)
       }
 
       const localeSuccessNotification = locale.getTranslation(
-        "notification.success"
-      );
+        'notification.success'
+      )
 
       toast.success(
-        toastMessage(localeSuccessNotification.replace("$action", localeAction))
-      );
+        toastMessage(localeSuccessNotification.replace('$action', localeAction))
+      )
 
-      setOpen(false);
+      setOpen(false)
     } catch (exception) {
-      errors.handleForException(exception);
+      errors.handleForException(exception)
     }
   }
 
-  const localeTitleMessage = locale.getTranslation("message.title");
-  const localePriceMessage = locale.getTranslation("message.price");
-  const localeCommandMessage = locale.getTranslation("message.command");
+  const localeTitleMessage = locale.getTranslation('message.title')
+  const localePriceMessage = locale.getTranslation('message.price')
+  const localeCommandMessage = locale.getTranslation('message.command')
 
-  const modalTitle = localeAction.toUpperCase();
+  const modalTitle = localeAction.toUpperCase()
 
   return (
     <Modal
@@ -95,37 +95,37 @@ const AdminProductEditModal: React.FC<Props> = ({
     >
       <form onSubmit={handleSubmit} ref={formRef}>
         <Input
-          name={"name"}
-          type={"text"}
+          name={'name'}
+          type={'text'}
           placeholder={localeTitleMessage}
           defaultValue={product?.name}
         />
 
         <Input
-          name={"price"}
-          type={"number"}
+          name={'price'}
+          type={'number'}
           placeholder={localePriceMessage}
           defaultValue={product?.price}
         />
 
-        <Input name={"image"} type={"file"} />
+        <Input name={'image'} type={'file'} />
 
         <Input
-          name={"command"}
-          type={"text"}
+          name={'command'}
+          type={'text'}
           placeholder={localeCommandMessage}
-          defaultValue={product?.commands?.join(", ") ?? ""}
+          defaultValue={product?.commands?.join(', ') ?? ''}
         />
 
         <MarkdownWrapper>
           <ReactMde
-            name={"description"}
+            name={'description'}
             renderHTML={text => markdown.render(text)}
           />
         </MarkdownWrapper>
       </form>
     </Modal>
-  );
-};
+  )
+}
 
-export default AdminProductEditModal;
+export default AdminProductEditModal

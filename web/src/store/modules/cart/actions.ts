@@ -111,7 +111,7 @@ export type CheckoutCartSuccessAction = {
 };
 
 export type ClearCartAction = {
-  type: typeof  Actions.CLEAR;
+  type: typeof Actions.CLEAR;
 };
 
 export type RemoveFromCartAction = {

@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
-import { FiEdit, FiTrash } from "react-icons/fi";
+import { FiEdit, FiTrash } from 'react-icons/fi'
 
-import ProductEditModal from "~/components/Admin/ProductContainer/ProductEditModal";
-import ProductDeleteModal from "~/components/Admin/ProductContainer/ProductDeleteModal";
+import ProductEditModal from '~/components/Admin/ProductContainer/ProductEditModal'
+import ProductDeleteModal from '~/components/Admin/ProductContainer/ProductDeleteModal'
 
-import { Product } from "~/services/entities";
+import { Product } from '~/services/entities'
 
-import { DeleteButton, EditButton, Container } from "./styles";
+import { Container, DeleteButton, EditButton } from './styles'
 
 type Props = {
-  product: Product;
-};
+  product: Product
+}
 
 const AdminProductComponent: React.FC<Props> = ({ product }) => {
-  const [editOpen, setEditOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
 
   return (
     <Container key={product.id}>
@@ -47,7 +47,7 @@ const AdminProductComponent: React.FC<Props> = ({ product }) => {
         </DeleteButton>
       </div>
     </Container>
-  );
-};
+  )
+}
 
-export default AdminProductComponent;
+export default AdminProductComponent

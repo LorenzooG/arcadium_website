@@ -7,7 +7,7 @@ import UserEditModal from "../UserEditModal";
 
 import { User } from "~/services/entities";
 
-import { List, Container, AddUserButton } from "./styles";
+import { AddUserButton, Container, List } from "./styles";
 
 type Props = {
   users: User[];
@@ -18,16 +18,16 @@ const AdminUserList: React.FC<Props> = ({ users }) => {
 
   return (
     <Container>
-      <UserEditModal create open={open} setOpen={setOpen} />
+      <UserEditModal create open={open} setOpen={setOpen}/>
 
       <List>
         {users.map(user => (
-          <UserComponent user={user} key={user.id} />
+          <UserComponent user={user} key={user.id}/>
         ))}
 
         <li>
           <AddUserButton onClick={() => setOpen(true)}>
-            <FiPlusCircle />
+            <FiPlusCircle/>
           </AddUserButton>
         </li>
       </List>

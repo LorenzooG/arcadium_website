@@ -4,7 +4,7 @@ import PaymentComponent from "../PaymentComponent";
 
 import { Payment } from "~/services/entities";
 
-import { List, Container } from "./styles";
+import { Container, List } from "./styles";
 
 type Props = {
   payments: Payment[];
@@ -15,7 +15,7 @@ const AdminPaymentList: React.FC<Props> = ({ payments }) => {
     <Container>
       <List>
         {payments.map(payment => (
-          <PaymentComponent payment={payment} key={payment.id} />
+          <PaymentComponent payment={payment} key={payment.id}/>
         ))}
       </List>
     </Container>

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.div`
   img {
@@ -25,7 +25,7 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
   }
-`;
+`
 
 export const Button = styled.button`
   margin-top: 8px;
@@ -42,12 +42,12 @@ export const Button = styled.button`
   :hover {
     filter: brightness(90%);
   }
-`;
+`
 
 export const AddButton = styled(Button)`
   background: #15a738;
-`;
+`
 
 export const DescriptionButton = styled(Button)`
   background: #2766c7;
-`;
+`

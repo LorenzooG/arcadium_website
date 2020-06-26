@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.footer`
   bottom: 0;
@@ -25,4 +25,4 @@ export const Container = styled.footer`
 
   border-top: 6px solid #254fa0;
   flex: 1 1 auto;
-`;
+`

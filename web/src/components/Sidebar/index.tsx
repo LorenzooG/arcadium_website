@@ -1,65 +1,65 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify'
 
-import { requestServerIcon, requestServerInfo, toastMessage } from "~/utils";
+import { requestServerIcon, requestServerInfo, toastMessage } from '~/utils'
 
-import { ErrorComponent } from "~/components";
+import { ErrorComponent } from '~/components'
 
-import { app, errors, locale } from "~/services";
+import { app, errors, locale } from '~/services'
 
 import {
-  Container,
-  Wrapper,
-  Color,
   Button,
+  ButtonWrapper,
+  Color,
+  Container,
   Field,
-  ButtonWrapper
-} from "./styles";
+  Wrapper
+} from './styles'
 
 const Sidebar: React.FC = () => {
-  const [error, setError] = useState(false);
-  const [players, setPlayers] = useState(0);
-  const [max, setMax] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false)
+  const [players, setPlayers] = useState(0)
+  const [max, setMax] = useState(0)
+  const [loading, setLoading] = useState(true)
 
-  const address = app.serverAddress();
+  const address = app.serverAddress()
 
   useEffect(() => {
     if (loading) {
       requestServerInfo(address)
         .then(res => {
-          setMax(res.MaxPlayers);
-          setPlayers(res.PlayersOnline);
+          setMax(res.MaxPlayers)
+          setPlayers(res.PlayersOnline)
 
           if (!res.Online) {
-            throw new Error();
+            throw new Error()
           }
         })
         .catch(() => {
-          setError(true);
+          setError(true)
 
-          errors.handle(locale.getTranslation("error.fetch"));
-        });
+          errors.handle(locale.getTranslation('error.fetch'))
+        })
     }
-    setLoading(false);
-  }, [address, error, loading]);
+    setLoading(false)
+  }, [address, error, loading])
 
   async function handleCopyIp() {
     try {
-      const localeAction = locale.getTranslation("action.copy.ip");
+      const localeAction = locale.getTranslation('action.copy.ip')
 
-      await navigator.clipboard.writeText(address);
+      await navigator.clipboard.writeText(address)
 
       const localeSuccessNotification = locale.getTranslation(
-        "notification.success"
-      );
+        'notification.success'
+      )
 
       toast.success(
-        toastMessage(localeSuccessNotification.replace("$action", localeAction))
-      );
+        toastMessage(localeSuccessNotification.replace('$action', localeAction))
+      )
     } catch (exception) {
-      errors.handleForException(exception);
+      errors.handleForException(exception)
     }
   }
 
@@ -68,7 +68,7 @@ const Sidebar: React.FC = () => {
       <Container>
         <Color>
           {error ? (
-            <ErrorComponent error={locale.getTranslation("error.fetch")} />
+            <ErrorComponent error={locale.getTranslation('error.fetch')} />
           ) : (
             <>
               <img src={requestServerIcon(address)} alt={address} />
@@ -76,18 +76,18 @@ const Sidebar: React.FC = () => {
               <Field>
                 <strong>
                   {locale
-                    .getTranslation("message.server.ip")
-                    .replace("$ip", address)}
+                    .getTranslation('message.server.ip')
+                    .replace('$ip', address)}
                 </strong>
               </Field>
               <Field>
-                {locale.getTranslation("message.come.play.with.us")}
+                {locale.getTranslation('message.come.play.with.us')}
               </Field>
               <h5>
                 {locale
-                  .getTranslation("message.players.online")
-                  .replace("$online", players?.toString())
-                  .replace("$max", max?.toString())}
+                  .getTranslation('message.players.online')
+                  .replace('$online', players?.toString())
+                  .replace('$max', max?.toString())}
               </h5>
             </>
           )}
@@ -95,7 +95,7 @@ const Sidebar: React.FC = () => {
 
         <ButtonWrapper>
           <Button onClick={handleCopyIp}>
-            {locale.getTranslation("action.copy.ip").toUpperCase()}
+            {locale.getTranslation('action.copy.ip').toUpperCase()}
           </Button>
         </ButtonWrapper>
       </Container>
@@ -104,7 +104,7 @@ const Sidebar: React.FC = () => {
         src={`https://discordapp.com/widget?id=${app.discordServerId()}&theme=dark`}
       />
     </Wrapper>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

@@ -1,43 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react'
 
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "~/store/modules";
-import { fetchPostsRequestAction } from "~/store/modules/posts/actions";
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '~/store/modules'
+import { fetchPostsRequestAction } from '~/store/modules/posts/actions'
 
-import { ErrorComponent } from "~/components";
-import PostList from "./PostList";
-import Loading from "./PostList/Loading";
+import { ErrorComponent } from '~/components'
+import PostList from './PostList'
+import Loading from './PostList/Loading'
 
-import { Post } from "~/services/entities";
+import { Post } from '~/services/entities'
 
 type Redux = {
-  posts: Post[];
-  loading: boolean;
-  error: boolean;
-};
+  posts: Post[]
+  loading: boolean
+  error: boolean
+}
 
 const PostContainer: React.FC = () => {
   const { posts, loading, error } = useSelector<RootState, Redux>(
     state => state.posts
-  );
+  )
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (loading) {
-      dispatch(fetchPostsRequestAction());
+      dispatch(fetchPostsRequestAction())
     }
-  }, [loading, dispatch]);
+  }, [loading, dispatch])
 
   if (error) {
-    return <ErrorComponent />;
+    return <ErrorComponent />
   }
 
   if (loading) {
-    return <Loading />;
+    return <Loading />
   }
 
-  return <PostList posts={posts} />;
-};
+  return <PostList posts={posts} />
+}
 
-export default PostContainer;
+export default PostContainer

@@ -1,18 +1,18 @@
-import { put, call, all, takeEvery } from "redux-saga/effects";
+import { all, call, put, takeEvery } from "redux-saga/effects";
 
 import { toast } from "react-toastify";
 
 import { toastMessage } from "~/utils";
 
-import { auth as service, users, errors, locale } from "~/services";
+import { auth as service, errors, locale, users } from "~/services";
 
 import {
-  loginFailAction,
-  loginSuccessAction,
-  LoginRequestAction,
+  Actions,
   editAccountSuccessAction,
-  UpdateAccountRequestAction,
-  Actions
+  loginFailAction,
+  LoginRequestAction,
+  loginSuccessAction,
+  UpdateAccountRequestAction
 } from "./actions";
 
 export function* handleLogin({ payload }: LoginRequestAction) {
@@ -46,8 +46,8 @@ export function* handleLogin({ payload }: LoginRequestAction) {
 }
 
 export function* handleUpdateAccount({
-  payload: { id, user: userConstructor }
-}: UpdateAccountRequestAction) {
+                                       payload: { id, user: userConstructor }
+                                     }: UpdateAccountRequestAction) {
   const localeEntity = locale.getTranslation("entity.user");
 
   const localeAction = locale

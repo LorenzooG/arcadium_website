@@ -14,7 +14,7 @@ const AdminUsers: React.FC = () => {
           <h1>{locale.getTranslation("page.users")}</h1>
         </header>
 
-        <UserContainer />
+        <UserContainer/>
       </UserWrapper>
     </AdminWrapper>
   );

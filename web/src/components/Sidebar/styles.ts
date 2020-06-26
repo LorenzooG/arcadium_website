@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Color = styled.div`
   background: #2766c7;
@@ -8,7 +8,7 @@ export const Color = styled.div`
   * {
     color: #f9f9f9;
   }
-`;
+`
 
 export const Field = styled.h3`
   strong {
@@ -17,11 +17,11 @@ export const Field = styled.h3`
   }
   margin: 6px 0;
   font-weight: normal;
-`;
+`
 
 export const ButtonWrapper = styled.div`
   padding: 2em;
-`;
+`
 
 export const Button = styled.button`
   border: 3px solid;
@@ -37,7 +37,7 @@ export const Button = styled.button`
   :hover {
     filter: brightness(90%);
   }
-`;
+`
 
 export const Container = styled.div`
   box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.08) !important;
@@ -51,7 +51,7 @@ export const Container = styled.div`
     height: 82px;
     border-radius: 6px;
   }
-`;
+`
 
 export const Wrapper = styled.aside`
   iframe {
@@ -62,4 +62,4 @@ export const Wrapper = styled.aside`
   > *:nth-child(n + 2) {
     margin-top: 16px;
   }
-`;
+`

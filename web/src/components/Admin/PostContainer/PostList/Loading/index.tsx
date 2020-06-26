@@ -9,7 +9,7 @@ const AdminPostListLoading: React.FC = () => {
     <Container>
       <List>
         {[1, 2, 3, 4, 5].map(key => (
-          <PostComponentLoading key={key} />
+          <PostComponentLoading key={key}/>
         ))}
       </List>
     </Container>

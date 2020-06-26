@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { FiFileText, FiEye } from "react-icons/fi";
+import { FiEye, FiFileText } from "react-icons/fi";
 
 import { toLocalePrice } from "~/utils";
 
@@ -8,7 +8,7 @@ import PaymentViewModal from "../PaymentViewModal";
 
 import { Payment } from "~/services/entities";
 
-import { EditButton, Container, Icon } from "./styles";
+import { Container, EditButton, Icon } from "./styles";
 
 type Props = {
   payment: Payment;
@@ -19,12 +19,12 @@ const AdminPaymentComponent: React.FC<Props> = ({ payment }) => {
 
   return (
     <Container key={payment.id}>
-      <PaymentViewModal open={open} payment={payment} setOpen={setOpen} />
+      <PaymentViewModal open={open} payment={payment} setOpen={setOpen}/>
 
       <span>{payment.id}</span>
 
       <Icon>
-        <FiFileText />
+        <FiFileText/>
       </Icon>
 
       <span>{payment.user.name}</span>
@@ -32,7 +32,7 @@ const AdminPaymentComponent: React.FC<Props> = ({ payment }) => {
       <span>{toLocalePrice(payment.totalPrice())}</span>
 
       <EditButton onClick={() => setOpen(true)}>
-        <FiEye />
+        <FiEye/>
       </EditButton>
     </Container>
   );

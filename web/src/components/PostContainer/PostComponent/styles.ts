@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.li`
   box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.08) !important;
@@ -7,24 +7,24 @@ export const Container = styled.li`
   background: #fff;
   border-radius: 6px;
   animation: 1s ease-in-out appear;
-`;
+`
 
 export const Content = styled.div<{ defaultHeight?: boolean }>`
   margin: 8px 0;
   padding: 0 14px 14px;
   border-radius: inherit;
-`;
+`
 
 export const ContentText = styled.p`
   font-size: 16px;
   margin: 16px 0;
-`;
+`
 
 export const Title = styled.h2`
   margin: 6px 0;
   font-size: 22px;
   text-align: center;
-`;
+`
 
 export const Header = styled.div`
   background: #2766c7;
@@ -53,7 +53,7 @@ export const Header = styled.div`
   * {
     color: #fff;
   }
-`;
+`
 
 export const Fade = styled.div`
   display: flex;
@@ -71,4 +71,4 @@ export const Fade = styled.div`
     background: #2766c7;
     padding: 12px;
   }
-`;
+`

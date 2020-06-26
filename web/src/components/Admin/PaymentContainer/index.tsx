@@ -13,14 +13,14 @@ const AdminProductContainer: React.FC = () => {
   const [payments, loading, error] = useResource<Payment[]>(service.fetchAll);
 
   if (loading) {
-    return <Loading />;
+    return <Loading/>;
   }
 
   if (error) {
-    return <Error />;
+    return <Error/>;
   }
 
-  return <PaymentList payments={payments} />;
+  return <PaymentList payments={payments}/>;
 };
 
 export default AdminProductContainer;

@@ -7,7 +7,7 @@ const AdminUserComponentLoading: React.FC = () => {
   return (
     <Container>
       <Bar size={"64px"}>
-        <Loading />
+        <Loading/>
       </Bar>
     </Container>
   );

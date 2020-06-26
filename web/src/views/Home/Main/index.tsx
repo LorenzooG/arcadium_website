@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react'
 
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch } from 'react-router-dom'
 
-import { Header, Sidebar, Footer, GuestRoute } from "~/components";
+import { Footer, GuestRoute, Header, Sidebar } from '~/components'
 
-import { NotFound } from "~/views/Errors";
+import { NotFound } from '~/views/Errors'
 
-import { Cart, Login, Post, Products, Register, Home } from "~/views/Home";
+import { Cart, Home, Login, Post, Products, Register } from '~/views/Home'
 
-import { Container } from "./styles";
+import { Container } from './styles'
 
 const HomeMain: React.FC = () => {
   return (
@@ -17,16 +17,16 @@ const HomeMain: React.FC = () => {
         <Header />
         <main>
           <Switch>
-            <Route exact path={"/"} component={Home} />
+            <Route exact path={'/'} component={Home} />
 
-            <Route exact path={"/posts/:post"} component={Post} />
-            <Route exact path={"/products"} component={Products} />
-            <Route exact path={"/cart"} component={Cart} />
+            <Route exact path={'/posts/:post'} component={Post} />
+            <Route exact path={'/products'} component={Products} />
+            <Route exact path={'/cart'} component={Cart} />
 
-            <GuestRoute exact path={"/login"} component={Login} />
+            <GuestRoute exact path={'/login'} component={Login} />
             <GuestRoute exact path="/register" component={Register} />
 
-            <Route path={"*"} component={NotFound} />
+            <Route path={'*'} component={NotFound} />
           </Switch>
 
           <Sidebar />
@@ -34,7 +34,7 @@ const HomeMain: React.FC = () => {
       </Container>
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default HomeMain;
+export default HomeMain

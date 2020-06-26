@@ -15,7 +15,8 @@ export default class Post implements Entity {
     public description: string,
     public createdAt: Date,
     public updatedAt: Date
-  ) {}
+  ) {
+  }
 
   public static new(data: PostConstructor): Post {
     return new Post(

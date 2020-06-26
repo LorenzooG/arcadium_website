@@ -43,10 +43,7 @@ class Payment implements Entity {
     public _totalPrice: number,
     public createdAt: Date,
     public updatedAt: Date
-  ) {}
-
-  public totalPrice(): number {
-    return this._totalPrice;
+  ) {
   }
 
   public static new(data: PaymentConstructor): Payment {
@@ -67,6 +64,10 @@ class Payment implements Entity {
       new Date(data.created_at),
       new Date(data.updated_at)
     );
+  }
+
+  public totalPrice(): number {
+    return this._totalPrice;
   }
 }
 

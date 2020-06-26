@@ -1,16 +1,11 @@
-import React from "react";
+import React from 'react'
 
-import {
-  Container as PostContainer,
-  Bar,
-  Header,
-  Content
-} from "./styles";
-import { RandomLoading } from "~/styles";
+import { Bar, Container as PostContainer, Content, Header } from './styles'
+import { RandomLoading } from '~/styles'
 
 type Props = {
-  defaultHeight?: boolean;
-};
+  defaultHeight?: boolean
+}
 
 const PostLoading: React.FC<Props> = ({ defaultHeight = false }) => {
   return (
@@ -26,7 +21,7 @@ const PostLoading: React.FC<Props> = ({ defaultHeight = false }) => {
         </Bar>
       </Content>
     </PostContainer>
-  );
-};
+  )
+}
 
-export default PostLoading;
+export default PostLoading

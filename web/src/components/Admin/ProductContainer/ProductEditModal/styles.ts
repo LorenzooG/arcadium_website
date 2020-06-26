@@ -1,10 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const MarkdownWrapper = styled.div`
   > div {
     min-height: 300px;
   }
-`;
+`
 
 export const Input = styled.input`
   display: flex;
@@ -14,4 +14,4 @@ export const Input = styled.input`
   border: 1px solid #999;
   border-radius: 6px;
   margin: 16px auto 8px;
-`;
+`

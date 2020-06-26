@@ -26,11 +26,11 @@ type Props = {
 };
 
 const AdminUserEditModal: React.FC<Props> = ({
-  open,
-  setOpen,
-  user,
-  create
-}) => {
+                                               open,
+                                               setOpen,
+                                               user,
+                                               create
+                                             }) => {
   const currentUser = useSelector<RootState, User | null>(
     state => state.auth.account
   );
@@ -47,8 +47,8 @@ const AdminUserEditModal: React.FC<Props> = ({
   const localeEntity = locale.getTranslation("entity.user");
 
   const localeAction = (create
-    ? locale.getTranslation("action.create.entity")
-    : locale.getTranslation("action.update.entity")
+      ? locale.getTranslation("action.create.entity")
+      : locale.getTranslation("action.update.entity")
   ).replace("$entity", localeEntity);
 
   async function handleSubmit(event?: FormEvent) {
@@ -119,7 +119,7 @@ const AdminUserEditModal: React.FC<Props> = ({
       setOpen={setOpen}
       title={modalTitle}
     >
-      <Avatar src={requestPlayerHead(userName ?? "undefined")} alt={userName} />
+      <Avatar src={requestPlayerHead(userName ?? "undefined")} alt={userName}/>
 
       <form onSubmit={handleSubmit}>
         <Input

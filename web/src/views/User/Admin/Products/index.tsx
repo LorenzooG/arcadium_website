@@ -14,7 +14,7 @@ const AdminProducts: React.FC = () => {
           <h1>{locale.getTranslation("page.products")}</h1>
         </header>
 
-        <ProductContainer />
+        <ProductContainer/>
       </UserWrapper>
     </AdminWrapper>
   );

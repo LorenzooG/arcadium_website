@@ -7,7 +7,7 @@ import { loginRequestAction } from "~/store/modules/auth/actions";
 
 import { locale } from "~/services";
 
-import { Container, Field, Submit, Input, Form } from "./styles";
+import { Container, Field, Form, Input, Submit } from "./styles";
 
 const HomeLogin: React.FC = () => {
   const [email, setEmail] = useState("");

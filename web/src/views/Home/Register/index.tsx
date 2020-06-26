@@ -8,7 +8,7 @@ import { loginRequestAction } from "~/store/modules/auth/actions";
 
 import { auth as service, errors, locale } from "~/services";
 
-import { Container, Field, Submit, Input, Form } from "./styles";
+import { Container, Field, Form, Input, Submit } from "./styles";
 
 import { toastMessage } from "~/utils";
 

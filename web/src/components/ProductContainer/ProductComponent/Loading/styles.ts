@@ -1,4 +1,4 @@
-import { Container as Original } from "../styles";
-import animate from "~/utils/animate";
+import { Container as Original } from '../styles'
+import animate from '~/utils/animate'
 
-export const Container = animate(Original);
+export const Container = animate(Original)

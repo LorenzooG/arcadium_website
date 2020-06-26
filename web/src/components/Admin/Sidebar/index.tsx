@@ -59,7 +59,7 @@ const AdminSidebar: React.FC<Props> = ({ open }) => {
     user && (
       <Container open={open}>
         <div>
-          <img alt={user.userName} src={requestPlayerHead(user.userName)} />
+          <img alt={user.userName} src={requestPlayerHead(user.userName)}/>
           <span>{user.name.toUpperCase()}</span>
         </div>
 
