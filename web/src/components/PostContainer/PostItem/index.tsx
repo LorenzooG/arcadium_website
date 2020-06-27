@@ -29,11 +29,7 @@ export const PostItem: React.FC<Props> = ({ post }) => {
     const postService = getService(PostService)
 
     async function fetchHasLiked() {
-      try {
-        setLiked(await postService.hasLiked(post.id))
-      } catch {
-        // Ignore if has error
-      }
+      setLiked(await postService.hasLiked(post.id))
     }
 
     fetchHasLiked().then()
