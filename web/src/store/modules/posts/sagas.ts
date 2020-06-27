@@ -1,12 +1,13 @@
 import { put, call, all, takeEvery } from 'redux-saga/effects'
 
 import { actionUpdatePosts, Actions, actionFailPosts } from './actions'
+import { PostService, getService } from '~/services/crud'
 
 export function* handleFetchPosts() {
+  const postService = getService(PostService)
+
   try {
-    const response = yield call(() =>
-      fetch('http://localhost/posts').then(res => res.json())
-    )
+    const response = yield call(() => postService.findAll())
 
     yield put(actionUpdatePosts(response.data))
   } catch (error) {
