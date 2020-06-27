@@ -57,6 +57,12 @@ final class PostsController extends Controller
     return PostResource::collection($this->postRepository->findPaginatedPostsForUser($user, $page));
   }
 
+  /**
+   * Find and show a post
+   *
+   * @param Post $post
+   * @return PostResource
+   */
   public function show(Post $post)
   {
     $postResource = new PostResource($post);
