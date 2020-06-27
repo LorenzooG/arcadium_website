@@ -36,4 +36,16 @@ export class PostService {
 
     return response.data
   }
+
+  public async hasLiked(postId: number): Promise<boolean> {
+    try {
+      const hasLiked = await this.api.get(`posts/${postId}/liked`)
+
+      return hasLiked.data
+    } catch {
+      // Ignore if has error
+    }
+
+    return false
+  }
 }

@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 
-import { FiUser } from 'react-icons/fi'
+import { FiStar } from 'react-icons/fi'
 
 import { Post } from '~/services/entities'
 
@@ -14,14 +14,30 @@ import {
   Fade,
   Title,
   UserAvatar,
+  StarIcon,
 } from './styles'
+import { getService, PostService } from '~/services/crud'
 
 interface Props {
   post: Post
 }
 
 export const PostItem: React.FC<Props> = ({ post }) => {
-  if (!post) return <h3>ERROR FUCKING BITCH</h3>
+  const [liked, setLiked] = useState(false)
+
+  useEffect(() => {
+    const postService = getService(PostService)
+
+    async function fetchHasLiked() {
+      try {
+        setLiked(await postService.hasLiked(post.id))
+      } catch {
+        // Ignore if has error
+      }
+    }
+
+    fetchHasLiked().then()
+  }, [post.id])
 
   return (
     <Container>
@@ -36,6 +52,10 @@ export const PostItem: React.FC<Props> = ({ post }) => {
           </div>
           <span>{post.createdAt?.toDateString?.()}</span>
         </div>
+
+        <StarIcon>
+          <FiStar fill={liked ? '#fff' : 'transparent'} />
+        </StarIcon>
       </Header>
 
       <Content>

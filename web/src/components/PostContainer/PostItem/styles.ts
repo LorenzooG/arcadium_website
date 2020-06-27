@@ -41,7 +41,7 @@ export const Header = styled.div`
   svg {
     font-size: 32px;
     margin: 8px;
-    border: 1px solid #fff;
+    //border: 1px solid #fff;
     border-radius: 6px;
   }
   span {
@@ -67,6 +67,16 @@ export const Fade = styled.div`
     text-decoration: none;
     background: #2766c7;
     padding: 12px;
+  }
+`
+
+export const StarIcon = styled.div<{ liked?: boolean }>`
+  margin-left: auto;
+  cursor: pointer;
+  width: fit-content;
+
+  :hover {
+    filter: brightness(90%);
   }
 `
 
