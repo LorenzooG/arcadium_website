@@ -24,10 +24,12 @@ const Index: NextPage = () => {
   return <PostList posts={posts} />
 }
 
-Index.getInitialProps = async ({ store: _store }) => {
+Index.getInitialProps = async ({ query, store: _store }) => {
   const store = _store as SagaStore
 
-  store.dispatch(actionFetchPosts())
+  const page = Array.isArray(query.page) ? query.page[0] : query.page
+
+  store.dispatch(actionFetchPosts(parseInt(page)))
   store.dispatch(END)
 
   await store.sagaTask?.toPromise()
