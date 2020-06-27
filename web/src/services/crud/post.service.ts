@@ -1,7 +1,6 @@
 import { AxiosInstance } from 'axios'
 import { Post, User } from '~/services/entities'
 import { Paginator } from './paginator'
-import { getService } from '~/services/crud/index'
 
 type Any = {
   [key: string]: Any
@@ -16,8 +15,6 @@ export class PostService {
         page,
       },
     })
-
-    console.log(response)
 
     response.data.data = response.data.data.map(async post => {
       const userResponse = await this.api.get(post.created_by)
