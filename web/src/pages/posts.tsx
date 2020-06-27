@@ -10,7 +10,7 @@ import { SagaStore, wrapper } from '~/store'
 import { actionFetchPosts } from '~/store/modules/posts/actions'
 import { PostList } from '~/components/PostContainer'
 
-const Index: NextPage = () => {
+const Posts: NextPage = () => {
   const { posts, error, loading } = useSelector<any, any>(state => state.posts)
 
   if (loading) {
@@ -24,7 +24,7 @@ const Index: NextPage = () => {
   return <PostList posts={posts} />
 }
 
-Index.getInitialProps = async ({ query, store: _store }) => {
+Posts.getInitialProps = async ({ query, store: _store }) => {
   const store = _store as SagaStore
 
   const page = Array.isArray(query.page) ? query.page[0] : query.page
@@ -35,4 +35,4 @@ Index.getInitialProps = async ({ query, store: _store }) => {
   await store.sagaTask?.toPromise()
 }
 
-export default wrapper.withRedux(Index)
+export default wrapper.withRedux(Posts)
