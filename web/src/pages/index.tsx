@@ -8,11 +8,20 @@ import { END } from '@redux-saga/core'
 
 import { SagaStore, wrapper } from '~/store'
 import { actionFetchPosts } from '~/store/modules/posts/actions'
+import { PostList } from '~/components/PostContainer'
 
 const Index: NextPage = () => {
-  const fuck = useSelector<any>(state => state.posts)
+  const { posts, error, loading } = useSelector<any, any>(state => state.posts)
 
-  return <>{JSON.stringify(fuck, null, 2)}</>
+  if (loading) {
+    return <>Loading</>
+  }
+
+  if (error) {
+    return <>Error</>
+  }
+
+  return <PostList posts={posts} />
 }
 
 Index.getInitialProps = async ({ store: _store }) => {
