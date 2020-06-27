@@ -69,3 +69,11 @@ export const Fade = styled.div`
     padding: 12px;
   }
 `
+
+export const UserAvatar = styled.img`
+  width: 54px;
+  height: 54px;
+  margin: 2px 12px;
+  border-radius: 8px;
+  border: #f7f7f7 solid 2px;
+`
