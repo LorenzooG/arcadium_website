@@ -13,23 +13,7 @@ export class PostService {
       },
     })
 
-    response.data.data = response.data.data.map(
-      post =>
-        new Post(
-          post.id,
-          post.title,
-          post.description,
-          new User(
-            post.created_by.id,
-            post.created_by.name,
-            post.created_by.user_name,
-            post.created_by.avatar,
-            post.created_by.email
-          ),
-          new Date(post.created_at),
-          new Date(post.updated_at)
-        )
-    )
+    response.data.data = response.data.data.map(post => Post.new(post, false))
 
     return response.data
   }
