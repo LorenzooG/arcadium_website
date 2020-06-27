@@ -48,7 +48,7 @@ export class PostService {
 
   public async like(postId: number): Promise<void> {
     try {
-      await this.api.get(`posts/${postId}/like`)
+      await this.api.post(`posts/${postId}/like`)
     } catch {
       // Ignore if has error
     }
