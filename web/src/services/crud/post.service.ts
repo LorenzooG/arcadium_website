@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios'
-import { Post, User } from '~/services/entities'
+import { Post } from '~/services/entities'
 import { Paginator } from './paginator'
 import { createApi } from '~/services/api'
 
@@ -16,6 +16,12 @@ export class PostService {
     response.data.data = response.data.data.map(post => Post.new(post, false))
 
     return response.data
+  }
+
+  public async findOne(postId: number): Promise<Post> {
+    const post = await this.api.get(`posts/${postId}`)
+
+    return Post.new(post.data, true)
   }
 
   public async hasLiked(postId: number): Promise<boolean> {
