@@ -9,7 +9,7 @@ import { actionFetchPosts } from '~/store/modules/posts/actions'
 import { PostList } from '~/components/PostContainer'
 import { postService } from '~/services/crud'
 
-const Posts: NextPage = () => {
+const Index: NextPage = () => {
   const { posts, error, loading } = useTypedSelector(state => state.posts)
 
   if (loading) {
@@ -23,7 +23,7 @@ const Posts: NextPage = () => {
   return <PostList posts={posts} />
 }
 
-Posts.getInitialProps = async ({ query, store: _store }) => {
+Index.getInitialProps = async ({ query, store: _store }) => {
   const store = _store as SagaStore
 
   const page = Array.isArray(query.page) ? query.page[0] : query.page
@@ -34,4 +34,4 @@ Posts.getInitialProps = async ({ query, store: _store }) => {
   await store.sagaTask?.toPromise()
 }
 
-export default wrapper.withRedux(Posts)
+export default wrapper.withRedux(Index)
