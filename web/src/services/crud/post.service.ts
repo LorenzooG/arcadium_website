@@ -1,10 +1,8 @@
 import { AxiosInstance } from 'axios'
 import { Post, User } from '~/services/entities'
 import { Paginator } from './paginator'
-
-type Any = {
-  [key: string]: Any
-}
+import { createContext } from 'react'
+import { createApi } from '~/services/api'
 
 export class PostService {
   public constructor(private readonly api: AxiosInstance) {}
@@ -65,3 +63,5 @@ export class PostService {
     }
   }
 }
+
+export const postService = new PostService(createApi())

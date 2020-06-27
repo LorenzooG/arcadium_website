@@ -1,13 +1,18 @@
 import { put, call, all, takeEvery } from 'redux-saga/effects'
 
-import { AnyAction } from 'redux'
-
 import { actionUpdatePosts, Actions, actionFailPosts } from './actions'
-import { PostService, getService } from '~/services/crud'
+import { PostService } from '~/services/crud'
 
-export function* handleFetchPosts({ page }: AnyAction) {
-  const postService = getService(PostService)
+interface HandleFetchPostsAction {
+  postService: PostService
+  page: number
+  type: string
+}
 
+export function* handleFetchPosts({
+  page,
+  postService,
+}: HandleFetchPostsAction) {
   try {
     const response = yield call(() => postService.findAll(page))
 
