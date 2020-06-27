@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import { FiStar } from 'react-icons/fi'
 
+import { postService } from '~/services/crud'
 import { Post } from '~/services/entities'
 
 import {
@@ -16,7 +17,6 @@ import {
   UserAvatar,
   StarIcon,
 } from './styles'
-import { getService, PostService } from '~/services/crud'
 
 interface Props {
   post: Post
@@ -27,8 +27,6 @@ export const PostItem: React.FC<Props> = ({ post }) => {
   const [liked, setLiked] = useState(false)
 
   useEffect(() => {
-    const postService = getService(PostService)
-
     async function fetchHasLiked() {
       setLiked(await postService.hasLiked(post.id))
     }
@@ -38,8 +36,6 @@ export const PostItem: React.FC<Props> = ({ post }) => {
 
   async function handleLikeOrUnlikePost() {
     if (!loaded) return
-
-    const postService = getService(PostService)
 
     if (liked) {
       await postService.unlike(post.id)
