@@ -40,7 +40,7 @@ final class PostResource extends JsonResource
       'title' => $this->title,
       'description' => $this->isAlone
         ? $this->description
-        : str_replace(substr($this->description, 1000), '', $this->description),
+        : (str_replace(substr($this->description, 1000), '', $this->description) . '...'),
       'likes' => $this->likes()->count(),
       'created_by' => [
         'id' => $this->user->id,

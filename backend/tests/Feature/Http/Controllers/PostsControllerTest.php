@@ -45,7 +45,7 @@ class PostsControllerTest extends TestCase
           return [
             'id' => $post->id,
             'title' => $post->title,
-            'description' => str_replace(substr($post->description, 1000), '', $post->description),
+            'description' => str_replace(substr($post->description, 1000), '', $post->description) . '...',
             'likes' => $post->likes->count(),
             'created_by' => [
               'id' => $post->user->id,
@@ -89,7 +89,7 @@ class PostsControllerTest extends TestCase
           return [
             'id' => $post->id,
             'title' => $post->title,
-            'description' => str_replace(substr($post->description, 1000), '', $post->description),
+            'description' => str_replace(substr($post->description, 1000), '', $post->description) . '...',
             'likes' => $post->likes->count(),
             'created_by' => [
               'id' => $post->user->id,
