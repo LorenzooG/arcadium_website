@@ -48,4 +48,20 @@ export class PostService {
 
     return false
   }
+
+  public async like(postId: number): Promise<void> {
+    try {
+      await this.api.get(`posts/${postId}/like`)
+    } catch {
+      // Ignore if has error
+    }
+  }
+
+  public async unlike(postId: number): Promise<void> {
+    try {
+      await this.api.get(`posts/${postId}/like`)
+    } catch {
+      // Ignore if has error
+    }
+  }
 }

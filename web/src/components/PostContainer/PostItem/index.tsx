@@ -23,6 +23,7 @@ interface Props {
 }
 
 export const PostItem: React.FC<Props> = ({ post }) => {
+  const [loaded, setLoaded] = useState(false)
   const [liked, setLiked] = useState(false)
 
   useEffect(() => {
@@ -32,8 +33,20 @@ export const PostItem: React.FC<Props> = ({ post }) => {
       setLiked(await postService.hasLiked(post.id))
     }
 
-    fetchHasLiked().then()
+    fetchHasLiked().then(() => setLoaded(true))
   }, [post.id])
+
+  async function handleLikeOrUnlikePost() {
+    if (!loaded) return
+
+    const postService = getService(PostService)
+
+    if (liked) {
+      await postService.unlike(post.id)
+    } else {
+      await postService.like(post.id)
+    }
+  }
 
   return (
     <Container>
@@ -49,7 +62,7 @@ export const PostItem: React.FC<Props> = ({ post }) => {
           <span>{post.createdAt?.toDateString?.()}</span>
         </div>
 
-        <StarIcon>
+        <StarIcon onClick={handleLikeOrUnlikePost}>
           <FiStar fill={liked ? '#fff' : 'transparent'} />
         </StarIcon>
       </Header>
