@@ -1,7 +1,6 @@
 import { AxiosInstance } from 'axios'
 import { Post, User } from '~/services/entities'
 import { Paginator } from './paginator'
-import { createContext } from 'react'
 import { createApi } from '~/services/api'
 
 export class PostService {
@@ -39,7 +38,7 @@ export class PostService {
     try {
       const hasLiked = await this.api.get(`posts/${postId}/liked`)
 
-      return hasLiked.data
+      return hasLiked.data.value
     } catch {
       // Ignore if has error
     }
