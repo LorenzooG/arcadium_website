@@ -16,21 +16,23 @@ export class PostService {
       },
     })
 
-    response.data.data = response.data.data.map(async post => {
-      const userResponse = await this.api.get(post.created_by)
-      const user = userResponse.data
-
-      return new Post(
-        post.id,
-        post.title,
-        post.description,
-        new User(user.id, user.name, user.user_name, user.avatar, user.email),
-        new Date(post.created_at),
-        new Date(post.updated_at)
-      )
-    })
-
-    response.data.data = await Promise.all(response.data.data)
+    response.data.data = response.data.data.map(
+      async post =>
+        new Post(
+          post.id,
+          post.title,
+          post.description,
+          new User(
+            post.created_by.id,
+            post.created_by.name,
+            post.created_by.user_name,
+            post.created_by.avatar,
+            post.created_by.email
+          ),
+          new Date(post.created_at),
+          new Date(post.updated_at)
+        )
+    )
 
     return response.data
   }
