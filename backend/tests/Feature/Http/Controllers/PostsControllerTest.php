@@ -142,6 +142,52 @@ class PostsControllerTest extends TestCase
   }
 
   /**
+   * Liked
+   */
+  public function testShouldShowTrueIfTheCurrentUserHasLikedThePost()
+  {
+    /* @var User $user */
+    $user = factory(User::class)->create();
+    /* @var Post $post */
+    $post = factory(Post::class)->create([
+      'user_id' => $user->id
+    ]);
+
+    $post->likes()->save($user);
+
+    $response = $this->actingAs($user)->getJson(route('posts.liked', [
+      'post' => $post->id
+    ]));
+
+    $response->assertOk()
+      ->assertJson([
+        'value' => true
+      ]);
+  }
+
+  public function testShouldShowFalseIfTheCurrentUserHasNotLikedThePost()
+  {
+    /* @var User $user */
+    $user = factory(User::class)->create();
+    /* @var Post $post */
+    $post = factory(Post::class)->create([
+      'user_id' => $user->id
+    ]);
+
+    $post->likes()->save($user);
+
+    $response = $this->actingAs($user)->getJson(route('posts.liked', [
+      'post' => $post->id
+    ]));
+
+    $response->assertOk()
+      ->assertJson([
+        'value' => true
+      ]);
+  }
+
+
+  /**
    * Create
    */
   public function testShouldStorePostWhenPostUsersPosts()

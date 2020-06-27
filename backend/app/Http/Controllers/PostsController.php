@@ -11,6 +11,7 @@ use App\Post;
 use App\Repositories\PostRepository;
 use App\User;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
@@ -89,6 +90,23 @@ final class PostsController extends Controller
     $post->likes()->save($request->user());
 
     return response()->noContent();
+  }
+
+  /**
+   * Find and check if user has liked the post
+   *
+   * @param Request $request
+   * @param Post $post
+   * @return array
+   */
+  public function liked(Request $request, Post $post)
+  {
+    /** @var User $user */
+    $user = $request->user();
+
+    return [
+      'value' => $post->likes()->where('user_id', $user->id)->exists()
+    ];
   }
 
   /**
