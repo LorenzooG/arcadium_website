@@ -6,7 +6,15 @@ import { FiUser } from 'react-icons/fi'
 
 import { Post } from '~/services/entities'
 
-import { Container, Header, Content, ContentText, Fade, Title } from './styles'
+import {
+  Container,
+  Header,
+  Content,
+  ContentText,
+  Fade,
+  Title,
+  UserAvatar,
+} from './styles'
 
 interface Props {
   post: Post
@@ -18,10 +26,10 @@ export const PostItem: React.FC<Props> = ({ post }) => {
   return (
     <Container>
       <Header>
-        <FiUser />
+        <UserAvatar src={post.createdBy.avatar} />
 
         <div className={'info'}>
-          <div>Administration</div>
+          <div>{post.createdBy.username}</div>
           <span>{post.createdAt?.toDateString?.()}</span>
         </div>
       </Header>
