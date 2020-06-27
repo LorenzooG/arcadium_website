@@ -1,7 +1,6 @@
 import { AnyAction } from 'redux'
 
 import { Post } from '~/services/entities'
-import { PostService } from '~/services/crud'
 
 export class Actions {
   public static readonly FETCH_POSTS = '@posts/FETCH'
