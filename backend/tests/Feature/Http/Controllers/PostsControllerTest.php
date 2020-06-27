@@ -47,9 +47,26 @@ class PostsControllerTest extends TestCase
             'title' => $post->title,
             'description' => $post->description,
             'likes' => $post->likes->count(),
-            'created_by' => route('users.show', [
-              'user' => $post->user->id
-            ]),
+            'created_by' => [
+              'id' => $post->user->id,
+              'user_name' => $post->user->user_name,
+              'name' => $post->user->name,
+              'posts' => route('users.posts.index', [
+                'user' => $post->user->id
+              ]),
+              'roles' => route('users.roles.index', [
+                'user' => $post->user->id
+              ]),
+              'avatar' => route('users.avatar', [
+                'user' => $post->user->id
+              ]),
+              'email_verified_at' => $post->user->email_verified_at->toISOString(),
+              'deleted_at' => $post->user->deleted_at ?
+                $post->user->deleted_at->toISOString()
+                : null,
+              'created_at' => $post->user->created_at->toISOString(),
+              'updated_at' => $post->user->updated_at->toISOString(),
+            ],
             'updated_at' => $post->updated_at->toISOString(),
             'created_at' => $post->updated_at->toISOString(),
           ];
@@ -86,9 +103,26 @@ class PostsControllerTest extends TestCase
             'title' => $post->title,
             'description' => $post->description,
             'likes' => $post->likes->count(),
-            'created_by' => route('users.show', [
-              'user' => $post->user->id
-            ]),
+            'created_by' => [
+              'id' => $post->user->id,
+              'user_name' => $post->user->user_name,
+              'name' => $post->user->name,
+              'posts' => route('users.posts.index', [
+                'user' => $post->user->id
+              ]),
+              'roles' => route('users.roles.index', [
+                'user' => $post->user->id
+              ]),
+              'avatar' => route('users.avatar', [
+                'user' => $post->user->id
+              ]),
+              'email_verified_at' => $post->user->email_verified_at->toISOString(),
+              'deleted_at' => $post->user->deleted_at ?
+                $post->user->deleted_at->toISOString()
+                : null,
+              'created_at' => $post->user->created_at->toISOString(),
+              'updated_at' => $post->user->updated_at->toISOString(),
+            ],
             'updated_at' => $post->updated_at->toISOString(),
             'created_at' => $post->updated_at->toISOString(),
           ];
@@ -118,9 +152,26 @@ class PostsControllerTest extends TestCase
         'title' => $post->title,
         'description' => $post->description,
         'likes' => $post->likes->count(),
-        'created_by' => route('users.show', [
-          'user' => $user->id
-        ]),
+        'created_by' => [
+          'id' => $post->user->id,
+          'user_name' => $post->user->user_name,
+          'name' => $post->user->name,
+          'posts' => route('users.posts.index', [
+            'user' => $post->user->id
+          ]),
+          'roles' => route('users.roles.index', [
+            'user' => $post->user->id
+          ]),
+          'avatar' => route('users.avatar', [
+            'user' => $post->user->id
+          ]),
+          'email_verified_at' => $post->user->email_verified_at->toISOString(),
+          'deleted_at' => $post->user->deleted_at ?
+            $post->user->deleted_at->toISOString()
+            : null,
+          'created_at' => $post->user->created_at->toISOString(),
+          'updated_at' => $post->user->updated_at->toISOString(),
+        ],
         'updated_at' => $post->updated_at->toISOString(),
         'created_at' => $post->updated_at->toISOString(),
       ]);
@@ -159,9 +210,26 @@ class PostsControllerTest extends TestCase
         'title' => $post->title,
         'description' => $post->description,
         'likes' => $post->likes->count(),
-        'created_by' => route('users.show', [
-          'user' => $user->id
-        ]),
+        'created_by' => [
+          'id' => $post->user->id,
+          'user_name' => $post->user->user_name,
+          'name' => $post->user->name,
+          'posts' => route('users.posts.index', [
+            'user' => $post->user->id
+          ]),
+          'roles' => route('users.roles.index', [
+            'user' => $post->user->id
+          ]),
+          'avatar' => route('users.avatar', [
+            'user' => $post->user->id
+          ]),
+          'email_verified_at' => $post->user->email_verified_at->toISOString(),
+          'deleted_at' => $post->user->deleted_at ?
+            $post->user->deleted_at->toISOString()
+            : null,
+          'created_at' => $post->user->created_at->toISOString(),
+          'updated_at' => $post->user->updated_at->toISOString(),
+        ],
         'updated_at' => $post->updated_at->toISOString(),
         'created_at' => $post->updated_at->toISOString(),
       ]);

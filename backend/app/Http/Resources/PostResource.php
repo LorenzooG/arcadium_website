@@ -38,9 +38,7 @@ final class PostResource extends JsonResource
       'title' => $this->title,
       'description' => $this->description,
       'likes' => $this->likes()->count(),
-      'created_by' => route('users.show', [
-        'user' => $this->user->id
-      ]),
+      'created_by' => new UserResource($this->user),
       'created_at' => $this->created_at,
       'updated_at' => $this->updated_at
     ];
