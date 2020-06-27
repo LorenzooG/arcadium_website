@@ -26,6 +26,6 @@ class UserSeeder extends Seeder
       ]);
     });
 
-    factory(User::class, 10000)->create();
+//     factory(User::class, 10000)->create();
   }
 }
