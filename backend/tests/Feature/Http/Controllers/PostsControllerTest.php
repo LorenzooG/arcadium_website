@@ -10,6 +10,7 @@ use App\Http\Requests\PostUpdateRequest;
 use App\Post;
 use App\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
@@ -45,7 +46,7 @@ class PostsControllerTest extends TestCase
           return [
             'id' => $post->id,
             'title' => $post->title,
-            'description' => $post->description,
+            'description' => str_replace('', Str::substr($post->description, 0, 1000), $post->description),
             'likes' => $post->likes->count(),
             'created_by' => [
               'id' => $post->user->id,
@@ -89,7 +90,7 @@ class PostsControllerTest extends TestCase
           return [
             'id' => $post->id,
             'title' => $post->title,
-            'description' => $post->description,
+            'description' => str_replace('', Str::substr($post->description, 0, 1000), $post->description),
             'likes' => $post->likes->count(),
             'created_by' => [
               'id' => $post->user->id,

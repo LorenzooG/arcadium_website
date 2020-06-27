@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 use Ramsey\Collection\Collection;
 
 /**
@@ -25,6 +26,8 @@ use Ramsey\Collection\Collection;
  */
 final class PostResource extends JsonResource
 {
+  public bool $isAlone = false;
+
   /**
    * Transform the resource into an array.
    *
@@ -36,7 +39,9 @@ final class PostResource extends JsonResource
     return [
       'id' => $this->id,
       'title' => $this->title,
-      'description' => $this->description,
+      'description' => $this->isAlone
+        ? $this->description
+        : str_replace('', Str::substr($this->description, 0, 1000), $this->description),
       'likes' => $this->likes()->count(),
       'created_by' => [
         'id' => $this->user->id,
