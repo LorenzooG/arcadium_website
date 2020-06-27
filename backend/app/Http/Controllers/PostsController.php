@@ -84,7 +84,10 @@ final class PostsController extends Controller
       'description'
     ]));
 
-    return new PostResource($post);
+    $postResource = new PostResource($post);
+    $postResource->isAlone = true;
+
+    return $postResource;
   }
 
   /**
