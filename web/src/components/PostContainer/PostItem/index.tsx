@@ -29,7 +29,11 @@ export const PostItem: React.FC<Props> = ({ post }) => {
         <UserAvatar src={post.createdBy.avatar} />
 
         <div className={'info'}>
-          <div>{post.createdBy.username}</div>
+          <div>
+            <Link href={`profile/${post.createdBy.id}`}>
+              <a>{post.createdBy.username}</a>
+            </Link>
+          </div>
           <span>{post.createdAt?.toDateString?.()}</span>
         </div>
       </Header>
@@ -42,7 +46,9 @@ export const PostItem: React.FC<Props> = ({ post }) => {
           }}
         />
         <Fade>
-          <Link href={`/posts/${post.id}`}>Read more</Link>
+          <Link href={`/posts/${post.id}`}>
+            <a>Read more</a>
+          </Link>
         </Fade>
       </Content>
     </Container>
