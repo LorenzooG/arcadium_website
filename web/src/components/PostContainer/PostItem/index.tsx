@@ -51,7 +51,7 @@ export const PostItem: React.FC<Props> = ({ post }) => {
 
         <div className={'info'}>
           <div>
-            <Link href={`profile/${post.createdBy.id}`}>
+            <Link href={'/profile/[user]'} as={`profile/${post.createdBy.id}`}>
               <a>{post.createdBy.username}</a>
             </Link>
           </div>
@@ -71,7 +71,7 @@ export const PostItem: React.FC<Props> = ({ post }) => {
           }}
         />
         <Fade>
-          <Link href={`/posts/${post.id}`}>
+          <Link href={'/posts/[post]'} as={`/posts/${post.id}`}>
             <a>Read more</a>
           </Link>
         </Fade>
