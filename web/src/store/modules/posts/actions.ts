@@ -8,8 +8,9 @@ export class Actions {
   public static readonly FAIL_POSTS = '@posts/FAIL'
 }
 
-export const actionFetchPosts = (): AnyAction => ({
+export const actionFetchPosts = (page = 1): AnyAction => ({
   type: Actions.FETCH_POSTS,
+  page,
 })
 
 export const actionUpdatePosts = (posts: Post[]): AnyAction => ({
