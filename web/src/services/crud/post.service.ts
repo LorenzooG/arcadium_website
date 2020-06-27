@@ -17,7 +17,7 @@ export class PostService {
     })
 
     response.data.data = response.data.data.map(
-      async post =>
+      post =>
         new Post(
           post.id,
           post.title,
