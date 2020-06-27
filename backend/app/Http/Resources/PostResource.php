@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Str;
 use Ramsey\Collection\Collection;
 
 /**
@@ -41,7 +40,7 @@ final class PostResource extends JsonResource
       'title' => $this->title,
       'description' => $this->isAlone
         ? $this->description
-        : str_replace('', Str::substr($this->description, 0, 1000), $this->description),
+        : str_replace(substr($this->description, 1000), '', $this->description),
       'likes' => $this->likes()->count(),
       'created_by' => [
         'id' => $this->user->id,
