@@ -13,21 +13,10 @@ export const Container = styled.li`
   }
 `
 
-export const Content = styled.div<{ defaultHeight?: boolean }>`
+export const Content = styled.div`
   margin: 8px 0;
   padding: 0 14px 14px;
   border-radius: inherit;
-`
-
-export const ContentText = styled.p`
-  font-size: 16px;
-  margin: 16px 0;
-`
-
-export const Title = styled.h2`
-  margin: 6px 0;
-  font-size: 22px;
-  text-align: center;
 `
 
 export const Header = styled.div`
@@ -52,33 +41,20 @@ export const Header = styled.div`
   }
 `
 
-export const Fade = styled.div`
-  display: flex;
-  a {
-    :hover {
-      filter: brightness(80%);
-    }
-    transition: 200ms;
-    display: block;
-    font-size: 16px;
-    color: #fff;
-    margin: auto;
-    font-weight: bold;
-    text-decoration: none;
-    background: #2766c7;
-    padding: 12px;
-  }
-`
-
-export const StarIcon = styled.div<{ liked?: boolean }>`
-  margin-left: auto;
-  cursor: pointer;
+const Icon = styled.div`
   width: fit-content;
+  cursor: pointer;
 
   :hover {
     filter: brightness(90%);
   }
 `
+
+export const StarIcon = styled(Icon)`
+  margin-left: auto;
+`
+
+export const EditIcon = styled(Icon)``
 
 export const UserAvatar = styled.img`
   width: 54px;

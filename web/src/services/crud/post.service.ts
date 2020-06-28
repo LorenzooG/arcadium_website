@@ -51,6 +51,12 @@ export class PostService {
       // Ignore if has error
     }
   }
+
+  public isOwner(postId: number): boolean {
+    // TODO: handle this correctly
+
+    return true
+  }
 }
 
 export const postService = new PostService(createApi())
