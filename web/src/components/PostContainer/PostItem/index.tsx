@@ -2,20 +2,20 @@ import React, { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 
-import { FiStar } from 'react-icons/fi'
+import { FiStar, FiEdit } from 'react-icons/fi'
 
 import { postService } from '~/services/crud'
 import { Post } from '~/services/entities'
+
+import { PostContent } from '..'
 
 import {
   Container,
   Header,
   Content,
-  ContentText,
-  Fade,
-  Title,
   UserAvatar,
   StarIcon,
+  EditIcon,
 } from './styles'
 
 interface Props {
@@ -25,6 +25,7 @@ interface Props {
 export const PostItem: React.FC<Props> = ({ post }) => {
   const [loaded, setLoaded] = useState(false)
   const [liked, setLiked] = useState(false)
+  const [isOwner, setOwner] = useState(false)
 
   useEffect(() => {
     async function fetchHasLiked() {
@@ -32,6 +33,10 @@ export const PostItem: React.FC<Props> = ({ post }) => {
     }
 
     fetchHasLiked().then(() => setLoaded(true))
+  }, [post.id])
+
+  useEffect(() => {
+    setOwner(postService.isOwner(post.id))
   }, [post.id])
 
   async function handleLikeOrUnlikePost() {
@@ -42,6 +47,10 @@ export const PostItem: React.FC<Props> = ({ post }) => {
     } else {
       await postService.like(post.id)
     }
+  }
+
+  function handleStartEditing() {
+    //
   }
 
   return (
@@ -59,24 +68,18 @@ export const PostItem: React.FC<Props> = ({ post }) => {
         </div>
 
         <StarIcon onClick={handleLikeOrUnlikePost}>
-          <FiStar fill={liked ? '#fff' : 'transparent'} />
+          <FiStar size={27} fill={liked ? '#fff' : 'transparent'} />
         </StarIcon>
+
+        {post.isComplete && isOwner && (
+          <EditIcon onClick={handleStartEditing}>
+            <FiEdit size={27} />
+          </EditIcon>
+        )}
       </Header>
 
       <Content>
-        <Title>{post.title}</Title>
-        <ContentText
-          dangerouslySetInnerHTML={{
-            __html: post.description,
-          }}
-        />
-        {!post.isComplete && (
-          <Fade>
-            <Link href={'/posts/[post]'} as={`/posts/${post.id}`}>
-              <a>Read more</a>
-            </Link>
-          </Fade>
-        )}
+        <PostContent post={post} />
       </Content>
     </Container>
   )
