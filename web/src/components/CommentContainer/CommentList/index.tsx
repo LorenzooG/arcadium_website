@@ -3,37 +3,35 @@ import { Post, Comment } from '~/services/entities'
 import { CommentItem } from '~/components/CommentContainer'
 import { commentService } from '~/services/crud'
 
+import useSwr from 'swr'
+
 interface Props {
   post: Post
+  initialData?: Comment[]
 }
 
-export const CommentList: React.FC<Props> = ({ post }) => {
-  const [comments, setComments] = useState<Comment[]>([])
-  const [loaded, setLoaded] = useState(false)
+const findPostCommentsFetcher = async (postId: unknown) => {
+  const paginator = await commentService.findAllOfPost(postId)
 
-  useEffect(() => {
-    async function fetchPostComments() {
-      console.log('POSTS FUCK')
+  return paginator.data
+}
 
-      try {
-        const { data } = await commentService.findAllOfPost(post.id)
-
-        setComments(data)
-      } catch {
-        // do not show the error
-      }
-    }
-
-    fetchPostComments().then(() => setLoaded(true))
-  }, [post.id])
+export const CommentList: React.FC<Props> = ({ post, initialData }) => {
+  const { data, error } = useSwr(
+    () => post.id.toString(),
+    findPostCommentsFetcher,
+    { initialData }
+  )
 
   return (
     <ul>
       <h1>Comments: </h1>
-      {loaded ? (
-        comments.map((comment, index) => (
+      {data ? (
+        data.map((comment, index) => (
           <CommentItem key={index} comment={comment} />
         ))
+      ) : error ? (
+        <div>Error</div>
       ) : (
         <div>Loading</div>
       )}
