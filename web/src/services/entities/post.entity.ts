@@ -6,8 +6,8 @@ export class Post {
     public title: string,
     public description: string,
     public createdBy: User,
-    public createdAt: Date,
-    public updatedAt: Date,
+    public createdAt: string,
+    public updatedAt: string,
     public isComplete: boolean
   ) {}
 
@@ -23,8 +23,8 @@ export class Post {
         post.created_by.avatar,
         post.created_by.email
       ),
-      new Date(post.created_at),
-      new Date(post.updated_at),
+      post.created_at,
+      post.updated_at,
       isComplete
     )
   }
