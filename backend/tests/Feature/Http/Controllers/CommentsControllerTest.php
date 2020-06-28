@@ -47,9 +47,14 @@ class CommentsControllerTest extends TestCase
           return [
             'id' => $pivot->id,
             'content' => $pivot->content,
-            'created_by' => route('users.show', [
-              'user' => $pivot->user_id
-            ]),
+            'created_by' => [
+              'id' => $user->id,
+              'name' => $user->name,
+              'user_name' => $user->user_name,
+              'avatar' => route('users.avatar', [
+                'user' => $user->id
+              ]),
+            ],
             'updated_at' => $pivot->updated_at->toISOString(),
             'created_at' => $pivot->updated_at->toISOString()
           ];
@@ -77,8 +82,6 @@ class CommentsControllerTest extends TestCase
       'content' => $content
     ]);
 
-    $a = $this->app['router']->getRoutes();
-
     $comments = Comment::query()
       ->where('id', $response->json('id'))
       ->where('content', $content)
@@ -95,9 +98,14 @@ class CommentsControllerTest extends TestCase
       ->assertJson([
         'id' => $comment->id,
         'content' => $comment->content,
-        'created_by' => route('users.show', [
-          'user' => $user->id
-        ]),
+        'created_by' => [
+          'id' => $user->id,
+          'name' => $user->name,
+          'user_name' => $user->user_name,
+          'avatar' => route('users.avatar', [
+            'user' => $user->id
+          ]),
+        ],
         'updated_at' => $comment->updated_at->toISOString(),
         'created_at' => $comment->updated_at->toISOString()
       ]);
