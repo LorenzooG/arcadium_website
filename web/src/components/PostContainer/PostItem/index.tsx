@@ -70,11 +70,13 @@ export const PostItem: React.FC<Props> = ({ post }) => {
             __html: post.description,
           }}
         />
-        <Fade>
-          <Link href={'/posts/[post]'} as={`/posts/${post.id}`}>
-            <a>Read more</a>
-          </Link>
-        </Fade>
+        {!post.isComplete && (
+          <Fade>
+            <Link href={'/posts/[post]'} as={`/posts/${post.id}`}>
+              <a>Read more</a>
+            </Link>
+          </Fade>
+        )}
       </Content>
     </Container>
   )
