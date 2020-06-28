@@ -55,7 +55,7 @@ export const PostItem: React.FC<Props> = ({ post }) => {
               <a>{post.createdBy.username}</a>
             </Link>
           </div>
-          <span>{post.createdAt?.toDateString?.()}</span>
+          <span>{new Date(post.createdAt).toDateString()}</span>
         </div>
 
         <StarIcon onClick={handleLikeOrUnlikePost}>

@@ -12,6 +12,7 @@ import { PostsState } from '~/store/modules/posts/reducer'
 import { Container } from './styles'
 import { PostItem } from '~/components/PostContainer'
 import { wrapper } from '~/store'
+import { CommentList } from '~/components/CommentContainer'
 
 interface Props {
   postId: string
@@ -38,6 +39,7 @@ const PostPage: NextPage<Props> = ({ postId, initialData }) => {
   return (
     <Container>
       <PostItem post={data} />
+      <CommentList post={data} />
     </Container>
   )
 }
