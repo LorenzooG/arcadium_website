@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Post, Comment } from '~/services/entities'
 import { CommentItem } from '~/components/CommentContainer'
 import { commentService } from '~/services/crud'
 
-import useSwr from 'swr'
+import { useFetcher } from '~/utils'
 
 interface Props {
   post: Post
@@ -17,11 +17,10 @@ const findPostCommentsFetcher = async (postId: unknown) => {
 }
 
 export const CommentList: React.FC<Props> = ({ post, initialData }) => {
-  const { data, error } = useSwr(
-    () => post.id.toString(),
-    findPostCommentsFetcher,
-    { initialData }
-  )
+  const { data, error } = useFetcher({
+    fetcher: () => findPostCommentsFetcher(post.id),
+    initialData,
+  })
 
   return (
     <ul>
