@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { NextPage } from 'next'
+import useSwr from 'swr'
+
+import { GetStaticProps, NextPage } from 'next'
 
 import { Post } from '~/services/entities'
 import { postService } from '~/services/crud'
@@ -12,30 +14,43 @@ import { PostItem } from '~/components/PostContainer'
 import { wrapper } from '~/store'
 
 interface Props {
-  post: Post
+  postId: string
+  initialData?: Post
 }
 
-const PostPage: NextPage<Props> = ({ post }) => {
+const PostPage: NextPage<Props> = ({ postId, initialData }) => {
+  const { data, error } = useSwr(
+    () => postId,
+    id => postService.findOne(id),
+    {
+      initialData,
+    }
+  )
+
+  if (error) {
+    return <div>Error: {JSON.stringify(error)}</div>
+  }
+
+  if (!data) {
+    return <div>Loading post...</div>
+  }
+
   return (
     <Container>
-      <PostItem post={post} />
+      <PostItem post={data} />
     </Container>
   )
 }
 
-PostPage.getInitialProps = async ({ query, store }) => {
-  const postIdString = Array.isArray(query.post) ? query.post[0] : query.post
-  const postId = parseInt(postIdString)
+PostPage.getInitialProps = async ({ req, query }) => {
+  const postId = Array.isArray(query.post) ? query.post[0] : query.post
 
-  const state = store.getState()
-  const posts: PostsState = state.posts
-  const post = posts.posts.find(post => post.id === postId)
+  if (!req) return { postId }
 
-  if (!post || !post?.isComplete) {
-    return { post: await postService.findOne(postId) }
+  return {
+    postId,
+    initialData: await postService.findOne(postId),
   }
-
-  return { post }
 }
 
 export default wrapper.withRedux(PostPage)

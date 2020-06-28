@@ -18,7 +18,7 @@ export class PostService {
     return response.data
   }
 
-  public async findOne(postId: number): Promise<Post> {
+  public async findOne(postId: number | string): Promise<Post> {
     const post = await this.api.get(`posts/${postId}`)
 
     return Post.new(post.data, true)
