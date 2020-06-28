@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import useSwr from 'swr'
 
@@ -14,26 +14,71 @@ import { CommentList } from '~/components/CommentContainer'
 
 interface Props {
   postId: string
-  post?: Post
+  initialData?: Post
   comments?: Comment[]
 }
 
-const PostPage: NextPage<Props> = ({ postId, post, comments }) => {
-  const { data, error } = useSwr(
-    () => postId,
-    id => postService.findOne(id),
-    {
-      initialData: post,
+interface Settings<F, D> {
+  fetcher: F
+  initialData: D
+}
+
+interface ReturnData<D> {
+  data: D | null
+  error: Error | null
+  loading: boolean
+}
+
+function useFetcher<D, F extends () => Promise<D>>({
+  fetcher: _fetcher,
+  initialData,
+}: Settings<F, D>): ReturnData<D> {
+  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState<D | null>(null)
+  const [error, setError] = useState<Error | null>(null)
+
+  const fetcher = useCallback(_fetcher, [])
+
+  useEffect(() => {
+    async function fetchData() {
+      if (initialData) return
+
+      try {
+        setData(await fetcher())
+      } catch (error) {
+        setError(error)
+      }
     }
-  )
+
+    fetchData().then(() => setLoading(false))
+  }, [fetcher, initialData])
+
+  if (initialData) {
+    return {
+      data: initialData,
+      loading: false,
+      error: null,
+    }
+  }
+
+  return { data, loading, error }
+}
+
+const PostPage: NextPage<Props> = ({ postId, initialData, comments }) => {
+  const { data, error, loading } = useFetcher({
+    fetcher: () => postService.findOne(postId),
+    initialData,
+  })
 
   if (error) {
     return <div>Error: {JSON.stringify(error)}</div>
   }
 
-  if (!data) {
+  if (loading || !data) {
     return <div>Loading post...</div>
   }
+
+  console.log('Post:', data)
 
   return (
     <Container>
@@ -52,7 +97,7 @@ PostPage.getInitialProps = async ({ req, query }) => {
 
   return {
     postId,
-    post: await postService.findOne(postId),
+    initialData: await postService.findOne(postId),
     comments,
   }
 }
