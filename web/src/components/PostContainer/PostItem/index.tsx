@@ -7,7 +7,7 @@ import { FiStar, FiEdit } from 'react-icons/fi'
 import { postService } from '~/services/crud'
 import { Post } from '~/services/entities'
 
-import { PostContent } from '..'
+import { PostContent, PostEditing } from '..'
 
 import {
   Container,
@@ -26,6 +26,7 @@ export const PostItem: React.FC<Props> = ({ post }) => {
   const [loaded, setLoaded] = useState(false)
   const [liked, setLiked] = useState(false)
   const [isOwner, setOwner] = useState(false)
+  const [isEditing, setEditing] = useState(false)
 
   useEffect(() => {
     async function fetchHasLiked() {
@@ -49,10 +50,6 @@ export const PostItem: React.FC<Props> = ({ post }) => {
     }
   }
 
-  function handleStartEditing() {
-    //
-  }
-
   return (
     <Container>
       <Header>
@@ -72,14 +69,14 @@ export const PostItem: React.FC<Props> = ({ post }) => {
         </StarIcon>
 
         {post.isComplete && isOwner && (
-          <EditIcon onClick={handleStartEditing}>
+          <EditIcon onClick={() => setEditing(value => !value)}>
             <FiEdit size={27} />
           </EditIcon>
         )}
       </Header>
 
       <Content>
-        <PostContent post={post} />
+        {isEditing ? <PostEditing post={post} /> : <PostContent post={post} />}
       </Content>
     </Container>
   )
