@@ -5,6 +5,8 @@ import { commentService } from '~/services/crud'
 
 import { useFetcher } from '~/utils'
 
+import { Container, Title } from './styles'
+
 interface Props {
   post: Post
   initialData?: Comment[]
@@ -23,17 +25,19 @@ export const CommentList: React.FC<Props> = ({ post, initialData }) => {
   })
 
   return (
-    <ul>
-      <h1>Comments: </h1>
-      {data ? (
-        data.map((comment, index) => (
-          <CommentItem key={index} comment={comment} />
-        ))
-      ) : error ? (
-        <div>Error</div>
-      ) : (
-        <div>Loading</div>
-      )}
-    </ul>
+    <Container>
+      <Title>Comments: </Title>
+      <ul>
+        {data ? (
+          data.map((comment, index) => (
+            <CommentItem key={index} comment={comment} />
+          ))
+        ) : error ? (
+          <div>Error</div>
+        ) : (
+          <div>Loading</div>
+        )}
+      </ul>
+    </Container>
   )
 }
