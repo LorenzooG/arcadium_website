@@ -2,12 +2,10 @@ import React from 'react'
 
 import useSwr from 'swr'
 
-import { GetStaticProps, NextPage } from 'next'
+import { NextPage } from 'next'
 
-import { Post } from '~/services/entities'
-import { postService } from '~/services/crud'
-
-import { PostsState } from '~/store/modules/posts/reducer'
+import { Comment, Post } from '~/services/entities'
+import { commentService, postService } from '~/services/crud'
 
 import { Container } from './styles'
 import { PostItem } from '~/components/PostContainer'
@@ -16,15 +14,16 @@ import { CommentList } from '~/components/CommentContainer'
 
 interface Props {
   postId: string
-  initialData?: Post
+  post?: Post
+  comments?: Comment[]
 }
 
-const PostPage: NextPage<Props> = ({ postId, initialData }) => {
+const PostPage: NextPage<Props> = ({ postId, post, comments }) => {
   const { data, error } = useSwr(
     () => postId,
     id => postService.findOne(id),
     {
-      initialData,
+      initialData: post,
     }
   )
 
@@ -39,7 +38,7 @@ const PostPage: NextPage<Props> = ({ postId, initialData }) => {
   return (
     <Container>
       <PostItem post={data} />
-      <CommentList post={data} />
+      <CommentList post={data} initialData={comments} />
     </Container>
   )
 }
@@ -49,9 +48,12 @@ PostPage.getInitialProps = async ({ req, query }) => {
 
   if (!req) return { postId }
 
+  const { data: comments } = await commentService.findAllOfPost(postId)
+
   return {
     postId,
-    initialData: await postService.findOne(postId),
+    post: await postService.findOne(postId),
+    comments,
   }
 }
 
