@@ -15,7 +15,7 @@ export const Container = styled.div`
 `
 
 export const Content = styled.p`
-  padding: 12px;
+  padding: 20px;
   display: block;
 `
 
