@@ -104,6 +104,7 @@ Route::prefix('posts')->name('posts.')->group(function () {
     Route::get('/', 'PostsController@show')->name('show');
 
     Route::middleware('auth:api')->group(function () {
+      Route::get('liked', 'PostsController@liked')->name('liked');
       Route::delete('/', 'PostsController@delete')->middleware('can:delete,post')->name('delete');
       Route::put('/', 'PostsController@update')->middleware(['xss', 'can:update,post'])->name('update');
       Route::post('like', 'PostsController@like')->middleware('can:like,post')->name('like');

@@ -5,10 +5,19 @@ import { MakeStore, createWrapper } from 'next-redux-wrapper'
 
 import { rootReducer, rootSaga } from './modules'
 
+import { PostsState } from './modules/posts/reducer'
+import { TypedUseSelectorHook, useSelector } from 'react-redux'
+
 export interface SagaStore extends Store {
   sagaTask?: Task
   __persistor: Persistor
 }
+
+export interface TypedState {
+  posts: PostsState
+}
+
+export const useTypedSelector: TypedUseSelectorHook<TypedState> = useSelector
 
 export const makeStore: MakeStore = (context: any) => {
   const sagaMiddleware = createSagaMiddleware()

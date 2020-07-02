@@ -1,9 +1,10 @@
 import { AxiosInstance } from 'axios'
 import { createApi } from '~/services/api'
 
-export { PostService } from './post.service'
+export { postService, PostService } from './post.service'
+export { commentService, CommentService } from './comment.service'
 
-type ServiceClass<T> = {
+export type ServiceClass<T> = {
   new (api: AxiosInstance): T
 }
 

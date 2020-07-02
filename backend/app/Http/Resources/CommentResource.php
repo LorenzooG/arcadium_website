@@ -29,12 +29,22 @@ final class CommentResource extends JsonResource
       ? $this->resource
       : $this->resource->pivot;
 
+    /** @var User $user */
+    $user = $this->resource instanceof Comment
+      ? $this->resource->user
+      : $this->resource;
+
     return [
       'id' => $comment->id,
       'content' => $comment->content,
-      'created_by' => route('users.show', [
-        'user' => $comment->user_id
-      ]),
+      'created_by' => [
+        'id' => $user->id,
+        'name' => $user->name,
+        'user_name' => $user->user_name,
+        'avatar' => route('users.avatar', [
+          'user' => $user->id
+        ]),
+      ],
       'created_at' => $comment->created_at,
       'updated_at' => $comment->updated_at
     ];

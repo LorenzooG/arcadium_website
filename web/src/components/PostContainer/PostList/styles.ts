@@ -1,3 +1,9 @@
 import styled from 'styled-components'
 
-export const Container = styled.div``
+/**
+ * TODO: remove this simple state to test application
+ */
+export const Container = styled.div`
+  margin: 8px auto;
+  max-width: 800px;
+`
