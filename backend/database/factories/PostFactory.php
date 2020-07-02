@@ -9,6 +9,6 @@ use Illuminate\Database\Eloquent\Factory;
 $factory->define(Post::class, function (Faker $faker) {
   return [
     "title" => $faker->text(72),
-    "description" => $faker->text(100)
+    "description" => $faker->text(6000)
   ];
 });

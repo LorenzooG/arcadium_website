@@ -1,30 +1,21 @@
-import React from "react";
+import React from 'react'
 
-import { Redirect, Route, RouteProps } from "react-router";
+import { Redirect, Route, RouteProps } from 'react-router-dom'
 
-import { useSelector } from "react-redux";
-import { RootState } from "~/store/modules";
+import { authService } from '~/services'
 
-type Props = {
-  onlyAdmin?: boolean;
-} & RouteProps;
+type Props = RouteProps & {
+  onlyAdmin?: boolean
+}
 
-const PrivateRoute: React.FC<Props> = ({ onlyAdmin, ...props }) => {
-  const isLogged = useSelector<RootState, boolean>(
-    state => state.auth.isLogged
-  );
-
-  const isAdmin = useSelector<RootState, boolean>(state => state.auth.isAdmin);
-
-  if (!isLogged) {
-    return <Redirect to={"/"} />;
+export const PrivateRoute: React.FC<Props> = ({ onlyAdmin, ...props }) => {
+  if (!authService.isLogged()) {
+    return <Redirect to={'/'} />
   }
 
-  if (onlyAdmin && !isAdmin) {
-    return <Redirect to={"/"} />;
+  if (onlyAdmin) {
+    return <Redirect to={'/'} />
   }
 
-  return <Route {...props} />;
-};
-
-export default PrivateRoute;
+  return <Route {...props} />
+}

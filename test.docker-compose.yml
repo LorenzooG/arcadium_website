@@ -14,6 +14,28 @@ services:
     networks:
       - arcadium-network
 
+  redis:
+    build: ./redis
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis:/redis
+    env_file:
+      - ./redis/.env.test
+    networks:
+      - arcadium-network
+
+  listener:
+    build:
+      context: ./backend
+      dockerfile: socket.dockerfile
+    volumes:
+      - ./backend:/var/www
+    env_file:
+      - ./backend/.env.test
+    networks:
+      - arcadium-network
+
   mongo:
     build: ./mongo
     restart: always

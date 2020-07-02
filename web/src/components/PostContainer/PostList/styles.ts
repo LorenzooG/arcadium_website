@@ -1,12 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
-export const Container = styled.main`
-  ul {
-    width: 100%;
-    padding: 0 0 8px;
-  }
-
-  li:nth-child(n + 2) {
-    margin-top: 18px;
-  }
-`;
+/**
+ * TODO: remove this simple state to test application
+ */
+export const Container = styled.div`
+  margin: 8px auto;
+  max-width: 800px;
+`

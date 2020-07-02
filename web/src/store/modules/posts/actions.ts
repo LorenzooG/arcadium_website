@@ -1,46 +1,29 @@
-import { Post } from "~/services/entities";
+import { AnyAction } from 'redux'
 
-export enum Actions {
-  FETCH_REQUEST = "@posts/FETCH_REQUEST",
-  FETCH_SUCCESS = "@posts/FETCH_SUCCESS",
-  FETCH_FAIL = "@posts/FETCH_FAIL"
+import { Post } from '~/services/entities'
+import { PostService } from '~/services/crud'
+
+export class Actions {
+  public static readonly FETCH_POSTS = '@posts/FETCH'
+  public static readonly UPDATE_POSTS = '@posts/UPDATE'
+  public static readonly FAIL_POSTS = '@posts/FAIL'
 }
 
-export function fetchPostsRequestAction(): FetchPostsRequestAction {
-  return {
-    type: Actions.FETCH_REQUEST
-  };
-}
+export const actionFetchPosts = (
+  postService: PostService,
+  page = 1
+): AnyAction => ({
+  type: Actions.FETCH_POSTS,
+  postService,
+  page,
+})
 
-export function fetchPostsFailAction(): FetchPostsFailAction {
-  return {
-    type: Actions.FETCH_FAIL
-  };
-}
+export const actionUpdatePosts = (posts: Post[]): AnyAction => ({
+  type: Actions.UPDATE_POSTS,
+  payload: posts,
+})
 
-export function fetchPostsSuccessAction(
-  posts: Post[]
-): FetchPostsSuccessAction {
-  return {
-    type: Actions.FETCH_SUCCESS,
-    payload: posts
-  };
-}
-
-export type FetchPostsSuccessAction = {
-  type: typeof Actions.FETCH_SUCCESS;
-  payload: Post[];
-};
-
-export type FetchPostsFailAction = {
-  type: typeof Actions.FETCH_FAIL;
-};
-
-export type FetchPostsRequestAction = {
-  type: typeof Actions.FETCH_REQUEST;
-};
-
-export type PostsAction =
-  | FetchPostsSuccessAction
-  | FetchPostsFailAction
-  | FetchPostsRequestAction;
+export const actionFailPosts = (error: Error): AnyAction => ({
+  type: Actions.FAIL_POSTS,
+  payload: error,
+})
