@@ -1,16 +1,42 @@
-import { createStore, applyMiddleware } from "redux";
-import createSagaMiddleware from "redux-saga";
+import { createStore, applyMiddleware, Store } from 'redux'
+import createSagaMiddleware, { Task } from 'redux-saga'
+import { persistStore, Persistor } from 'redux-persist'
+import { MakeStore, createWrapper } from 'next-redux-wrapper'
 
-import { persistStore } from "redux-persist";
+import { rootReducer, rootSaga } from './modules'
 
-import { rootReducer, rootSaga } from "./modules";
+import { PostsState } from './modules/posts/reducer'
+import { TypedUseSelectorHook, useSelector } from 'react-redux'
 
-const sagaMiddleware = createSagaMiddleware();
+export interface SagaStore extends Store {
+  sagaTask?: Task
+  __persistor: Persistor
+}
 
-const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+export interface TypedState {
+  posts: PostsState
+}
 
-sagaMiddleware.run(rootSaga);
+export const useTypedSelector: TypedUseSelectorHook<TypedState> = useSelector
 
-export const persistor = persistStore(store);
+export const makeStore: MakeStore = (context: any) => {
+  const sagaMiddleware = createSagaMiddleware()
 
-export default store;
+  if (context.isServer) {
+    return createStore(rootReducer, applyMiddleware(sagaMiddleware))
+  }
+
+  const store = createStore(
+    rootReducer,
+    applyMiddleware(sagaMiddleware)
+  ) as SagaStore
+
+  store.sagaTask = sagaMiddleware.run(rootSaga)
+  store.__persistor = persistStore(store)
+
+  return store
+}
+
+export const wrapper = createWrapper(makeStore, {
+  debug: true,
+})

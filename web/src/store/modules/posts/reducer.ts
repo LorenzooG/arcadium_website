@@ -1,42 +1,50 @@
-/* tslint:disable:ter-indent */
 /* eslint-disable indent */
-import produce from "immer";
+import { AnyAction } from 'redux'
 
-import { Actions, PostsAction } from "./actions";
+import produce from 'immer'
 
-import { Post } from "~/services/entities";
+import { Post } from '~/services/entities'
 
-export type PostsState = {
-  loading: boolean;
-  error: boolean;
-  posts: Post[];
-};
+import { Actions } from './actions'
+import { HYDRATE } from 'next-redux-wrapper'
 
-const INITIAL_STATE: PostsState = {
+export interface PostsState {
+  posts: Post[]
+  error?: Error
+  loading: boolean
+}
+
+const INITIAL_STATE: State = {
+  posts: [],
   loading: true,
-  error: false,
-  posts: []
-};
+}
 
-export default function reducer(state = INITIAL_STATE, action: PostsAction) {
+const reducer = (state: State = INITIAL_STATE, action: AnyAction) => {
   return produce(state, draft => {
     switch (action.type) {
-      case Actions.FETCH_SUCCESS:
-        draft.loading = false;
-        draft.error = false;
-        draft.posts = action.payload;
+      case HYDRATE:
+        draft.posts = action.payload.posts.posts
+        draft.loading = action.payload.posts.loading
 
-        break;
-      case Actions.FETCH_FAIL:
-        draft.loading = false;
-        draft.error = true;
+        break
 
-        break;
-      case Actions.FETCH_REQUEST:
-        draft.loading = true;
-        draft.error = false;
+      case Actions.FETCH_POSTS:
+        draft.posts = []
+        draft.loading = true
 
-        break;
+        break
+      case Actions.UPDATE_POSTS:
+        draft.posts = action.payload
+        draft.loading = false
+
+        break
+
+      case Actions.FAIL_POSTS:
+        draft.posts = []
+        draft.loading = false
+        draft.error = action.payload
     }
-  });
+  })
 }
+
+export default reducer

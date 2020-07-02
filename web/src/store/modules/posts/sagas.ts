@@ -1,23 +1,25 @@
-import { put, call, all, takeEvery } from "redux-saga/effects";
+import { put, call, all, takeEvery } from 'redux-saga/effects'
 
-import {
-  fetchPostsFailAction,
-  fetchPostsSuccessAction,
-  Actions
-} from "./actions";
+import { actionUpdatePosts, Actions, actionFailPosts } from './actions'
+import { PostService } from '~/services/crud'
 
-import { posts as service, errors } from "~/services";
+interface HandleFetchPostsAction {
+  postService: PostService
+  page: number
+  type: string
+}
 
-export function* handleFetchPosts() {
+export function* handleFetchPosts({
+  page,
+  postService,
+}: HandleFetchPostsAction) {
   try {
-    const response = yield call(service.fetchAll);
+    const response = yield call(() => postService.findAll(page))
 
-    yield put(fetchPostsSuccessAction(response));
-  } catch (exception) {
-    yield put(fetchPostsFailAction());
-
-    errors.handleForException(exception);
+    yield put(actionUpdatePosts(response.data))
+  } catch (error) {
+    yield put(actionFailPosts(error))
   }
 }
 
-export default all([takeEvery(Actions.FETCH_REQUEST, handleFetchPosts)]);
+export default all([takeEvery(Actions.FETCH_POSTS, handleFetchPosts)])

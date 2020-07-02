@@ -49,7 +49,7 @@ final class PostRepository
     return $this->cacheRepository->remember($this->getCacheKey("paginated.$page"), now()->addHour(), function () use ($page) {
       $this->logger->info("Caching posts in page {$page}.");
 
-      return Post::byLikes()->paginate();
+      return Post::query()->paginate();
     });
   }
 

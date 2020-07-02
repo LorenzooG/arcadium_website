@@ -25,7 +25,6 @@ use App\Punishment;
 use App\Role;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use PayPalCheckoutSdk\Core\PayPalEnvironment;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
@@ -50,8 +49,6 @@ final class AppServiceProvider extends ServiceProvider
    */
   public final function boot()
   {
-    Log::info("Bootstrapped application.");
-
     $this->app->singleton(PaymentService::class);
 
     // Singleton payment handlers

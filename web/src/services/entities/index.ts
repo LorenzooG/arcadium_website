@@ -1,4 +1,3 @@
-export { default as User } from "./User";
-export { default as Post } from "./Post";
-export { default as Payment } from "./Payment";
-export { default as Product } from "./Product";
+export { Post } from './post.entity'
+export { User } from './user.entity'
+export { Comment } from './comment.entity'

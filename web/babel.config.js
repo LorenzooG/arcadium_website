@@ -1,11 +1,12 @@
 module.exports = {
   plugins: [
     [
-      "root-import",
+      'root-import',
       {
-        rootPathPrefix: "~",
-        rootPathSuffix: "src"
-      }
-    ]
-  ]
-};
+        rootPathPrefix: '~',
+        rootPathSuffix: 'src',
+      },
+    ],
+    // ['styled-components', { ssr: true, displayName: true, preprocess: false }],
+  ],
+}
