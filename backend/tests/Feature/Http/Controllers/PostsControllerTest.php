@@ -45,27 +45,15 @@ class PostsControllerTest extends TestCase
           return [
             'id' => $post->id,
             'title' => $post->title,
-            'description' => $post->description,
+            'description' => str_replace(substr($post->description, 1000), '', $post->description) . '...',
             'likes' => $post->likes->count(),
             'created_by' => [
               'id' => $post->user->id,
-              'user_name' => $post->user->user_name,
               'name' => $post->user->name,
-              'posts' => route('users.posts.index', [
-                'user' => $post->user->id
-              ]),
-              'roles' => route('users.roles.index', [
-                'user' => $post->user->id
-              ]),
+              'user_name' => $post->user->user_name,
               'avatar' => route('users.avatar', [
                 'user' => $post->user->id
               ]),
-              'email_verified_at' => $post->user->email_verified_at->toISOString(),
-              'deleted_at' => $post->user->deleted_at ?
-                $post->user->deleted_at->toISOString()
-                : null,
-              'created_at' => $post->user->created_at->toISOString(),
-              'updated_at' => $post->user->updated_at->toISOString(),
             ],
             'updated_at' => $post->updated_at->toISOString(),
             'created_at' => $post->updated_at->toISOString(),
@@ -101,27 +89,15 @@ class PostsControllerTest extends TestCase
           return [
             'id' => $post->id,
             'title' => $post->title,
-            'description' => $post->description,
+            'description' => str_replace(substr($post->description, 1000), '', $post->description) . '...',
             'likes' => $post->likes->count(),
             'created_by' => [
               'id' => $post->user->id,
-              'user_name' => $post->user->user_name,
               'name' => $post->user->name,
-              'posts' => route('users.posts.index', [
-                'user' => $post->user->id
-              ]),
-              'roles' => route('users.roles.index', [
-                'user' => $post->user->id
-              ]),
+              'user_name' => $post->user->user_name,
               'avatar' => route('users.avatar', [
                 'user' => $post->user->id
               ]),
-              'email_verified_at' => $post->user->email_verified_at->toISOString(),
-              'deleted_at' => $post->user->deleted_at ?
-                $post->user->deleted_at->toISOString()
-                : null,
-              'created_at' => $post->user->created_at->toISOString(),
-              'updated_at' => $post->user->updated_at->toISOString(),
             ],
             'updated_at' => $post->updated_at->toISOString(),
             'created_at' => $post->updated_at->toISOString(),
@@ -154,28 +130,62 @@ class PostsControllerTest extends TestCase
         'likes' => $post->likes->count(),
         'created_by' => [
           'id' => $post->user->id,
-          'user_name' => $post->user->user_name,
           'name' => $post->user->name,
-          'posts' => route('users.posts.index', [
-            'user' => $post->user->id
-          ]),
-          'roles' => route('users.roles.index', [
-            'user' => $post->user->id
-          ]),
+          'user_name' => $post->user->user_name,
           'avatar' => route('users.avatar', [
             'user' => $post->user->id
           ]),
-          'email_verified_at' => $post->user->email_verified_at->toISOString(),
-          'deleted_at' => $post->user->deleted_at ?
-            $post->user->deleted_at->toISOString()
-            : null,
-          'created_at' => $post->user->created_at->toISOString(),
-          'updated_at' => $post->user->updated_at->toISOString(),
         ],
         'updated_at' => $post->updated_at->toISOString(),
         'created_at' => $post->updated_at->toISOString(),
       ]);
   }
+
+  /**
+   * Liked
+   */
+  public function testShouldShowTrueIfTheCurrentUserHasLikedThePost()
+  {
+    /* @var User $user */
+    $user = factory(User::class)->create();
+    /* @var Post $post */
+    $post = factory(Post::class)->create([
+      'user_id' => $user->id
+    ]);
+
+    $post->likes()->save($user);
+
+    $response = $this->actingAs($user)->getJson(route('posts.liked', [
+      'post' => $post->id
+    ]));
+
+    $response->assertOk()
+      ->assertJson([
+        'value' => true
+      ]);
+  }
+
+  public function testShouldShowFalseIfTheCurrentUserHasNotLikedThePost()
+  {
+    /* @var User $user */
+    $user = factory(User::class)->create();
+    /* @var Post $post */
+    $post = factory(Post::class)->create([
+      'user_id' => $user->id
+    ]);
+
+    $post->likes()->save($user);
+
+    $response = $this->actingAs($user)->getJson(route('posts.liked', [
+      'post' => $post->id
+    ]));
+
+    $response->assertOk()
+      ->assertJson([
+        'value' => true
+      ]);
+  }
+
 
   /**
    * Create
@@ -212,23 +222,11 @@ class PostsControllerTest extends TestCase
         'likes' => $post->likes->count(),
         'created_by' => [
           'id' => $post->user->id,
-          'user_name' => $post->user->user_name,
           'name' => $post->user->name,
-          'posts' => route('users.posts.index', [
-            'user' => $post->user->id
-          ]),
-          'roles' => route('users.roles.index', [
-            'user' => $post->user->id
-          ]),
+          'user_name' => $post->user->user_name,
           'avatar' => route('users.avatar', [
             'user' => $post->user->id
           ]),
-          'email_verified_at' => $post->user->email_verified_at->toISOString(),
-          'deleted_at' => $post->user->deleted_at ?
-            $post->user->deleted_at->toISOString()
-            : null,
-          'created_at' => $post->user->created_at->toISOString(),
-          'updated_at' => $post->user->updated_at->toISOString(),
         ],
         'updated_at' => $post->updated_at->toISOString(),
         'created_at' => $post->updated_at->toISOString(),

@@ -1,10 +1,7 @@
 import { AxiosInstance } from 'axios'
-import { Post, User } from '~/services/entities'
+import { Post } from '~/services/entities'
 import { Paginator } from './paginator'
-
-type Any = {
-  [key: string]: Any
-}
+import { createApi } from '~/services/api'
 
 export class PostService {
   public constructor(private readonly api: AxiosInstance) {}
@@ -16,24 +13,50 @@ export class PostService {
       },
     })
 
-    response.data.data = response.data.data.map(
-      post =>
-        new Post(
-          post.id,
-          post.title,
-          post.description,
-          new User(
-            post.created_by.id,
-            post.created_by.name,
-            post.created_by.user_name,
-            post.created_by.avatar,
-            post.created_by.email
-          ),
-          new Date(post.created_at),
-          new Date(post.updated_at)
-        )
-    )
+    response.data.data = response.data.data.map(post => Post.new(post, false))
 
     return response.data
   }
+
+  public async findOne(postId: number | string): Promise<Post> {
+    const post = await this.api.get(`posts/${postId}`)
+
+    return Post.new(post.data, true)
+  }
+
+  public async hasLiked(postId: number): Promise<boolean> {
+    try {
+      const hasLiked = await this.api.get(`posts/${postId}/liked`)
+
+      return hasLiked.data.value
+    } catch {
+      // Ignore if has error
+    }
+
+    return false
+  }
+
+  public async like(postId: number): Promise<void> {
+    try {
+      await this.api.post(`posts/${postId}/like`)
+    } catch {
+      // Ignore if has error
+    }
+  }
+
+  public async unlike(postId: number): Promise<void> {
+    try {
+      await this.api.get(`posts/${postId}/like`)
+    } catch {
+      // Ignore if has error
+    }
+  }
+
+  public isOwner(postId: number): boolean {
+    // TODO: handle this correctly
+
+    return true
+  }
 }
+
+export const postService = new PostService(createApi())

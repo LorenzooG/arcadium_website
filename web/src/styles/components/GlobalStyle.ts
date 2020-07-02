@@ -6,7 +6,7 @@ export const GlobalStyle = styled.createGlobalStyle`
       'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
       'Helvetica Neue', sans-serif;
 
-    color: #999;
+    color: #333;
 
     margin: 0;
     padding: 0;

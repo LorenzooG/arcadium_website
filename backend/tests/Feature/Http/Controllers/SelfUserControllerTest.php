@@ -130,11 +130,16 @@ class SelfUserControllerTest extends TestCase
           return [
             'id' => $post->id,
             'title' => $post->title,
-            'description' => $post->description,
+            'description' => str_replace(substr($post->description, 1000), '', $post->description) . '...',
             'likes' => $post->likes->count(),
-            'created_by' => route('users.show', [
-              'user' => $post->user->id
-            ]),
+            'created_by' => [
+              'id' => $post->user->id,
+              'name' => $post->user->name,
+              'user_name' => $post->user->user_name,
+              'avatar' => route('users.avatar', [
+                'user' => $post->user->id
+              ]),
+            ],
             'updated_at' => $post->updated_at->toISOString(),
             'created_at' => $post->updated_at->toISOString(),
           ];

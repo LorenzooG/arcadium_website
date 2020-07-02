@@ -81,6 +81,7 @@ final class Post extends Model
    */
   public static function byLikes()
   {
+    // TODO: Solve error that are not showing posts that haven't likes
     return self::query()->selectRaw('posts.*, count(*) as total')
       ->join('post_user', 'posts.id', '=', 'post_user.post_id')
       ->groupBy('posts.id')

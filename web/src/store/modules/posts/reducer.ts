@@ -8,7 +8,7 @@ import { Post } from '~/services/entities'
 import { Actions } from './actions'
 import { HYDRATE } from 'next-redux-wrapper'
 
-interface State {
+export interface PostsState {
   posts: Post[]
   error?: Error
   loading: boolean

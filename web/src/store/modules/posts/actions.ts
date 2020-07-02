@@ -1,6 +1,7 @@
 import { AnyAction } from 'redux'
 
 import { Post } from '~/services/entities'
+import { PostService } from '~/services/crud'
 
 export class Actions {
   public static readonly FETCH_POSTS = '@posts/FETCH'
@@ -8,8 +9,12 @@ export class Actions {
   public static readonly FAIL_POSTS = '@posts/FAIL'
 }
 
-export const actionFetchPosts = (page = 1): AnyAction => ({
+export const actionFetchPosts = (
+  postService: PostService,
+  page = 1
+): AnyAction => ({
   type: Actions.FETCH_POSTS,
+  postService,
   page,
 })
 
